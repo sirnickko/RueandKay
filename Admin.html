@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Inventory Control</title>
+    <link rel="stylesheet" href="LandingStyle.css">
+    <style>
+        /* Extra quick styles specific to our admin form layout */
+        .admin-box {
+            max-width: 500px;
+            margin: 60px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+        .status-msg {
+            margin-top: 15px;
+            font-weight: 500;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <div class="logo">Rue and Kay <span style="color:var(--accent);">Dashboard</span></div>
+            <a href="LandingPage.html" style="text-decoration: none; color: var(--text-main); font-weight: 500;">View Store ↗</a>
+        </div>
+    </header>
+
+    <main class="admin-box">
+        <h2 style="margin-bottom: 20px;">Add New Product</h2>
+        
+        <form id="addProductForm">
+            <div class="form-group">
+                <label for="prodName">Product Name</label>
+                <input type="text" id="prodName" placeholder="e.g., Luxury Leather Handbag" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="prodPrice">Price (KES)</label>
+                <input type="number" id="prodPrice" placeholder="e.g., 3500" required>
+            </div>
+            
+            <div class="form-group" style="border: 1px dashed var(--border); padding: 15px; border-radius: 8px;">
+                <label style="margin-bottom: 12px; color: var(--accent);">Product Image Source</label>
+    
+                <div style="margin-bottom: 15px;">
+                  <label for="prodFile" style="font-size: 0.85rem; color: var(--text-muted);">Option 1: Upload Local Image File</label>
+                  <input type="file" id="prodFile" accept="image/*">
+                </div>
+    
+            <div style="text-align: center; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">— OR —</div>
+    
+            <div>
+                <label for="prodImage" style="font-size: 0.85rem; color: var(--text-muted);">Option 2: Paste Web Image URL</label>
+                <input type="url" id="prodImage" placeholder="https://example.com/image.jpg">
+            </div>
+            </div>
+            
+            <button type="submit" class="add-btn">Upload to Database</button>
+        </form>
+
+        <div id="statusMessage" class="status-msg"></div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="Admin.js"></script>
+</body>
+</html>

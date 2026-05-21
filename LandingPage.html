@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimalist Tech Shop</title>
+    <!-- Linking our external styles -->
+    <link rel="stylesheet" href="LandingStyle.css">
+</head>
+<body>
+
+     <!-- Navigation Bar -->
+
+    <header>
+        <div class="nav-container">
+            <div class="logo">Rue and Kay Atelier.</div>
+            <div class="cart-status" id="cartWidget">
+                Cart: <span id="cartCount">0</span> items
+            </div>
+        </div>
+    </header>
+
+    <!-- BANNER LAYER  -->
+    <main class="hero">
+        <h1>Our Products</h1>
+        <p>Handpicked inventory curated by our shop managers.</p>
+    </main>
+
+    <!-- PRODUCT DISPLAY GRID -->
+    <section class="shop-container" id="productsGrid">
+        <!-- JavaScript will automatically inject item cards here -->
+    </section>
+
+    <!-- CDN link for supabase js library -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script href="App.js" src="App.js"></script>
+</body>
+</html>
