@@ -9,10 +9,10 @@
 :root {
     --bg-color: #f8f9fa;
     --card-bg: #ffffff;
-    --text-main: #1a1a1a;
+    --text-main: #0b0b0b;
     --text-muted: #707070;
-    --accent: #2563eb; /* Royal Blue */
-    --accent-hover: #1d4ed8;
+    --accent: #000000; /* Royal Blue */
+    --accent-hover: #d81d74;
     --border: #e5e7eb;
 }
 
@@ -22,110 +22,172 @@ body {
     padding-bottom: 60px;
 }
 
-/* --- NAVBAR --- */
-header {
-    background-color: var(--card-bg);
-    border-bottom: 1px solid var(--border);
-    position: sticky;
-    top: 0;
-    z-index: 100;
+/* --- STATIONARY POSITION MECHANICS --- */
+
+/* Pinned Sub-Header Section Container Layout */
+
+
+/* Base Main content adjustments pushing grid below floating headers */
+.storefront-main {
+    width: 100%; 
+    padding: 0 40px; 
+    box-sizing: border-box;
+    margin-top: 50px; /* Leaves clear space for the fixed top brand nav bar */
+}
+.scrolling-title-box {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 30px 0 10px 0; /* Tightened bottom padding slightly */
 }
 
-.nav-container {
-    max-width: 1200px;
-    margin: 0 auto;
+/* --- FILTER SYSTEM PILLS --- */
+.filter-container {
+    position: sticky; /* Swapped from fixed to sticky */
+    top: 80px; /* Pins it cleanly right below the 80px high top logo header! */
+    left: 0;
+    width: 100%;
+    background-color: var(--bg-color); /* Matches background color to mask bags moving behind */
+    z-index: 900;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding: 15px 0; /* Removed horizontal padding so it stays perfectly aligned with the text grid box */
+    margin: 0 auto 20px auto;
+    max-width: 1400px; /* Matches grid line boundaries */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.03);
 }
 
-.logo {
-    font-size: 1.4rem;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-}
-
-.cart-status {
-    background-color: var(--text-main);
-    color: white;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-weight: 500;
-    font-size: 0.9rem;
+.filter-btn {
+    background: #ffffff; 
+    color: #000000; 
+    border: 1px solid #e5e7eb; 
+    padding: 10px 22px; 
+    border-radius: 25px; 
+    font-size: 0.88rem;
+    font-weight: 500; 
     cursor: pointer;
-    transition: transform 0.2s;
+    transition: all 0.2s ease;
+    outline: none;
 }
 
-.cart-status:hover {
-    transform: scale(1.05);
+.filter-btn:hover {
+    background: #f9fafb;
+    border-color: #bcd1d5db;
 }
 
-/* --- MAIN HERO --- */
-.hero {
-    max-width: 1200px;
-    margin: 40px auto 20px;
-    padding: 0 20px;
+.filter-btn.active {
+    background: #000000 !important;
+    color: #ffffff !important;
+    border-color: #000000 !important;
+    font-weight: 600;
 }
 
-.hero h1 {
-    font-size: 2.5rem;
-    margin-bottom: 8px;
-}
-
-.hero p {
-    color: var(--text-muted);
-}
-
-/* --- PRODUCT GRID --- */
-.shop-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
+/* --- DESIGNER PRODUCT GRID --- */
+#productsGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 30px;
+    width: 100%;
+    max-width: 1400px; 
+    margin: 20px auto 0 auto; /* Changed top margin from 75px to a tight 20px since sticky handles the natural flow */
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px; 
+    padding-bottom: 80px;
 }
 
 .product-card {
-    background-color: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px;
+    background: transparent; 
+    border: none; 
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    transition: box-shadow 0.3s, transform 0.2s;
-}
-
-.product-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    align-items: center;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
 }
 
 .image-placeholder {
     width: 100%;
-    height: 200px;
-    background-color: #f3f4f6;
-    border-radius: 8px;
+    aspect-ratio: 4 / 5; 
+    background-color: #ffffff; 
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--text-muted);
-    font-weight: 500;
-    margin-bottom: 16px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+/* FIXED: Scaled down from 150% to 100% to ensure clean catalog resizing proportions */
+.image-placeholder img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; 
+    padding: 35px; /* Adds premium padding to scale your bag images perfectly */
+    transition: transform 0.4s ease;
+}
+
+.product-card:hover .image-placeholder img {
+    transform: scale(1.03);
+}
+
+.product-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px; 
+    width: 100%;
 }
 
 .product-info h3 {
-    font-size: 1.15rem;
-    margin-bottom: 6px;
+    font-size: 0.9rem;
+    font-weight: 400;
+    letter-spacing: 1px; 
+    text-transform: uppercase;
+    color: #ff046c;
+    margin: 0;
+}
+.product-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Securely pushes icon to the far-left, price to far-right */
+    width: 100%;
+    margin-top: 12px;
+    padding: 0 4px; /* Slight inset breathing frame alignment cushion */
+}
+.icon-cart-btn {
+    background: transparent;
+    border: none;
+    color: #1a1a1a;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+.icon-cart-btn .material-symbols-outlined {
+    font-size: 1.45rem; /* Matches premium sleek catalog sizes */
+    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+}
+.icon-cart-btn .material-symbols-outlined {
+    font-size: 1.45rem; /* Matches premium sleek catalog sizes */
+    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+}
+.product-info .product-desc {
+    font-size: 0.95rem;
+    color: #666666; 
+    font-weight: 400;
+    margin: 0;
+    max-width: 90%;
+    line-height: 1.4;
 }
 
 .product-info .price {
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: var(--text-main);
-    margin-bottom: 16px;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #000000;
+    margin: 4px 0 0 0;
+    letter-spacing: 0.5px;
 }
 
 .add-btn {
@@ -145,8 +207,477 @@ header {
     background-color: var(--accent-hover);
 }
 
-/* --- RESPONSIVE SCREEN DESIGNS --- */
-@media (max-width: 600px) {
-    .hero h1 { font-size: 2rem; }
-    .shop-container { grid-template-columns: 1fr; }
+/* --- HEADER NAVIGATION ROW LAYOUT --- */
+.main-nav-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 80px;
+    padding: 0 40px; 
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important; 
+    box-sizing: border-box !important;
+    margin: 0 !important;
+}
+
+.logo {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 600; 
+    letter-spacing: -0.5px; 
+    color: #000000;
+}
+
+#cartWidget {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    color: #000000;
+    padding: 4px;
+}
+
+#cartCount {
+    position: absolute;
+    top: -3px;
+    right: -5px;
+    background: #0052cc; 
+    color: #ffffff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Ensure side drawer overlay backdrop functions on top of your fixed headers */
+#cartModalOverlay {
+    z-index: 2000 !important;
+}
+/* --- PRODUCT QUICK VIEW MODAL OVERLAY --- */
+.pdm-overlay {
+    display: none; 
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.1); 
+    backdrop-filter: blur(4px);
+    z-index: 3000; 
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    /* CHANGE: Re-enable pointer events so it can catch the mouse exit */
+    pointer-events: auto; 
+}
+/* Rounded Canva Frame Box Window Component */
+.pdm-window {
+    background-color: #ffffff;
+    width: 70%;
+    
+    
+    /* FIX 1: Reduced maximum width restriction from 920px down to 740px 
+       This forces the entire popup module to look smaller and tighter on the monitor */
+    max-width: 700px; 
+    
+    border-radius: 40px; 
+    border: 1px solid #dad8d8;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+    position: relative;
+    overflow: hidden;
+    
+    /* FIX 2: Reduced vertical and horizontal interior padding to tighten the empty spaces */
+    padding: 30px; 
+    
+    animation: pdmFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes pdmFadeIn {
+    from { opacity: 0; transform: scale(0.96); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.pdm-close-btn {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    background: transparent;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #666;
+    z-index: 10;
+}
+
+/* Grid layout splitting images left and text blocks right */
+.pdm-content-layout {
+    display: grid;
+    grid-template-columns: 40% 55%; 
+    gap: 5%;
+    align-items: center; /* Centers items vertically so the modal looks incredibly clean */
+}
+/* Gallery layout panels */
+.pdm-main-frame {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.pdm-main-frame img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.pdm-carousel-ribbon {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 15px;
+    gap: 10px;
+}
+.pdm-thumbnails {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+}
+.pdm-thumb {
+    width: 65px;
+    height: 65px;
+    object-fit: contain;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+.pdm-thumb.active, .pdm-thumb:hover {
+    border-color: #000000;
+}
+.pdm-arrow {
+    background: transparent;
+    border: none;
+    font-family: monospace;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+/* Details Copy Panels */
+.pdm-details-side {
+    display: flex;
+    flex-direction: column;
+}
+.pdm-brand-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.8rem; /* Scaled down slightly from 2.2rem */
+    font-weight: 600;
+    color: #000000;
+    margin-bottom: 2px;
+}
+.pdm-product-tagline {
+    font-size: 0.9rem;
+    color: #555555;
+    margin-bottom: 12px;
+}
+.pdm-price-label {
+    font-size: 1.0rem;
+    font-weight: 600;
+    color: #000000;
+    margin-bottom: 25px;
+}
+
+/* Black add-to-bag structural button components */
+.pdm-primary-add {
+    width: 100%;
+    max-width: 260px;
+    background-color: #000000;
+    color: #ffffff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 30px; /* Rounded pill style matches canvas styling */
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+    margin-bottom: 12px;
+    transition: opacity 0.2s;
+}
+.pdm-primary-add:hover { opacity: 0.85; }
+
+.pdm-fav-btn {
+    background: transparent;
+    border: none;
+    font-size: 0.9rem;
+    color: #333333;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 25px;
+    width: max-content;
+}
+
+.pdm-divider {
+    border: 0;
+    border-top: 1px solid #e5e7eb;
+    margin-bottom: 20px;
+}
+
+.pdm-info-block h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #000000;
+}
+.pdm-info-block p {
+    font-size: 0.95rem;
+    color: #666666;
+    line-height: 1.5;
+}
+/* Vertical Side Drawer Action Selection Links */
+.drawer-filter-btn {
+    background: transparent;
+    border: none;
+    text-align: left;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    color: #444444;
+    padding: 10px 0;
+    cursor: pointer;
+    border-bottom: 1px solid #f3f4f6;
+    transition: all 0.2s ease;
+}
+
+.drawer-filter-btn:hover {
+    color: #000000;
+    padding-left: 5px;
+}
+
+.drawer-filter-btn.active {
+    color: #000000 !important;
+    font-weight: 600 !important;
+    border-bottom-color: #000000;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #productsGrid {
+        grid-template-columns: repeat(3, 1fr); /* 3 bags per row on small tablets */
+        gap: 15px;
+    }
+    .storefront-main {
+        padding: 0 20px; /* Conserves edge space on portable viewports */
+    }
+    .filter-container {
+        padding: 15px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    #productsGrid {
+        grid-template-columns: repeat(2, 1fr); /* 2 bags per row on mobile screens */
+        gap: 15px;
+    }
+}
+/* Align Search and Cart widgets together on the right wall */
+.main-nav-container > div:last-child {
+    display: flex !important;
+    align-items: center !important;
+    gap: 15px;
+}
+/* ==========================================
+   MOBILE-FIRST SECURE CHECKOUT RESPONSIVENESS
+   ========================================== */
+@media screen and (max-width: 768px) {
+    /* 1. Force the main checkout container into a single stacked column */
+    body > main {
+        grid-template-columns: 1fr !important;
+        gap: 30px !important;
+        margin: 20px auto !important;
+        padding: 0 15px !important;
+    }
+
+    /* 2. Re-order sections so the customer inputs details before summary options */
+    body > main > section:first-of-type {
+        order: 1;
+    }
+    
+    body > main > section:last-of-type {
+        order: 2;
+        position: static !important; /* Removes desktop fixed stickiness on phone screens */
+        box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+    }
+
+    /* 3. Soften internal card padding so forms have breathing room on narrow screens */
+    div[style*="padding: 30px"], 
+    section[style*="padding: 30px"] {
+        padding: 20px !important;
+        border-radius: 12px !important;
+    }
+
+    /* 4. Flatten grid input rows (First Name / Last Name / City) to individual stacked lines */
+    div[style*="grid-template-columns"] {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+    }
+
+    /* 5. Adjust the minimalist secure checkout header padding for touch profiles */
+    header[style*="padding: 15px 40px"] {
+        padding: 15px 20px !important;
+    }
+}
+/* ==========================================
+     GLOBAL MINIMALIST FOOTER CONFIGURATION
+   ========================================== */
+.site-footer {
+    background-color: #f8f8f8;
+    padding: 60px 40px 30px 40px;
+    font-family: 'Poppins', sans-serif;
+    border-top: 1px solid #e5e7eb;
+    margin-top: 80px;
+}
+
+.footer-main-columns {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 40px;
+    padding-bottom: 50px;
+}
+
+.footer-column h3 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    color: #000000;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.footer-column ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-column ul li {
+    margin-bottom: 12px;
+}
+
+.footer-column ul li a {
+    text-decoration: none;
+    color: #333333;
+    font-size: 0.85rem;
+    transition: color 0.2s ease;
+}
+
+.footer-column ul li a:hover {
+    color: #000000;
+}
+
+/* Specific Alignment Columns */
+.text-center-col {
+    text-align: center;
+}
+
+.right-align-col {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+/* App Badges Simulation Structure Layout */
+.app-badges-container {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 35px;
+}
+
+.app-badge-btn {
+    background: #000000;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    min-width: 110px;
+}
+
+.app-badge-btn .badge-sub {
+    font-size: 0.55rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    opacity: 0.8;
+}
+
+.app-badge-btn .badge-main {
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+/* Social Icon Blocks Styling */
+.social-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.social-icons-row {
+    display: flex;
+    gap: 16px;
+}
+
+.social-icons-row a {
+    color: #000000;
+    opacity: 0.8;
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+.social-icons-row a:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+}
+
+/* Legal Base Strip Line Matrix */
+.footer-legal-base {
+    max-width: 1200px;
+    margin: 0 auto;
+    border-top: 1px solid #e5e7eb;
+    padding-top: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.legal-links {
+    display: flex;
+    gap: 20px;
+}
+
+.legal-links a {
+    text-decoration: none;
+    color: #555555;
+    font-size: 0.8rem;
+}
+
+.legal-links a:hover {
+    color: #000000;
+}
+
+.copyright-notice {
+    font-size: 0.75rem;
+    color: #888888;
+    letter-spacing: 0.5px;
 }

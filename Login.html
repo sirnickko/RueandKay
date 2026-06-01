@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal - Sign In</title>
+    <link rel="stylesheet" href="LandingStyle.css">
+    <style>
+        .login-box {
+            max-width: 400px;
+            margin: 100px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; }
+        .form-group input { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 1rem; }
+        .status-msg { margin-top: 15px; font-weight: 500; text-align: center; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <main class="login-box">
+        <h2 style="margin-bottom: 10px; text-align: center;">Admin Portal</h2>
+        <p style="color: var(--text-muted); text-align: center; margin-bottom: 25px; font-size: 0.9rem;">Sign in to manage your inventory.</p>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="loginEmail">Email Address</label>
+                <input type="email" id="loginEmail" placeholder="admin@example.com" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="loginPassword">Password</label>
+                <input type="password" id="loginPassword" placeholder="••••••••" required>
+            </div>
+            
+            <button type="submit" class="add-btn" style="width: 100%;">Sign In</button>
+        </form>
+
+        <div id="authStatus" class="status-msg"></div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = "https://qwcpiltbfbnfikqlhrrg.supabase.co"; 
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF3Y3BpbHRiZmJuZmlrcWxocnJnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNzY4ODIsImV4cCI6MjA5NDk1Mjg4Mn0.yHTBkF-rQaE-BK0RTcrVmmegqH3y-hgstBqr4P6LW1o"; 
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        const loginForm = document.getElementById('loginForm');
+        const authStatus = document.getElementById('authStatus');
+
+        if (loginForm) {
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                authStatus.innerText = "Authenticating...";
+                authStatus.style.color = "var(--text-muted)";
+
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+
+                // Send login request directly to Supabase Auth
+                const { data, error } = await supabaseClient.auth.signInWithPassword({
+                    email: email,
+                    password: password,
+                });
+
+                if (error) {
+                    authStatus.innerText = "Login Failed: " + error.message;
+                    authStatus.style.color = "red";
+                } else {
+                    authStatus.innerText = "Success! Redirecting...";
+                    authStatus.style.color = "green";
+                    // Send authenticated admin to dashboard
+                    window.location.href = "Admin.html";
+                }
+            });
+        }
+    </script>
+</body>
+</html>

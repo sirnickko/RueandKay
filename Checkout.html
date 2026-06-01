@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Checkout | Rue and Kay Atelier</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="LandingStyle.css">
+</head>
+<body style="background-color: #f9fafb; margin: 0; font-family: 'Poppins', sans-serif;">
+
+    <header style="background: #ffffff; border-bottom: 1px solid #e5e7eb; padding: 15px 40px; position: sticky; top: 0; z-index: 1000;">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
+            <div style="font-size: 1.3rem; font-weight: 700; color: #000; letter-spacing: 0.5px;">Rue and Kay Atelier.</div>
+            <div style="font-size: 0.85rem; color: #059669; display: flex; align-items: center; gap: 6px; font-weight: 500;">
+                 Secure Checkout
+            </div>
+        </div>
+    </header>
+
+    <main style="max-width: 1200px; margin: 40px auto; padding: 0 20px; display: grid; grid-template-columns: 58% 38%; gap: 4%; align-items: start;">
+        
+        <section style="display: flex; flex-direction: column; gap: 25px;">
+            
+            
+       
+            
+            <!-- Delivery & Shipping Information Card Component -->
+            <div style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 30px;">
+                <h3 style="margin: 0 0 20px 0; font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 600;">Delivery Information</h3>
+                <form id="checkoutDeliveryForm" style="display: flex; flex-direction: column; gap: 15px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div>
+                            <label style="display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 6px; color: #333;">First Name</label>
+                            <input type="text" id="chkFirstName" required style="width: 100%; padding: 10px 14px; border: 1px solid #d1d5db; border-radius: 8px; box-sizing: border-box; outline: none; font-size: 0.9rem;">
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 6px; color: #333;">Last Name</label>
+                            <input type="text" id="chkLastName" required style="width: 100%; padding: 10px 14px; border: 1px solid #d1d5db; border-radius: 8px; box-sizing: border-box; outline: none; font-size: 0.9rem;">
+                        </div>
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 6px; color: #333;">Delivery Address / Building Name</label>
+                        <input type="text" id="chkLocation" required style="width: 100%; padding: 10px 14px; border: 1px solid #d1d5db; border-radius: 8px; box-sizing: border-box; outline: none; font-size: 0.9rem;">
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div>
+                            <label style="display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 6px; color: #333;">City</label>
+                            <input type="text" id="chkCity" value="Nairobi" style="width: 100%; padding: 10px 14px; border: 1px solid #d1d5db; border-radius: 8px; box-sizing: border-box; outline: none; font-size: 0.9rem;">
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 6px; color: #333;">Phone Number</label>
+                            <input type="tel" id="chkPhone" placeholder="e.g. 0712345678" required style="width: 100%; padding: 10px 14px; border: 1px solid #d1d5db; border-radius: 8px; box-sizing: border-box; outline: none; font-size: 0.9rem;">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- Payment Method Selection Card Component -->
+            <div style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 30px; margin-top: 25px;">
+                <h3 style="margin: 0 0 20px 0; font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 600;">Payment Method</h3>
+                
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <!-- M-Pesa Option Row -->
+                    <label style="display: flex; align-items: center; justify-content: space-between; padding: 16px; border: 1px solid #d1d5db; border-radius: 10px; cursor: pointer; font-weight: 500;" onclick="togglePaymentFields('mpesa')">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <input type="radio" name="paymentType" id="payMpesa" checked style="accent-color: #000;">
+                            <span>M-Pesa (STK Push)</span>
+                        </div>
+                        <span style="font-size: 0.8rem; color: #059669; font-weight: 600;">🟢 Lipa Na M-Pesa</span>
+                    </label>
+
+                    <!-- Bank Card Option Row -->
+                    <label style="display: flex; align-items: center; justify-content: space-between; padding: 16px; border: 1px solid #d1d5db; border-radius: 10px; cursor: pointer; font-weight: 500;" onclick="togglePaymentFields('card')">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <input type="radio" name="paymentType" id="payCard" style="accent-color: #000;">
+                            <span>Credit / Debit Card</span>
+                        </div>
+                        <span style="font-size: 1.2rem;">💳</span>
+                    </label>
+
+                    <!-- PayPal Option Row -->
+                    <label style="display: flex; align-items: center; justify-content: space-between; padding: 16px; border: 1px solid #d1d5db; border-radius: 10px; cursor: pointer; font-weight: 500;" onclick="togglePaymentFields('paypal')">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <input type="radio" name="paymentType" id="payPaypal" style="accent-color: #000;">
+                            <span>PayPal</span>
+                        </div>
+                        <span style="font-size: 0.85rem; color: #003087; font-weight: 700; font-style: italic;">PayPal</span>
+                    </label>
+                </div>
+
+                <!-- DYNAMIC CONDITIONAL CARD INPUT SUB-FORM -->
+                <div id="cardDetailsSubForm" style="display: none; flex-direction: column; gap: 15px; margin-top: 20px; padding-top: 20px; border-top: 1px solid #f3f4f6;">
+                    <div>
+                        <label style="display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 6px; color: #333;">Card Number</label>
+                        <input type="text" id="chkCardNumber" placeholder="1234 5678 9012 3456" style="width: 100%; padding: 10px 14px; border: 1px solid #d1d5db; border-radius: 8px; box-sizing: border-box; outline: none; font-size: 0.9rem;">
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div>
+                            <label style="display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 6px; color: #333;">Expiry Date</label>
+                            <input type="text" id="chkCardExpiry" placeholder="MM/YY" style="width: 100%; padding: 10px 14px; border: 1px solid #d1d5db; border-radius: 8px; box-sizing: border-box; outline: none; font-size: 0.9rem;">
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 6px; color: #333;">CVC</label>
+                            <input type="text" id="chkCardCvc" placeholder="123" style="width: 100%; padding: 10px 14px; border: 1px solid #d1d5db; border-radius: 8px; box-sizing: border-box; outline: none; font-size: 0.9rem;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+        </section>
+
+        <section style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 30px; position: sticky; top: 100px;">
+            <h3 style="margin: 0 0 20px 0; font-size: 1.1rem; font-weight: 600;">Order Summary</h3>
+            
+            <div id="checkoutSummaryList" style="max-height: 240px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; border-bottom: 1px solid #f3f4f6; padding-bottom: 20px;">
+                </div>
+
+            <div style="display: flex; flex-direction: column; gap: 10px; border-bottom: 1px solid #f3f4f6; padding-bottom: 20px; margin-bottom: 20px; font-size: 0.9rem; color: #444;">
+                <div style="display: flex; justify-content: space-between;"><span>Subtotal</span><span id="chkSubtotal">KES 0</span></div>
+                <div style="display: flex; justify-content: space-between;"><span>Shipping Delivery</span><span style="color: #059669; font-weight: 500;">FREE</span></div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 1.2rem; color: #000; margin-bottom: 25px;">
+                <span>Total Due</span>
+                <span id="chkTotal">KES 0</span>
+            </div>
+
+            <button id="chkPlaceOrderBtn" onclick="processCheckoutOrder()" style="width: 100%; background: #000000; color: #ffffff; border: none; padding: 15px; border-radius: 30px; font-weight: 600; font-size: 0.95rem; cursor: pointer; letter-spacing: 0.5px; transition: opacity 0.2s; margin-bottom: 12px;">
+                Place Order →
+            </button>
+            <a href="LandingPage.html" style="display: block; text-align: center; color: #666666; font-size: 0.85rem; text-decoration: none; font-weight: 500;">
+                ← Continue Shopping
+            </a>
+            
+            <div id="chkStatusMsg" style="text-align: center; font-size: 0.9rem; margin-top: 15px; font-weight: 500;"></div>
+        </section>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="App.js"></script>
+    <script>
+        // Trigger initialization routine directly on screen initialization bootup
+        if (typeof renderCheckoutSummaryPage === 'function') {
+            renderCheckoutSummaryPage();
+        }
+    </script>
+</body>
+</html>

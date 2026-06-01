@@ -1,0 +1,67 @@
+
+@media screen and (max-width: 768px) {
+    
+    /* --- STOREFRONT PRODUCTS GRID (NATURAL 3-COLUMN LOOK) --- */
+    #productsGrid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 10px !important;
+        padding: 10px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .product-card {
+        padding: 8px !important;
+        border-radius: 8px !important;
+    }
+
+    .product-card-title {
+        font-size: 0.75rem !important;
+        margin: 4px 0 !important;
+    }
+
+    .product-card-price {
+        font-size: 0.85rem !important;
+        font-weight: 700 !important;
+    }
+
+    .image-placeholder img {
+        width: 100% !important;
+        height: auto !important;
+        max-height: 100px !important;
+        object-fit: contain !important;
+    }
+
+    /* --- SECURE CHECKOUT PAGE RESPONSIVENESS --- */
+    body > main {
+        grid-template-columns: 1fr !important;
+        gap: 30px !important;
+        margin: 20px auto !important;
+        padding: 0 15px !important;
+    }
+
+    body > main > section:first-of-type {
+        order: 1;
+    }
+    
+    body > main > section:last-of-type {
+        order: 2;
+        position: static !important;
+        box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+    }
+
+    div[style*="padding: 30px"], 
+    section[style*="padding: 30px"] {
+        padding: 20px !important;
+        border-radius: 12px !important;
+    }
+
+    div[style*="grid-template-columns"] {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+    }
+
+    header[style*="padding: 15px 40px"] {
+        padding: 15px 20px !important;
+    }
+}

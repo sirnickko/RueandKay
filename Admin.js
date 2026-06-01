@@ -1,10 +1,23 @@
 
 //SUPABASE CONFIGURATION & INITIALIZATION
 
-const SUPABASE_URL = "https://qwcpiltbfbnfikqlhrrg.supabase.co"; // Paste your project URL
+const SUPABASE_URL = "https://qwcpiltbfbnfikqlhrrg.supabase.co"; // 
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF3Y3BpbHRiZmJuZmlrcWxocnJnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNzY4ODIsImV4cCI6MjA5NDk1Mjg4Mn0.yHTBkF-rQaE-BK0RTcrVmmegqH3y-hgstBqr4P6LW1o"; // Paste your Anon Key
 
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// SECURITY WALL: CHECK FOR ACTIVE ADMIN SESSION
+
+async function checkAdminSession() {
+    // Ask Supabase if a user token is stored in this browser session
+    const { data: { session } } = await supabaseClient.auth.getSession();
+
+    // If no active token exists, bounce them right out to the login page immediately
+    if (!session) {
+        window.location.href = "Login.html";
+    }
+}
+// Run the security gate immediately before any layout forms load
+checkAdminSession();
 
 
 //  UI DOCUMENT ELEMENT TARGETS
@@ -29,7 +42,7 @@ if (addProductForm) {
         try {
             // Check if the admin selected a local file
             if (fileInput && fileInput.files.length > 0) {
-                showStatus("Uploading file to cloud storage...", "var(--accent)");
+                showStatus("Uploading file to cloud storage...","var(--accent)");
                 
                 const chosenFile = fileInput.files[0];
                 
@@ -79,4 +92,12 @@ function showStatus(text, color) {
         statusMessage.innerText = text;
         statusMessage.style.color = color;
     }
+}
+// Logout Handler
+const logoutBtn = document.getElementById('logoutBtn');
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', async () => {
+        await supabaseClient.auth.signOut();
+        window.location.href = "Login.html";
+    });
 }
