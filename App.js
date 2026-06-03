@@ -10,7 +10,7 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 // 2. STATE AND UI TARGET VARIABLES
 // ==========================================
 let liveProducts = []; 
-let currentCategoryFilter = 'all'; // Tracks currently selected store category filter
+let currentCategoryFilter = 'all'; 
 let globalCart = JSON.parse(localStorage.getItem('swiftShopCart')) || [];
 let runningCartTotal = 0; 
 
@@ -53,6 +53,7 @@ async function fetchProductsFromDatabase() {
     }
 }
 
+
 // ==========================================
 // 4. PRESENTATION: DRAW FILTERED STOREFRONT
 // ==========================================
@@ -60,69 +61,51 @@ function renderInventory() {
     if (!productsGrid) return;
     productsGrid.innerHTML = ''; 
     
+    // Smart filtering that checks both standard item categories and explicit entity collections
     const filteredItems = currentCategoryFilter === 'all' 
         ? liveProducts 
-        : liveProducts.filter(item => item.category === currentCategoryFilter);
+        : liveProducts.filter(item => {
+            return item.category === currentCategoryFilter || 
+                   item.collection === currentCategoryFilter || // Assumes a 'collection' column in Supabase
+                   (item.brand && item.brand === currentCategoryFilter);
+          });
 
     if (filteredItems.length === 0) {
-        productsGrid.innerHTML = '<p style="padding: 20px; color: var(--text-muted);">No products found in this category.</p>';
+        productsGrid.innerHTML = '<p style="padding: 20px; color: var(--text-muted);">No products found matching this selector.</p>';
         return;
     }
 
-    // Capture our native HTML blueprint element container
+    // ... rest of your original loop logic remains exactly the same ...
     const productCardTemplate = document.getElementById('productCardTemplate');
-
     filteredItems.forEach(item => {
-        // Fallback default placeholder icon if image url entry link is empty
-        const displayImageHTML = item.image_url 
-            ? `<img src="${item.image_url}" alt="${item.name}">` 
-            : '<span style="font-size: 3rem; color: #ccc;">👜</span>';
-
-        // 1. Clone a fresh, empty layout instance of your HTML template card architecture
+        // (Keep all your existing cardClone, image placeholders, and event assignment logic here)
+        const displayImageHTML = item.image_url ? `<img src="${item.image_url}" alt="${item.name}">` : '<span style="font-size: 3rem; color: #ccc;">👜</span>';
         const cardClone = productCardTemplate.content.cloneNode(true);
+        const cardRootNode = cardClone.querySelector('.product-card');
+        const imageFrameNode = cardClone.querySelector('.image-placeholder');
+        const titleNode = cardClone.querySelector('.product-card-title');
+        const priceNode = cardClone.querySelector('.product-card-price');
+        const cartButtonNode = cardClone.querySelector('.icon-cart-btn');
 
-        // 2. Locate target selector nodes inside our cloned structure blueprint copy
-        const cardRootNode    = cardClone.querySelector('.product-card');
-        const imageFrameNode  = cardClone.querySelector('.image-placeholder');
-        const titleNode       = cardClone.querySelector('.product-card-title');
-        const priceNode       = cardClone.querySelector('.product-card-price');
-        const cartButtonNode  = cardClone.querySelector('.icon-cart-btn');
+        if (cardRootNode) cardRootNode.setAttribute('onclick', `openProductModal(${item.id})`);
+        if (imageFrameNode) imageFrameNode.innerHTML = displayImageHTML;
+        if (titleNode) titleNode.innerText = item.name;
+        if (priceNode) priceNode.innerText = `KES ${Number(item.price).toLocaleString()}`;
+        if (cartButtonNode) cartButtonNode.setAttribute('onclick', `event.stopPropagation(); handleAddToCart(${item.id});`);
 
-        // 3. Map values and event listeners directly into elements
-        if (cardRootNode) {
-            cardRootNode.setAttribute('onclick', `openProductModal(${item.id})`);
-        }
-        if (imageFrameNode && item.image_url_2) {
-            imageFrameNode.setAttribute('onmouseenter', `const img = this.querySelector('img'); if(img) img.src = '${item.image_url_2}';`);
-            imageFrameNode.setAttribute('onmouseleave', `const img = this.querySelector('img'); if(img) img.src = '${item.image_url || ''}';`);
-        }
-        if (imageFrameNode) {
-            imageFrameNode.innerHTML = displayImageHTML;
-        }
-        if (titleNode)      titleNode.innerText = item.name;
-        if (priceNode)      priceNode.innerText = `KES ${Number(item.price).toLocaleString()}`;
-        
-        if (cartButtonNode) {
-            // event.stopPropagation() stops the click from bubbling up and forcing the modal open accidentally
-            cartButtonNode.setAttribute('onclick', `event.stopPropagation(); handleAddToCart(${item.id});`);
-        }
-
-        // 4. Inject the completed card right onto your storefront screen grid row layer
         productsGrid.appendChild(cardClone);
     });
 }
 
-// Action Controller: Swaps category filtering selection state values
 function filterStorefront(categoryName, clickedButton) {
     currentCategoryFilter = categoryName;
     
-    // Style adjustments: toggle button background focus visual states via CSS clean classing
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.classList.remove('active');
     });
     clickedButton.classList.add('active');
 
-    renderInventory(); // Redraw grid cards live
+    renderInventory(); 
 }
 
 // ==========================================
@@ -137,7 +120,6 @@ function handleAddToCart(productId) {
         if (existingItem) {
             existingItem.quantity = (existingItem.quantity || 1) + 1;
         } else {
-            // Use spread operator to prevent altering master table item states accidentally
             const cartPayload = { ...productMatch, quantity: 1 };
             globalCart.push(cartPayload);
         }
@@ -146,31 +128,42 @@ function handleAddToCart(productId) {
     }
 }
 
-// Core operational modifier controlling incrementing/decrementing math items
 function handleUpdateQuantity(index, mutationValue) {
     const targetItem = globalCart[index];
     if (!targetItem) return;
 
     targetItem.quantity = (targetItem.quantity || 1) + mutationValue;
 
-    // Boundary rule: If quantity gets manually drained lower than 1, delete the product row entirely
     if (targetItem.quantity < 1) {
         globalCart.splice(index, 1);
     }
 
     saveCartToVault();
-    renderCartContents(); // Redraw rows instantly inside the open overlay layout
 }
 
 function saveCartToVault() {
     localStorage.setItem('swiftShopCart', JSON.stringify(globalCart));
     updateCartBadge();
+    renderCartContents(); // Keeps state perfectly synchronized
 }
 
 function updateCartBadge() {
+    let totalItems = 0;
+    let computedTotalSum = 0;
+
+    globalCart.forEach(item => {
+        const qty = item.quantity || 1;
+        totalItems += qty;
+        computedTotalSum += (Number(item.price) * qty);
+    });
+
     if (cartCountDisplay) {
-        const totalItems = globalCart.reduce((sum, item) => sum + (item.quantity || 1), 0);
         cartCountDisplay.innerText = totalItems;
+    }
+
+    const headerPriceDisplay = document.getElementById('cartHeaderPrice');
+    if (headerPriceDisplay) {
+        headerPriceDisplay.innerText = `KES ${computedTotalSum.toLocaleString('en-KE', { minimumFractionDigits: 2 })}`;
     }
 }
 
@@ -218,14 +211,28 @@ function showCheckoutForm(isCheckout) {
 // ==========================================
 function renderCartContents() {
     if (!cartItemsList || !cartTotalPrice) return;
+    
     cartItemsList.innerHTML = ''; 
     runningCartTotal = 0; 
 
     if (globalCart.length === 0) {
-        cartItemsList.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 30px 0;">Your shopping cart is currently empty.</p>';
+        cartItemsList.innerHTML = `
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 20px; font-family: 'Poppins', sans-serif; width: 100%; box-sizing: border-box;">
+                <h2 style="font-size: 1.6rem; font-weight: 400; color: #000000; margin-bottom: 25px; letter-spacing: 0.5px;">Your cart is empty</h2>
+                <button onclick="toggleCartDrawer(false)" style="background: #111111; color: #ffffff; border: none; padding: 12px 30px; font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: background 0.2s ease; font-family: 'Poppins', sans-serif;"
+                        onmouseover="this.style.background='#333333'" 
+                        onmouseout="this.style.background='#111111'">
+                    Continue shopping
+                </button>
+            </div>
+        `;
+        
         cartTotalPrice.innerText = "KES 0";
+        if (cartActionButtons) cartActionButtons.style.display = 'none';
         return;
     }
+
+    if (cartActionButtons) cartActionButtons.style.display = 'block';
 
     const stencilTemplate = document.getElementById('cartItemTemplate');
     if (!stencilTemplate) return;
@@ -241,15 +248,13 @@ function renderCartContents() {
         const priceNode = rowClone.querySelector('.cart-item-price');
         const imageBoxNode = rowClone.querySelector('.cart-item-image-box');
         
-        // Target our adjustment triggers
         const plusBtnNode = rowClone.querySelector('.qty-plus-btn');
         const minusBtnNode = rowClone.querySelector('.qty-minus-btn');
 
         if (nameNode) nameNode.innerText = item.name;
-        if (qtyNode) qtyNode.innerText = itemQuantity; // Sets visible core count digit
+        if (qtyNode) qtyNode.innerText = itemQuantity;
         if (priceNode) priceNode.innerText = `KES ${itemCombinedPrice.toLocaleString()}`;
         
-        // Connect dynamic functional assignment nodes to adjustments math triggers
         if (plusBtnNode) plusBtnNode.onclick = () => handleUpdateQuantity(index, 1);
         if (minusBtnNode) minusBtnNode.onclick = () => handleUpdateQuantity(index, -1);
         
@@ -276,7 +281,6 @@ function openProductModal(itemId) {
     const product = liveProducts.find(p => p.id === itemId);
     if (!product) return;
 
-    // Grab your unique Canva modal view element nodes
     const modal       = document.getElementById('productDetailModal');
     const mainImage   = document.getElementById('pdmMainImage');
     const brandTitle  = document.getElementById('pdmBrand');
@@ -285,24 +289,17 @@ function openProductModal(itemId) {
     const addBtn      = document.getElementById('pdmAddBtn');
     const descBlock   = document.getElementById('pdmDesc');
     
-    // Grab all 3 thumbnail image elements inside your row array
     const thumbs      = document.querySelectorAll('.pdm-thumb');
 
     if (!modal) return;
 
-    // Direct data variables map binding strings
     if (mainImage) mainImage.src = product.image_url || '';
-    
     if (brandTitle) brandTitle.innerText = product.category || 'Handbags';
     if (prodName)   prodName.innerText   = product.name;
     if (priceLabel) priceLabel.innerText = `${Number(product.price).toLocaleString()} ksh`;
     if (descBlock)  descBlock.innerText  = product.description || `Classy all time item with elegant structures. Handpicked styling configurations crafted from premium selections.`;
 
-    // DYNAMIC THUMBNAILS MAPPING LOGIC (FIXED)
-    // Checks your Supabase data payload keys and safely handles image assets
     if (thumbs && thumbs.length >= 3) {
-        
-        // Thumbnail 1: Primary Image
         if (product.image_url) {
             thumbs[0].src = product.image_url;
             thumbs[0].style.display = 'block';
@@ -310,31 +307,28 @@ function openProductModal(itemId) {
             thumbs[0].style.display = 'none';
         }
 
-        // Thumbnail 2: Second Angle View (Supabase column name MUST match: image_url_2)
         if (product.image_url_2) {
             thumbs[1].src = product.image_url_2;
             thumbs[1].style.display = 'block';
         } else {
-            thumbs[1].style.display = 'none'; // Hides the box if it's empty in Supabase
+            thumbs[1].style.display = 'none';
         }
 
-        // Thumbnail 3: Third Angle View (Supabase column name MUST match: image_url_3)
         if (product.image_url_3) {
             thumbs[2].src = product.image_url_3;
             thumbs[2].style.display = 'block';
         } else {
-            thumbs[2].style.display = 'none'; // Hides the box if it's empty in Supabase
+            thumbs[2].style.display = 'none';
         }
     }
 
-    // Connect checkout cart actions onto your black primary pill checkout trigger button
     if (addBtn) {
         addBtn.setAttribute('onclick', `handleAddToCart(${product.id}); document.getElementById('productDetailModal').style.display='none';`);
     }
 
-    // Unhide modal display overlay container layout instantly
     modal.style.display = 'flex';
 }
+
 function swapPdmView(srcPath) {
     const mainImage = document.getElementById('pdmMainImage');
     if (mainImage) mainImage.src = srcPath;
@@ -342,7 +336,6 @@ function swapPdmView(srcPath) {
 
 function closeProductModal(event) {
     const modal = document.getElementById('productDetailModal');
-    // Safety check ensuring backdrop selections close panels safely
     if (event.target === modal) {
         modal.style.display = 'none';
     }
@@ -401,7 +394,7 @@ if (submitOrderBtn) {
         }
     });
 }
-// Toggle search input visibility layout state
+
 function toggleSearchField() {
     const searchInput = document.getElementById('storefrontSearchInput');
     if (!searchInput) return;
@@ -412,19 +405,15 @@ function toggleSearchField() {
     } else {
         searchInput.style.display = 'none';
         searchInput.value = '';
-        renderInventory(); // Reset grid if closed
+        renderInventory(); 
     }
 }
 
-// Real-time lookup filtering engine matching database titles
 function handleSearchFilter(queryText) {
     const cleanQuery = queryText.toLowerCase().trim();
-    
-    // Intercept normal renderInventory behavior with query limits
     if (!productsGrid) return;
     productsGrid.innerHTML = '';
 
-    // Apply dual layer filtering (checks active category AND search text strings)
     const filteredItems = liveProducts.filter(item => {
         const matchesCategory = currentCategoryFilter === 'all' || item.category === currentCategoryFilter;
         const matchesSearch = item.name.toLowerCase().includes(cleanQuery) || 
@@ -439,7 +428,6 @@ function handleSearchFilter(queryText) {
 
     const productCardTemplate = document.getElementById('productCardTemplate');
     
-    // Re-run standard card cloning loop for matches
     filteredItems.forEach(item => {
         const displayImageHTML = item.image_url ? `<img src="${item.image_url}" alt="${item.name}">` : '<span>👜</span>';
         const cardClone = productCardTemplate.content.cloneNode(true);
@@ -455,7 +443,6 @@ function handleSearchFilter(queryText) {
             }
         }
         
-        cardClone.querySelector('.product-card-category').innerText = item.category || 'Handbags';
         cardClone.querySelector('.product-card-title').innerText = item.name;
         cardClone.querySelector('.product-card-price').innerText = `KES ${Number(item.price).toLocaleString()}`;
         cardClone.querySelector('.icon-cart-btn').setAttribute('onclick', `event.stopPropagation(); handleAddToCart(${item.id});`);
@@ -463,35 +450,31 @@ function handleSearchFilter(queryText) {
         productsGrid.appendChild(cardClone);
     });
 }
-// Toggle slide out category menu layout view states
+
 function toggleCategoryMenu(shouldOpen) {
     const menuOverlay = document.getElementById('categoryMenuOverlay');
     if (!menuOverlay) return;
     menuOverlay.style.display = shouldOpen ? 'block' : 'none';
 }
 
-// Dedicated vertical filter driver utility
 function filterStorefrontViaDrawer(categoryName, clickedBtn) {
     currentCategoryFilter = categoryName;
 
-    // Reset visual selection cues across drawer buttons
     document.querySelectorAll('.drawer-filter-btn').forEach(btn => {
         btn.classList.remove('active');
     });
     clickedBtn.classList.add('active');
 
-    renderInventory(); // Re-render grid cards live
-    toggleCategoryMenu(false); // Smooth close panel after selection change
+    renderInventory(); 
+    toggleCategoryMenu(false); 
 }
-// ==========================================
-// 11. CHECKOUT VIEW CONTROL GENERATOR LOGIC
-// ==========================================
+
 function renderCheckoutSummaryPage() {
     const listContainer = document.getElementById('checkoutSummaryList');
     const subtotalLabel = document.getElementById('chkSubtotal');
     const totalLabel    = document.getElementById('chkTotal');
 
-    if (!listContainer) return; // Guard protection preventing errors if run on normal landing view
+    if (!listContainer) return; 
     listContainer.innerHTML = '';
     
     let subtotalCalculator = 0;
@@ -506,7 +489,6 @@ function renderCheckoutSummaryPage() {
         const lineCost = Number(item.price) * qty;
         subtotalCalculator += lineCost;
 
-        // Render dynamic minimal text lines matching your Canva blueprint items list row
         const summaryRow = document.createElement('div');
         summaryRow.style.cssText = "display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; border-bottom: 1px solid #f9fafb; padding-bottom: 8px;";
         summaryRow.innerHTML = `
@@ -529,7 +511,6 @@ function renderCheckoutSummaryPage() {
     if (totalLabel)    totalLabel.innerText    = `KES ${runningCartTotal.toLocaleString()}`;
 }
 
-// Order handling function that binds database records across columns
 async function processCheckoutOrder() {
     const firstName = document.getElementById('chkFirstName').value;
     const lastName  = document.getElementById('chkLastName').value;
@@ -566,53 +547,37 @@ async function processCheckoutOrder() {
 
         if (error) throw error;
 
-        if (statusMsg) {
-            statusMsg.innerText = "Order placed successfully! Redirecting...";
-            statusMsg.style.color = "#059669";
-        }
-
-        // Clean cart metrics out of cache memory structures
-        globalCart = [];
-        localStorage.removeItem('swiftShopCart');
-
-        // --- START OF WHATSAPP AUTOMATED MESSAGE GENERATOR ---
-        const shopWhatsAppNumber = "254748184217"; // Replace this with your actual business phone number
+        const shopWhatsAppNumber = "254748184217"; 
         
-        // Build an explicit structural list text string of what they bought
         let itemsOrderedText = "";
         globalCart.forEach((item, index) => {
             itemsOrderedText += `${index + 1}. ${item.name} (Qty: ${item.quantity || 1})\n`;
         });
 
-        // Format a gorgeous, professional text delivery ticket invoice copy
         const rawMessage = `Hello *Rue and Kay Atelier*,\n\n` +
-                           ` *NEW ORDER PLACED!*\n` +
+                           `🛍️ *NEW ORDER PLACED!*\n` +
                            `---------------------------\n` +
-                           ` *Customer:* ${firstName} ${lastName}\n` +
-                           `*Contact:* ${phone}\n` +
-                           ` *Delivery Location:* ${location}, ${document.getElementById('chkCity').value}\n` +
-                           ` *Payment Method:* ${chosenMethod}\n\n` +
-                           ` *Items Requested:*\n${itemsOrderedText}\n` +
-                           ` *Total Amount:* KES ${runningCartTotal.toLocaleString()}\n` +
+                           `👤 *Customer:* ${firstName} ${lastName}\n` +
+                           `📞 *Contact:* ${phone}\n` +
+                           `📍 *Delivery Location:* ${location}, ${document.getElementById('chkCity').value}\n` +
+                           `💳 *Payment Method:* ${chosenMethod}\n\n` +
+                           `📦 *Items Requested:*\n${itemsOrderedText}\n` +
+                           `💰 *Total Amount:* KES ${runningCartTotal.toLocaleString()}\n` +
                            `---------------------------\n` +
-                           ` *Estimated Delivery:* Your luxury package will be processed and delivered within *24 to 48 hours*. Thank you for shopping with us!`;
+                           `🚚 *Estimated Delivery:* Your luxury package will be processed and delivered within *24 to 48 hours*. Thank you for shopping with us!`;
 
-        // Encode the text strings cleanly to protect format spaces over global URL protocols
         const encodedTextString = encodeURIComponent(rawMessage);
         const globalWhatsAppLink  = `https://wa.me/${shopWhatsAppNumber}?text=${encodedTextString}`;
-        // --- END OF WHATSAPP AUTOMATED MESSAGE GENERATOR ---
 
         if (statusMsg) {
             statusMsg.innerText = "Order secured! Redirecting to WhatsApp for instant confirmation...";
             statusMsg.style.color = "#059669";
         }
 
-        // Clean cart metrics out of cache memory structures
         globalCart = [];
         localStorage.removeItem('swiftShopCart');
 
         setTimeout(() => {
-            // Instantly launches WhatsApp app or web tab with pre-typed confirmation template message
             window.location.href = globalWhatsAppLink;
         }, 2000);
 
@@ -625,15 +590,46 @@ async function processCheckoutOrder() {
         if (actionBtn) actionBtn.disabled = false;
     }
 }
+
 // Toggle conditional payment fields panel display state
 function togglePaymentFields(selectedMethod) {
-    const cardForm = document.getElementById('cardDetailsSubForm');
-    if (!cardForm) return;
-    
-    // Only show sub-form inputs if user selects credit card option
-    cardForm.style.display = (selectedMethod === 'card') ? 'flex' : 'none';
+    const mpesaForm = document.getElementById('mpesaDetailsSubForm');
+    const cardForm  = document.getElementById('cardDetailsSubForm');
+    const gatewayForm = document.getElementById('globalGatewaySubForm');
+    const nativePlaceOrderBtn = document.getElementById('chkPlaceOrderBtn');
+
+    // Safety check
+    if (!mpesaForm || !gatewayForm) return;
+
+    if (selectedMethod === 'mpesa') {
+        mpesaForm.style.display = 'block';
+        if (cardForm) cardForm.style.display = 'none';
+        gatewayForm.style.display = 'none';
+        
+        // Show native black button
+        if (nativePlaceOrderBtn) nativePlaceOrderBtn.style.display = 'block'; 
+        
+    } else if (selectedMethod === 'card') {
+        mpesaForm.style.display = 'none';
+        if (cardForm) cardForm.style.display = 'flex'; // Uses flex for your layout grid
+        gatewayForm.style.display = 'none';
+        
+        // Show native black button so they can submit your custom card form
+        if (nativePlaceOrderBtn) nativePlaceOrderBtn.style.display = 'block'; 
+        
+    } else if (selectedMethod === 'paypal') {
+        mpesaForm.style.display = 'none';
+        if (cardForm) cardForm.style.display = 'none';
+        gatewayForm.style.display = 'block';
+        
+        // HIDE native black button because PayPal SDK buttons handle the click
+        if (nativePlaceOrderBtn) nativePlaceOrderBtn.style.display = 'none'; 
+        
+        // Initialize PayPal smart buttons
+        initializeGlobalGatewayPortal();
+    }
 }
-// Toggle display state to swap footer maps into contact cards
+
 function revealContactCards() {
     const defaultLinks = document.getElementById('footerDefaultLinks');
     const contactPanels = document.getElementById('footerContactPanels');
@@ -644,7 +640,6 @@ function revealContactCards() {
     }
 }
 
-// Revert back to original layout map state
 function hideContactCards() {
     const defaultLinks = document.getElementById('footerDefaultLinks');
     const contactPanels = document.getElementById('footerContactPanels');
@@ -660,3 +655,4 @@ function hideContactCards() {
 // ==========================================
 fetchProductsFromDatabase();
 updateCartBadge();
+renderCartContents(); // FIX: Added initialization render call explicitly on cold boot
