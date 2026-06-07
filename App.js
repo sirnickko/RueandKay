@@ -512,6 +512,9 @@ function renderCheckoutSummaryPage() {
     if (totalLabel)    totalLabel.innerText    = `KES ${runningCartTotal.toLocaleString()}`;
 }
 
+// ==========================================
+// 9. SECURE CHECKOUT & ORDER PROCESSING
+// ==========================================
 async function processCheckoutOrder() {
     const firstName = document.getElementById('chkFirstName').value;
     const lastName  = document.getElementById('chkLastName').value;
@@ -524,6 +527,9 @@ async function processCheckoutOrder() {
         return alert("Please fill out all required shipping fields to secure your order.");
     }
 
+    const isMpesa = document.getElementById('payMpesa') && document.getElementById('payMpesa').checked;
+    const chosenMethod = isMpesa ? 'M-Pesa' : (document.getElementById('payPaypal') && document.getElementById('payPaypal').checked ? 'PayPal' : 'Card');
+
     if (statusMsg) {
         statusMsg.innerText = "Processing order details securely...";
         statusMsg.style.color = "#666666";
@@ -531,9 +537,25 @@ async function processCheckoutOrder() {
     if (actionBtn) actionBtn.disabled = true;
 
     try {
-        const chosenMethod = document.getElementById('payCard').checked ? 'Card' : (document.getElementById('payPaypal').checked ? 'PayPal' : 'M-Pesa');
+        // 1. GENERATE UNIQUE ORDER ID
+        const orderId = 'ORD-' + Math.floor(Math.random() * 1000000);
 
-        const { error } = await supabaseClient
+        // 2. TRIGGER STK PUSH IF M-PESA IS SELECTED
+        if (isMpesa) {
+            if (statusMsg) {
+                statusMsg.innerText = "Initiating M-Pesa STK Push... Please check your phone.";
+                statusMsg.style.color = "#0e0f0e";
+            }
+
+            const { data: pushData, error: pushError } = await supabaseClient.functions.invoke('mpesa_stk_push', {
+                body: { phoneNumber: phone, totalAmount: runningCartTotal, orderId: orderId }
+            });
+
+            if (pushError) throw pushError;
+        }
+
+        // 3. LOG ORDER TO SUPABASE
+        const { error: dbError } = await supabaseClient
             .from('orders')
             .insert([
                 {
@@ -542,12 +564,14 @@ async function processCheckoutOrder() {
                     delivery_location: location,
                     cart_items: globalCart, 
                     total_price: runningCartTotal,
-                    payment_method: chosenMethod
+                    payment_method: chosenMethod,
+                    payment_status: isMpesa ? 'Pending' : 'Completed' // STK push remains pending until the callback webhook fires
                 }
             ]);
 
-        if (error) throw error;
+        if (dbError) throw dbError;
 
+        // 4. GENERATE WHATSAPP CONFIRMATION MESSAGE
         const shopWhatsAppNumber = "254748184217"; 
         
         let itemsOrderedText = "";
@@ -556,31 +580,34 @@ async function processCheckoutOrder() {
         });
 
         const rawMessage = `Hello *Rue and Kay Atelier*,\n\n` +
-                           `🛍️ *NEW ORDER PLACED!*\n` +
+                           ` *NEW ORDER PLACED!*\n` +
                            `---------------------------\n` +
-                           `👤 *Customer:* ${firstName} ${lastName}\n` +
-                           `📞 *Contact:* ${phone}\n` +
-                           `📍 *Delivery Location:* ${location}, ${document.getElementById('chkCity').value}\n` +
-                           `💳 *Payment Method:* ${chosenMethod}\n\n` +
-                           `📦 *Items Requested:*\n${itemsOrderedText}\n` +
-                           `💰 *Total Amount:* KES ${runningCartTotal.toLocaleString()}\n` +
+                           ` *Customer:* ${firstName} ${lastName}\n` +
+                           ` *Contact:* ${phone}\n` +
+                           ` *Delivery Location:* ${location}, ${document.getElementById('chkCity').value}\n` +
+                           ` *Payment Method:* ${chosenMethod}\n\n` +
+                           `*Items Requested:*\n${itemsOrderedText}\n` +
+                           ` *Total Amount:* KES ${runningCartTotal.toLocaleString()}\n` +
                            `---------------------------\n` +
-                           `🚚 *Estimated Delivery:* Your luxury package will be processed and delivered within *24 to 48 hours*. Thank you for shopping with us!`;
+                           ` *Estimated Delivery:* Your luxury package will be processed and delivered within *24 to 48 hours*. Thank you for shopping with us!`;
 
         const encodedTextString = encodeURIComponent(rawMessage);
         const globalWhatsAppLink  = `https://wa.me/${shopWhatsAppNumber}?text=${encodedTextString}`;
 
         if (statusMsg) {
-            statusMsg.innerText = "Order secured! Redirecting to WhatsApp for instant confirmation...";
+            statusMsg.innerText = isMpesa 
+                ? "STK Push sent! Redirecting to WhatsApp for confirmation..." 
+                : "Order secured! Redirecting to WhatsApp...";
             statusMsg.style.color = "#059669";
         }
 
+        // 5. CLEAR CART AND EXECUTE REDIRECT
         globalCart = [];
         localStorage.removeItem('swiftShopCart');
 
         setTimeout(() => {
             window.location.href = globalWhatsAppLink;
-        }, 2000);
+        }, 3000);
 
     } catch (err) {
         console.error("Checkout process breakdown:", err.message);
@@ -591,7 +618,6 @@ async function processCheckoutOrder() {
         if (actionBtn) actionBtn.disabled = false;
     }
 }
-
 // Toggle conditional payment fields panel display state
 function togglePaymentFields(selectedMethod) {
     const mpesaForm = document.getElementById('mpesaDetailsSubForm');
