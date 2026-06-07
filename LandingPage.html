@@ -82,12 +82,27 @@
     </div>
 
     <!-- Main Content Area Wrapper -->
+    <!-- Main Content Area Wrapper -->
     <main class="storefront-main" style="margin-top: 110px; padding: 0 20px;">
-        <!-- Title Box and Description Subtext sit first -->
-        <div class="scrolling-title-box">
-            <h1 style="font-size: 2.0rem; margin-bottom: 0px; font-weight: 700; color: #000000; letter-spacing: 0.5px;">Our Products</h1>
-            <p style="color: #666666; font-size: 0.95rem; margin: 0;">Handpicked inventory curated by our shop managers.</p>
+
+        <!-- DYNAMIC SPLIT HERO BANNER (Matches your Canva mockup) -->
+        <div style="background-color: #f3f0ea; display: flex; align-items: center; justify-content: space-between; padding: 60px 80px; border-radius: 12px; margin-bottom: 30px; min-height: 350px;">
+            
+            <!-- Left Side: Typography -->
+            <div style="flex: 1; max-width: 50%;">
+                <h1 style="font-size: 4rem; font-weight: 800; color: #221f24; margin: 0 0 15px 0; font-family: 'Poppins', sans-serif; letter-spacing: -1px; line-height: 1.1;">Our Products</h1>
+                <p style="font-size: 1.3rem; color: #221f24; margin: 0; font-family: 'Poppins', sans-serif; line-height: 1.6;">Some of our products as Rue<br>and Kay Atelier</p>
+            </div>
+            
+            <!-- Right Side: Dynamic Image Canvas -->
+            <div style="flex: 1; display: flex; align-items: center; justify-content: center; height: 350px;">
+                <img id="heroDynamicImage" src="" alt="Featured Atelier Bag" style="max-width: 100%; max-height: 100%; object-fit: contain; opacity: 1; transition: opacity 0.6s ease-in-out;">
+            </div>
         </div>
+
+        <!-- ENTITY & CATEGORY PILLS BAR COMBINED (Sits below banner) -->
+        <div class="filter-container" style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 25px;">
+            <!-- ... Your existing filter buttons stay exactly the same ... -->
 
         <!-- Category Pills Bar sits BELOW the description text -->
         <div class="filter-container">
@@ -156,11 +171,14 @@
         <div class="product-card">
           <div>
             <div class="image-placeholder"></div>
-            <div class="product-info">
-                <h3 class="product-card-title" style="margin-top:2px;"></h3>
-                <p class="product-card-price price"></p>
+            
+            <div class="product-info" style="text-align: left; padding: 12px 10px;">
+                <h3 class="product-card-title" style="margin: 0 0 2px 0; font-size: 1.1rem; font-weight: 500; color: #000;"></h3>
+                <p class="product-card-subtitle" style="margin: 0 0 6px 0; font-size: 0.85rem; color: #888888; font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"></p>
+                <p class="product-card-price price" style="margin: 0; font-size: 1.05rem; font-weight: 500; color: #000;"></p>
             </div>
           </div>
+        
           <div class="product-card-footer">
             <button class="icon-cart-btn" title="Add to Bag">
                 <span class="material-symbols-outlined">shopping_cart</span>

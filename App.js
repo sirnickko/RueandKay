@@ -44,6 +44,7 @@ async function fetchProductsFromDatabase() {
 
         liveProducts = data;
         renderInventory();
+        initializeHeroCarousel(); // <--- ADD THIS LINE HERE
 
     } catch (err) {
         console.error("Error communicating with database:", err.message);
@@ -648,6 +649,44 @@ function hideContactCards() {
         contactPanels.style.display = 'none';
         defaultLinks.style.display = 'block';
     }
+}
+
+// HERO CAROUSEL ANIMATION ENGINE
+
+let heroImageIndex = 0;
+let heroCarouselInterval;
+
+function initializeHeroCarousel() {
+    const heroImgElement = document.getElementById('heroDynamicImage');
+    if (!heroImgElement) return;
+
+    // Extract all valid image URLs from your live Supabase products
+    const validImages = liveProducts.map(item => item.image_url).filter(url => url);
+    
+    // Safety fallback just in case the database is empty
+    if (validImages.length === 0) return;
+
+    // Set the first image immediately
+    heroImgElement.src = validImages[0];
+
+    // Clear any existing loops to prevent glitching
+    if (heroCarouselInterval) clearInterval(heroCarouselInterval);
+
+    // Start the 3-second cycle loop
+    heroCarouselInterval = setInterval(() => {
+        // 1. Fade the current image out
+        heroImgElement.style.opacity = '0';
+        
+        setTimeout(() => {
+            // 2. Swap the source link while it is invisible
+            heroImageIndex = (heroImageIndex + 1) % validImages.length;
+            heroImgElement.src = validImages[heroImageIndex];
+            
+            // 3. Fade the new image back in
+            heroImgElement.style.opacity = '1';
+        }, 600); // 600ms matches the CSS transition timer
+        
+    }, 3000); // Triggers every 3 seconds
 }
 
 // ==========================================
