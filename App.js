@@ -21,6 +21,7 @@ const cartModalOverlay = document.getElementById('cartModalOverlay');
 const cartItemsList = document.getElementById('cartItemsList');
 const cartTotalPrice = document.getElementById('cartTotalPrice');
 
+
 // Checkout Loop Layout Panels
 const cartItemsView = document.getElementById('cartItemsView');
 const checkoutFormView = document.getElementById('checkoutFormView');
@@ -29,6 +30,7 @@ const checkoutActionButtons = document.getElementById('checkoutActionButtons');
 const drawerTitle = document.getElementById('drawerTitle');
 const orderStatusMessage = document.getElementById('orderStatusMessage');
 const submitOrderBtn = document.getElementById('submitOrderBtn');
+const cartCheckoutSection = document.getElementById('cartCheckoutSection');
 
 // ==========================================
 // 3. DATABASE OPERATION: FETCH PRODUCTS
@@ -88,7 +90,10 @@ function renderInventory() {
         const priceNode = cardClone.querySelector('.product-card-price');
         const cartButtonNode = cardClone.querySelector('.icon-cart-btn');
 
-        if (cardRootNode) cardRootNode.setAttribute('onclick', `openProductModal(${item.id})`);
+        if (cardRootNode) {
+        // Navigates to the new page and passes the ID in the URL
+         cardRootNode.setAttribute('onclick', `window.location.href = 'ProductDetails.html?id=${item.id}'`);
+         }
         if (imageFrameNode) imageFrameNode.innerHTML = displayImageHTML;
         if (titleNode) titleNode.innerText = item.name;
         if (priceNode) priceNode.innerText = `KES ${Number(item.price).toLocaleString()}`;
@@ -168,22 +173,12 @@ function updateCartBadge() {
     }
 }
 
-// ==========================================
-// 6. POPUP PANEL VISIBILITY LAYOUT TOGGLES
-// ==========================================
+// 6. CART REDIRECT & PAGE RENDERING
+
 function toggleCartDrawer(shouldOpen) {
-    if (!cartModalOverlay) return;
     if (shouldOpen) {
-        cartModalOverlay.style.display = 'flex';
-        showCheckoutForm(false); 
-        renderCartContents(); 
-        
-        cartModalOverlay.onclick = function(event) {
-            if (event.target === cartModalOverlay) toggleCartDrawer(false);
-        };
-    } else {
-        cartModalOverlay.style.display = 'none';
-        cartModalOverlay.onclick = null;
+        // Redirect to the new dedicated cart page!
+        window.location.href = 'Cart.html';
     }
 }
 
@@ -229,11 +224,13 @@ function renderCartContents() {
         `;
         
         cartTotalPrice.innerText = "KES 0";
-        if (cartActionButtons) cartActionButtons.style.display = 'none';
+        // HIDE THE ENTIRE BOTTOM SECTION
+        if (cartCheckoutSection) cartCheckoutSection.style.display = 'none'; 
         return;
     }
 
-    if (cartActionButtons) cartActionButtons.style.display = 'block';
+    // SHOW THE ENTIRE BOTTOM SECTION IF CART HAS ITEMS
+    if (cartCheckoutSection) cartCheckoutSection.style.display = 'block';
 
     const stencilTemplate = document.getElementById('cartItemTemplate');
     if (!stencilTemplate) return;
@@ -515,6 +512,9 @@ function renderCheckoutSummaryPage() {
 // ==========================================
 // 9. SECURE CHECKOUT & ORDER PROCESSING
 // ==========================================
+// ==========================================
+// 9. SECURE CHECKOUT & ORDER PROCESSING
+// ==========================================
 async function processCheckoutOrder() {
     const firstName = document.getElementById('chkFirstName').value;
     const lastName  = document.getElementById('chkLastName').value;
@@ -528,7 +528,8 @@ async function processCheckoutOrder() {
     }
 
     const isMpesa = document.getElementById('payMpesa') && document.getElementById('payMpesa').checked;
-    const chosenMethod = isMpesa ? 'M-Pesa' : (document.getElementById('payPaypal') && document.getElementById('payPaypal').checked ? 'PayPal' : 'Card');
+    const isCard = document.getElementById('payCard') && document.getElementById('payCard').checked;
+    const chosenMethod = isMpesa ? 'M-Pesa' : (isCard ? 'Card' : 'PayPal');
 
     if (statusMsg) {
         statusMsg.innerText = "Processing order details securely...";
@@ -537,14 +538,15 @@ async function processCheckoutOrder() {
     if (actionBtn) actionBtn.disabled = true;
 
     try {
-        // 1. GENERATE UNIQUE ORDER ID
         const orderId = 'ORD-' + Math.floor(Math.random() * 1000000);
 
-        // 2. TRIGGER STK PUSH IF M-PESA IS SELECTED
+        
+        // ROUTE A: M-PESA STK PUSH
+        
         if (isMpesa) {
             if (statusMsg) {
                 statusMsg.innerText = "Initiating M-Pesa STK Push... Please check your phone.";
-                statusMsg.style.color = "#0e0f0e";
+                statusMsg.style.color = "#040404";
             }
 
             const { data: pushData, error: pushError } = await supabaseClient.functions.invoke('mpesa_stk_push', {
@@ -552,71 +554,97 @@ async function processCheckoutOrder() {
             });
 
             if (pushError) throw pushError;
-        }
 
-        // 3. LOG ORDER TO SUPABASE
-        const { error: dbError } = await supabaseClient
-            .from('orders')
-            .insert([
-                {
-                    customer_name: `${firstName} ${lastName}`,
-                    phone_number: phone,
-                    delivery_location: location,
-                    cart_items: globalCart, 
-                    total_price: runningCartTotal,
-                    payment_method: chosenMethod,
-                    payment_status: isMpesa ? 'Pending' : 'Completed' // STK push remains pending until the callback webhook fires
-                }
-            ]);
-
-        if (dbError) throw dbError;
-
-        // 4. GENERATE WHATSAPP CONFIRMATION MESSAGE
-        const shopWhatsAppNumber = "254748184217"; 
+            // Log pending order to Supabase
+            await logOrderToDatabase('Pending', orderId, chosenMethod, firstName, lastName, phone, location);
+            triggerWhatsAppRedirect(firstName, lastName, phone, location, chosenMethod);
+        } 
         
-        let itemsOrderedText = "";
-        globalCart.forEach((item, index) => {
-            itemsOrderedText += `${index + 1}. ${item.name} (Qty: ${item.quantity || 1})\n`;
-        });
+        // ROUTE B: PAYSTACK CREDIT CARD 
+      
+        else if (isCard) {
+            if (statusMsg) {
+                statusMsg.innerText = "Opening secure payment gateway...";
+                statusMsg.style.color = "#000000";
+            }
 
-        const rawMessage = `Hello *Rue and Kay Atelier*,\n\n` +
-                           ` *NEW ORDER PLACED!*\n` +
-                           `---------------------------\n` +
-                           ` *Customer:* ${firstName} ${lastName}\n` +
-                           ` *Contact:* ${phone}\n` +
-                           ` *Delivery Location:* ${location}, ${document.getElementById('chkCity').value}\n` +
-                           ` *Payment Method:* ${chosenMethod}\n\n` +
-                           `*Items Requested:*\n${itemsOrderedText}\n` +
-                           ` *Total Amount:* KES ${runningCartTotal.toLocaleString()}\n` +
-                           `---------------------------\n` +
-                           ` *Estimated Delivery:* Your luxury package will be processed and delivered within *24 to 48 hours*. Thank you for shopping with us!`;
+            // Paystack requires an email. We generate a placeholder using their phone.
+            const customerEmail = `${phone.replace(/\+/g, '')}@rueandkay.com`;
 
-        const encodedTextString = encodeURIComponent(rawMessage);
-        const globalWhatsAppLink  = `https://wa.me/${shopWhatsAppNumber}?text=${encodedTextString}`;
+            let handler = PaystackPop.setup({
+                key: 'sk_test_6fd66dc4b3af626cdf7ee7e3dc4606a69167f064', 
+                email: customerEmail,
+                amount: runningCartTotal * 100, // Paystack uses cents/kobo
+                currency: 'KES',
+                ref: orderId,
+                onClose: function() {
+                    if (statusMsg) {
+                        statusMsg.innerText = "Payment window closed. Transaction cancelled.";
+                        statusMsg.style.color = "#dc2626";
+                    }
+                    if (actionBtn) actionBtn.disabled = false;
+                },
+                // PAYSTACK FIX: Standard function on the outside, async on the inside!
+                callback: function(response) {
+                    (async function() {
+                        if (statusMsg) {
+                            statusMsg.innerText = "Payment Successful! Securing your order...";
+                            statusMsg.style.color = "#0f100f";
+                        }
+                        
+                        // Log Paid order to Supabase
+                        await logOrderToDatabase('Paid', response.reference, chosenMethod, firstName, lastName, phone, location);
+                        triggerWhatsAppRedirect(firstName, lastName, phone, location, chosenMethod);
+                    })();
+                }
+            });
 
-        if (statusMsg) {
-            statusMsg.innerText = isMpesa 
-                ? "STK Push sent! Redirecting to WhatsApp for confirmation..." 
-                : "Order secured! Redirecting to WhatsApp...";
-            statusMsg.style.color = "#059669";
+            
+
+            handler.openIframe();
         }
-
-        // 5. CLEAR CART AND EXECUTE REDIRECT
-        globalCart = [];
-        localStorage.removeItem('swiftShopCart');
-
-        setTimeout(() => {
-            window.location.href = globalWhatsAppLink;
-        }, 3000);
 
     } catch (err) {
-        console.error("Checkout process breakdown:", err.message);
+        console.error("Checkout breakdown:", err.message);
         if (statusMsg) {
-            statusMsg.innerText = " Transaction processing failed: " + err.message;
+            statusMsg.innerText = " Transaction failed: " + err.message;
             statusMsg.style.color = "#dc2626";
         }
         if (actionBtn) actionBtn.disabled = false;
     }
+}
+
+// Helper Function: Keeps code clean by handling the database save
+async function logOrderToDatabase(status, receiptRef, method, fName, lName, phone, loc) {
+    const { error } = await supabaseClient.from('orders').insert([{
+        customer_name: `${fName} ${lName}`,
+        phone_number: phone,
+        delivery_location: loc,
+        cart_items: globalCart, 
+        total_price: runningCartTotal,
+        payment_method: method,
+        payment_status: status,
+        mpesa_receipt: receiptRef 
+    }]);
+    if (error) throw error;
+}
+
+// Helper Function: Keeps code clean by handling the WhatsApp redirect
+function triggerWhatsAppRedirect(fName, lName, phone, loc, method) {
+    let itemsOrderedText = "";
+    globalCart.forEach((item, index) => {
+        itemsOrderedText += `${index + 1}. ${item.name} (Qty: ${item.quantity || 1})\n`;
+    });
+
+    const rawMessage = `Hello *Rue and Kay Atelier*,\n\n🛍️ *NEW ORDER PLACED!*\n---------------------------\n👤 *Customer:* ${fName} ${lName}\n📞 *Contact:* ${phone}\n📍 *Delivery Location:* ${loc}\n💳 *Payment Method:* ${method}\n\n📦 *Items Requested:*\n${itemsOrderedText}\n💰 *Total Amount:* KES ${runningCartTotal.toLocaleString()}\n---------------------------\n🚚 *Estimated Delivery:* 24 to 48 hours.`;
+
+    const encodedTextString = encodeURIComponent(rawMessage);
+    const globalWhatsAppLink  = `https://wa.me/254748184217?text=${encodedTextString}`;
+
+    globalCart = [];
+    localStorage.removeItem('swiftShopCart');
+
+    setTimeout(() => { window.location.href = globalWhatsAppLink; }, 2000);
 }
 // Toggle conditional payment fields panel display state
 function togglePaymentFields(selectedMethod) {
@@ -676,6 +704,104 @@ function hideContactCards() {
         defaultLinks.style.display = 'block';
     }
 }
+
+
+
+
+
+// FULL PAGE CART RENDERER (For Cart.html)
+
+function renderFullPageCart() {
+    const emptyView = document.getElementById('emptyCartView');
+    const filledView = document.getElementById('filledCartView');
+    const itemsGrid = document.getElementById('cartPageItemsGrid');
+    const subtotalText = document.getElementById('pageSubtotalValue');
+    const grandTotalText = document.getElementById('pageGrandTotalValue');
+    const template = document.getElementById('cartPageItemTemplate');
+
+    // Only run if we are actually on Cart.html
+    if (!emptyView || !filledView || !itemsGrid || !template) return; 
+
+    // --- EMPTY STATE ---
+    if (globalCart.length === 0) {
+        emptyView.style.display = 'block';
+        filledView.style.display = 'none';
+        return;
+    }
+
+    // --- FILLED STATE ---
+    emptyView.style.display = 'none';
+    filledView.style.display = 'block';
+    
+    let runningTotal = 0;
+    itemsGrid.innerHTML = ''; // Clear old rows
+
+    globalCart.forEach((item, index) => {
+        const qty = item.quantity || 1;
+        const subtotal = Number(item.price) * qty;
+        runningTotal += subtotal;
+
+        // 1. Clone the HTML from Cart.html
+        const clone = template.content.cloneNode(true);
+
+        // 2. Fill in the data
+        const imgNode = clone.querySelector('.cp-image');
+        if (imgNode && item.image_url) imgNode.src = item.image_url;
+        
+        clone.querySelector('.cp-name').innerText = item.name;
+        clone.querySelector('.cp-id').innerText = `Item No.: RK-${item.id}`;
+        clone.querySelector('.cp-price').innerText = `KES ${Number(item.price).toLocaleString()}`;
+        clone.querySelector('.cp-qty').innerText = qty;
+        clone.querySelector('.cp-subtotal').innerText = `KES ${subtotal.toLocaleString()}`;
+
+        // 3. Attach the button functions
+        clone.querySelector('.cp-minus-btn').onclick = () => handleUpdateQuantityOnPage(index, -1);
+        clone.querySelector('.cp-plus-btn').onclick = () => handleUpdateQuantityOnPage(index, 1);
+        clone.querySelector('.cp-remove-btn').onclick = () => handleRemoveItem(index);
+
+        // 4. Inject it into the page
+        itemsGrid.appendChild(clone);
+    });
+
+    // Update Totals directly in the HTML
+    subtotalText.innerText = `KES ${runningTotal.toLocaleString()}`;
+    grandTotalText.innerText = `KES ${runningTotal.toLocaleString()}`;
+}
+
+// Helpers for the full page cart
+function handleUpdateQuantityOnPage(index, mutationValue) {
+    handleUpdateQuantity(index, mutationValue);
+    renderFullPageCart(); 
+}
+
+function handleRemoveItem(index) {
+    globalCart.splice(index, 1);
+    saveCartToVault();
+    renderFullPageCart(); 
+}
+
+// Auto-run when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    renderFullPageCart();
+});
+
+// Helpers for the full page cart
+function handleUpdateQuantityOnPage(index, mutationValue) {
+    handleUpdateQuantity(index, mutationValue);
+    renderFullPageCart(); 
+}
+
+function handleRemoveItem(index) {
+    globalCart.splice(index, 1);
+    saveCartToVault();
+    renderFullPageCart(); 
+}
+
+// Auto-run when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    renderFullPageCart();
+});
+
 
 // HERO CAROUSEL ANIMATION ENGINE
 
