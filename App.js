@@ -87,15 +87,20 @@ function renderInventory() {
         const cardRootNode = cardClone.querySelector('.product-card');
         const imageFrameNode = cardClone.querySelector('.image-placeholder');
         const titleNode = cardClone.querySelector('.product-card-title');
+        const descNode = cardClone.querySelector('.product-card-desc'); // <-- ADD THIS
         const priceNode = cardClone.querySelector('.product-card-price');
         const cartButtonNode = cardClone.querySelector('.icon-cart-btn');
 
         if (cardRootNode) {
-        // Navigates to the new page and passes the ID in the URL
-         cardRootNode.setAttribute('onclick', `window.location.href = 'ProductDetails.html?id=${item.id}'`);
-         }
+            cardRootNode.setAttribute('onclick', `window.location.href = 'ProductDetails.html?id=${item.id}'`);
+        }
         if (imageFrameNode) imageFrameNode.innerHTML = displayImageHTML;
+        
         if (titleNode) titleNode.innerText = item.name;
+        
+        // <-- ADD THIS LINE to inject the description (with a fallback if empty)
+        if (descNode) descNode.innerText = item.description || 'Exclusive Atelier collection piece.';
+        
         if (priceNode) priceNode.innerText = `KES ${Number(item.price).toLocaleString()}`;
         if (cartButtonNode) cartButtonNode.setAttribute('onclick', `event.stopPropagation(); handleAddToCart(${item.id});`);
 
