@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shopping Bag | Rue and Kay Atelier</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Stalemate&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="LandingStyle.css">
     <link rel="stylesheet" href="mobileresponsiveness.css">
 </head>
@@ -72,7 +72,7 @@
         <div id="filledCartView" style="display: none;">
             <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px;">
                 <h1 style="font-size: 2.5rem; font-weight: 400; margin: 0; color: #000;">Your shopping bag</h1>
-                <button onclick="window.location.href='Checkout.html'" style="background: #000; color: #fff; padding: 15px 40px; border: none; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.3s;">Proceed to checkout</button>
+                <button id="checkoutBtnDesktop" onclick="window.location.href='Checkout.html'" style="background: #000; color: #fff; padding: 15px 40px; border: none; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.3s;">Proceed to checkout</button>
             </div>
             
             <div style="display: grid; grid-template-columns: 3fr 1fr 1fr 1fr; gap: 20px; border-bottom: 2px solid #000; padding-bottom: 10px; font-weight: 600; font-size: 0.95rem;">
@@ -83,6 +83,9 @@
             </div>
 
             <div id="cartPageItemsGrid"></div>
+
+            <!-- Mobile-only checkout button — sits below items on small screens -->
+            <button id="checkoutBtnMobile" onclick="window.location.href='Checkout.html'" style="display: none; width: 100%; background: #000; color: #fff; padding: 15px; border: none; font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: 20px; letter-spacing: 0.5px;">Proceed to checkout</button>
 
             <div style="display: flex; justify-content: space-between; margin-top: 40px; padding-top: 20px;">
                 <div style="display: flex; gap: 10px; align-items: flex-start;">
@@ -112,13 +115,29 @@
         <template id="cartPageItemTemplate">
         <div style="display: grid; grid-template-columns: 3fr 1fr 1fr 1fr; gap: 20px; align-items: center; padding: 30px 0; border-bottom: 1px solid #e5e7eb;">
             <div style="display: flex; gap: 20px;">
-                <div style="width: 120px; height: 150px; background: #f9fafb; display: flex; align-items: center; justify-content: center;">
+                <div style="width: 120px; height: 150px; background: #f9fafb; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                     <img class="cp-image" src="" style="max-width: 100%; max-height: 100%; object-fit: contain;">
                 </div>
                 <div style="display: flex; flex-direction: column; justify-content: center;">
                     <div style="font-weight: 600; font-size: 1.1rem; color: #000; margin-bottom: 5px;">Rue and Kay</div>
                     <div class="cp-name" style="color: #000; font-size: 0.95rem; margin-bottom: 5px;">Product Name</div>
                     <div class="cp-id" style="color: #666; font-size: 0.85rem;">Item No.: RK-000</div>
+                    <!-- Mobile-only details shown when desktop columns are hidden -->
+                    <div class="mobile-item-details" style="display: none; margin-top: 10px;">
+                        <div class="cp-price-mobile" style="font-size: 0.85rem; color: #666; margin-bottom: 8px;">KES 0</div>
+                        <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 8px;">
+                            <button class="cp-minus-btn" style="border: 1px solid #ddd; background: transparent; cursor: pointer; font-size: 1.1rem; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;">&minus;</button>
+                            <span class="cp-qty" style="font-weight: 500; font-size: 0.95rem;">1</span>
+                            <button class="cp-plus-btn" style="border: 1px solid #ddd; background: transparent; cursor: pointer; font-size: 1.1rem; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;">&#43;</button>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="cp-subtotal-mobile" style="font-weight: 700; font-size: 1rem;">KES 0</span>
+                            <div style="display: flex; gap: 12px; font-size: 0.8rem;">
+                                <span style="cursor: pointer; text-decoration: underline; color: #000;">♡ Wishlist</span>
+                                <span class="cp-remove-btn" style="cursor: pointer; text-decoration: underline; color: #000;">Remove</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="cp-price" style="font-weight: 500; text-align: center;">KES 0</div>
@@ -136,6 +155,7 @@
             </div>
         </div>
     </template>
+
 
     </main>
 

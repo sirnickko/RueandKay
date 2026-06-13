@@ -756,17 +756,26 @@ function renderFullPageCart() {
         clone.querySelector('.cp-name').innerText = item.name;
         clone.querySelector('.cp-id').innerText = `Item No.: RK-${item.id}`;
         clone.querySelector('.cp-price').innerText = `KES ${Number(item.price).toLocaleString()}`;
-        clone.querySelector('.cp-qty').innerText = qty;
+
+        // Populate mobile-only price + subtotal fields
+        const mobilePriceNode = clone.querySelector('.cp-price-mobile');
+        if (mobilePriceNode) mobilePriceNode.innerText = `KES ${Number(item.price).toLocaleString()}`;
+        const mobileSubtotalNode = clone.querySelector('.cp-subtotal-mobile');
+        if (mobileSubtotalNode) mobileSubtotalNode.innerText = `KES ${subtotal.toLocaleString()}`;
+
+        // Set qty on all qty spans (desktop + mobile share the same class)
+        clone.querySelectorAll('.cp-qty').forEach(el => el.innerText = qty);
         clone.querySelector('.cp-subtotal').innerText = `KES ${subtotal.toLocaleString()}`;
 
-        // 3. Attach the button functions
-        clone.querySelector('.cp-minus-btn').onclick = () => handleUpdateQuantityOnPage(index, -1);
-        clone.querySelector('.cp-plus-btn').onclick = () => handleUpdateQuantityOnPage(index, 1);
-        clone.querySelector('.cp-remove-btn').onclick = () => handleRemoveItem(index);
+        // 3. Attach the button functions (all minus/plus/remove buttons, desktop + mobile)
+        clone.querySelectorAll('.cp-minus-btn').forEach(btn => btn.onclick = () => handleUpdateQuantityOnPage(index, -1));
+        clone.querySelectorAll('.cp-plus-btn').forEach(btn => btn.onclick = () => handleUpdateQuantityOnPage(index, 1));
+        clone.querySelectorAll('.cp-remove-btn').forEach(btn => btn.onclick = () => handleRemoveItem(index));
 
         // 4. Inject it into the page
         itemsGrid.appendChild(clone);
     });
+
 
     // Update Totals directly in the HTML
     subtotalText.innerText = `KES ${runningTotal.toLocaleString()}`;

@@ -110,11 +110,11 @@ img {
     /* ---- HEADER ---- */
     .main-nav-container {
         height: 60px !important;
-        padding: 0 14px !important;
+        padding: 0 22px 0 14px !important; /* extra right padding pulls cart away from edge */
     }
     .logo {
-        font-size: 1.05rem !important;
-        letter-spacing: -0.3px !important;
+        font-size: 1.8rem !important;
+        letter-spacing: 0 !important;
         white-space: nowrap;
     }
     /* Hide "Cart" label + price text — keep icon */
@@ -303,59 +303,107 @@ img {
     }
 
     /* ---- CART PAGE ---- */
-    /* Page heading + button row */
+
+    /* Main area top margin */
+    main[style*="120px"] {
+        margin-top: 80px !important;
+        padding: 0 16px !important;
+    }
+
+    /* Page heading — title only, no button beside it */
     #filledCartView > div:first-child {
-        flex-direction: column !important;
-        align-items: flex-start !important;
-        gap: 14px;
+        flex-direction: row !important;
+        align-items: center !important;
+        margin-bottom: 16px !important;
     }
     #filledCartView > div:first-child h1 {
         font-size: 1.6rem !important;
-    }
-    #filledCartView > div:first-child button {
-        width: 100% !important;
-        padding: 12px 20px !important;
-        font-size: 0.9rem !important;
+        font-weight: 400 !important;
     }
 
-    /* Cart column header row — hide on mobile */
+    /* Hide the desktop top button — mobile button sits below items instead */
+    #checkoutBtnDesktop {
+        display: none !important;
+    }
+    /* Show the mobile button below the items */
+    #checkoutBtnMobile {
+        display: block !important;
+    }
+
+    /* Show the mobile-only detail block (price, qty, subtotal, actions) */
+    .mobile-item-details {
+        display: block !important;
+    }
+
+    /* Hide the desktop column header row */
     #filledCartView > div:nth-child(2) {
         display: none !important;
     }
 
-    /* Each cart item row — make it flex column */
+    /* ---- EACH CART ITEM: image left, info right ---- */
     #cartPageItemsGrid > div {
         display: flex !important;
-        flex-direction: column !important;
-        gap: 10px !important;
-        padding: 20px 0 !important;
-    }
-    #cartPageItemsGrid > div > div:first-child {
-        width: 100% !important;
-    }
-    #cartPageItemsGrid img.cp-image {
-        width: 80px !important;
-        height: 100px !important;
+        flex-direction: row !important;
+        gap: 14px !important;
+        padding: 18px 0 !important;
+        border-bottom: 1px solid #e5e7eb !important;
+        align-items: flex-start !important;
     }
 
-    /* Promo + totals row */
+    /* First child: the flex row of [image box + text info] — let it stay as-is */
+    #cartPageItemsGrid > div > div:first-child {
+        flex-direction: row !important;
+        gap: 12px !important;
+        flex: 1 !important;
+        width: auto !important;
+    }
+
+    /* Image box — give it real size */
+    #cartPageItemsGrid > div > div:first-child > div:first-child {
+        width: 100px !important;
+        height: 120px !important;
+        min-width: 100px !important;
+        flex-shrink: 0 !important;
+    }
+    #cartPageItemsGrid img.cp-image {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: contain !important;
+    }
+
+    /* Hide the separate price / qty / subtotal columns from the desktop grid */
+    #cartPageItemsGrid > div > div.cp-price,
+    #cartPageItemsGrid > div > div:nth-child(3),
+    #cartPageItemsGrid > div > div:nth-child(4) {
+        display: none !important;
+    }
+
+    /* Instead — show price, qty, subtotal INSIDE the text info block */
+    /* (these are already in the template's text-info div, so just let them flow) */
+
+    /* ---- PROMO + TOTALS — stack vertically ---- */
     #filledCartView > div:last-child {
         flex-direction: column !important;
-        gap: 20px !important;
-        margin-top: 20px !important;
+        gap: 16px !important;
+        margin-top: 24px !important;
     }
     #filledCartView > div:last-child > div:first-child {
         flex-direction: column !important;
         width: 100% !important;
+        gap: 10px !important;
     }
     #filledCartView > div:last-child > div:first-child input {
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    #filledCartView > div:last-child > div:first-child button {
         width: 100% !important;
     }
     #filledCartView > div:last-child > div:last-child {
         width: 100% !important;
     }
 
-    /* Empty cart category tiles */
+    /* ---- EMPTY CART category tiles ---- */
     #emptyCartView > div {
         grid-template-columns: repeat(2, 1fr) !important;
         gap: 12px !important;
@@ -366,6 +414,8 @@ img {
     #emptyCartView h1 {
         font-size: 1.5rem !important;
     }
+
+
 
     /* ---- CHECKOUT PAGE ---- */
     body > main {
@@ -441,9 +491,9 @@ img {
    ================================================================ */
 @media (max-width: 480px) {
 
-    /* Logo font even tighter */
+    /* Logo font — keep Stalemate readable on small screens */
     .logo {
-        font-size: 0.95rem !important;
+        font-size: 1.6rem !important;
     }
 
     /* Products grid stays 2 columns but tighter */
@@ -497,7 +547,7 @@ img {
 @media (max-width: 380px) {
 
     .logo {
-        font-size: 0.85rem !important;
+        font-size: 1.4rem !important;
     }
 
     .main-nav-container {
