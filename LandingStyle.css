@@ -7,13 +7,14 @@
 }
 
 :root {
-    --bg-color: #f8f9fa;
+    --bg-color: #fdf5f7;           /* warm blush page background */
     --card-bg: #ffffff;
-    --text-main: #0b0b0b;
-    --text-muted: #707070;
-    --accent: #000000; /* Royal Blue */
-    --accent-hover: #d81d74;
-    --border: #e5e7eb;
+    --text-main: #1a0a0f;          /* near-black with warm rose undertone */
+    --text-muted: #7a5560;
+    --accent: #C2185B;             /* deep rose — primary brand colour */
+    --accent-hover: #880E4F;       /* darker rose on hover */
+    --accent-light: #FCE4EC;       /* blush pink — hover backgrounds */
+    --border: #f0d6df;
 }
 
 body {
@@ -60,8 +61,8 @@ body {
 
 .filter-btn {
     background: #ffffff; 
-    color: #000000; 
-    border: 1px solid #e5e7eb; 
+    color: var(--accent); 
+    border: 1.5px solid var(--accent); 
     padding: 10px 22px; 
     border-radius: 25px; 
     font-size: 0.88rem;
@@ -72,15 +73,62 @@ body {
 }
 
 .filter-btn:hover {
-    background: #f9fafb;
-    border-color: #bcd1d5db;
+    background: var(--accent-light);
+    border-color: var(--accent);
 }
 
 .filter-btn.active {
-    background: #000000 !important;
+    background: var(--accent) !important;
     color: #ffffff !important;
-    border-color: #000000 !important;
+    border-color: var(--accent) !important;
     font-weight: 600;
+}
+
+/* ---- Horizontal Category Nav Bar ---- */
+.cat-nav-btn {
+    background: transparent;
+    border: none;
+    padding: 12px 18px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: #444;
+    cursor: pointer;
+    white-space: nowrap;
+    position: relative;
+    transition: color 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    letter-spacing: 0.2px;
+}
+.cat-nav-btn::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 18px;
+    right: 18px;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transition: transform 0.2s ease;
+}
+.cat-nav-btn:hover {
+    color: var(--accent);
+}
+.cat-nav-btn:hover::after {
+    transform: scaleX(1);
+}
+.cat-nav-btn.active {
+    color: var(--accent);
+    font-weight: 600;
+}
+.cat-nav-btn.active::after {
+    transform: scaleX(1);
+}
+.cat-chevron {
+    font-size: 0.75rem;
+    opacity: 0.6;
 }
 
 /* --- DESIGNER PRODUCT GRID --- */
@@ -244,7 +292,7 @@ body {
     position: absolute;
     top: -3px;
     right: -5px;
-    background: #0052cc; 
+    background: var(--accent);
     color: #ffffff;
     font-size: 0.72rem;
     font-weight: 700;
@@ -434,30 +482,22 @@ body {
     color: #666666;
     line-height: 1.5;
 }
-/* Vertical Side Drawer Action Selection Links */
+/* Vertical Side Drawer Category Rows */
 .drawer-filter-btn {
     background: transparent;
-    border: none;
-    text-align: left;
-    font-family: 'Poppins', sans-serif;
-    font-size: 1rem;
-    font-weight: 400;
-    color: #444444;
-    padding: 10px 0;
-    cursor: pointer;
-    border-bottom: 1px solid #f3f4f6;
-    transition: all 0.2s ease;
+    transition: background 0.15s ease;
 }
 
 .drawer-filter-btn:hover {
-    color: #000000;
-    padding-left: 5px;
+    background: #f7f7f7 !important;
 }
 
 .drawer-filter-btn.active {
+    background: #f7f7f7 !important;
+}
+.drawer-filter-btn.active > span:first-child {
+    font-weight: 700 !important;
     color: #000000 !important;
-    font-weight: 600 !important;
-    border-bottom-color: #000000;
 }
 
 /* Align Search and Cart widgets together on the right wall */

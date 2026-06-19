@@ -111,10 +111,12 @@ function renderInventory() {
 function filterStorefront(categoryName, clickedButton) {
     currentCategoryFilter = categoryName;
     
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    clickedButton.classList.add('active');
+    // Update horizontal nav bar active state
+    document.querySelectorAll('.cat-nav-btn').forEach(btn => btn.classList.remove('active'));
+    // Update old filter pills if any remain
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+
+    if (clickedButton) clickedButton.classList.add('active');
 
     renderInventory(); 
 }
@@ -861,3 +863,28 @@ function initializeHeroCarousel() {
 fetchProductsFromDatabase();
 updateCartBadge();
 renderCartContents(); // FIX: Added initialization render call explicitly on cold boot
+
+// Auto-position category nav bar flush below the header
+function alignCategoryBar() {
+    const header = document.querySelector('header');
+    const navBar = document.getElementById('categoryNavBar');
+    const main = document.querySelector('.storefront-main');
+    if (!header || !navBar) return;
+    const headerH = header.getBoundingClientRect().height;
+    navBar.style.top = headerH + 'px';
+    // Apply on all sizes where the category bar is shown (> 600px = phones excluded)
+    if (main && window.innerWidth > 600) {
+        const navBarH = navBar.getBoundingClientRect().height;
+        main.style.marginTop = (headerH + navBarH + 30) + 'px';
+    }
+}
+window.addEventListener('load', alignCategoryBar);
+window.addEventListener('resize', alignCategoryBar);
+// Re-run after fonts load (Stalemate font can resize the header late)
+if (document.fonts) {
+    document.fonts.ready.then(() => {
+        alignCategoryBar();
+        setTimeout(alignCategoryBar, 600);
+    });
+}
+

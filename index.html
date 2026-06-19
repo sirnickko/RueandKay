@@ -63,30 +63,71 @@
         </div>
     </header>
 
+    <!-- Horizontal Category Nav Bar -->
+    <nav id="categoryNavBar" style="position: fixed; top: 77px; left: 0; width: 100%; z-index: 999; background: #ffffff; border-bottom: 1px solid #e5e7eb; border-top: 1px solid #e5e7eb;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; align-items: center; gap: 0; overflow-x: auto; scrollbar-width: none;">
+            <button class="cat-nav-btn active" onclick="filterStorefront('all', this)">
+                Show All <span class="cat-chevron">&#8964;</span>
+            </button>
+            <button class="cat-nav-btn" onclick="filterStorefront('Luxury Handbags', this)">
+                Luxury Handbags <span class="cat-chevron">&#8964;</span>
+            </button>
+            <button class="cat-nav-btn" onclick="filterStorefront('Clutches', this)">
+                Clutches <span class="cat-chevron">&#8964;</span>
+            </button>
+            <button class="cat-nav-btn" onclick="filterStorefront('Backpacks', this)">
+                Backpacks <span class="cat-chevron">&#8964;</span>
+            </button>
+        </div>
+    </nav>
+
     <!-- Side Navigation Sidebar Filters Drawer Overlay -->
-    <div id="categoryMenuOverlay" class="cmo-backdrop" onclick="toggleCategoryMenu(false)" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); z-index: 4000;">
-        <div class="cmo-drawer" onclick="event.stopPropagation()" style="position: absolute; top: 0; left: 0; width: 320px; height: 100%; background: #ffffff; padding: 40px; box-sizing: border-box; box-shadow: 5px 0 25px rgba(0,0,0,0.15); display: flex; flex-direction: column;">
-            
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
-                <h2 style="font-family: 'Poppins', sans-serif; font-size: 1.4rem; font-weight: 600; margin: 0;">Filters & Categories</h2>
-                <button onclick="toggleCategoryMenu(false)" style="background: transparent; border: none; font-size: 1.8rem; cursor: pointer; color: #666;">&times;</button>
+    <div id="categoryMenuOverlay" class="cmo-backdrop" onclick="toggleCategoryMenu(false)" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 4000;">
+        <div class="cmo-drawer" onclick="event.stopPropagation()" style="position: absolute; top: 0; left: 0; width: 340px; height: 100%; background: #ffffff; box-shadow: 5px 0 30px rgba(0,0,0,0.18); display: flex; flex-direction: column; overflow: hidden;">
+
+            <!-- Black header bar -->
+            <div style="background: #C2185B; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; height: 64px; flex-shrink: 0;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                    <span style="color: #ffffff; font-family: 'Stalemate', cursive; font-size: 1.8rem; font-weight: 400; letter-spacing: 1px;">Rue and Kay Online Menu</span>
+                </div>
+                <button onclick="toggleCategoryMenu(false)" style="background: #880E4F; border: none; cursor: pointer; color: #ffffff; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; line-height: 1; flex-shrink: 0;">&#x2715;</button>
             </div>
 
-            <div class="drawer-filter-list" style="display: flex; flex-direction: column; gap: 15px;">
-                <button class="drawer-filter-btn active" onclick="filterStorefrontViaDrawer('all', this)">Show All</button>
-                <button class="drawer-filter-btn" onclick="filterStorefrontViaDrawer('Luxury Handbags', this)">Luxury Handbags</button>
-                <button class="drawer-filter-btn" onclick="filterStorefrontViaDrawer('Clutches', this)">Clutches</button>
-                <button class="drawer-filter-btn" onclick="filterStorefrontViaDrawer('Backpacks', this)">Backpacks</button>
+            <!-- Category list -->
+            <div style="flex: 1; overflow-y: auto; padding: 8px 0;">
+                <button class="drawer-filter-btn active" onclick="filterStorefrontViaDrawer('all', this)" style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 18px 24px; background: transparent; border: none; border-bottom: 1px solid #f0f0f0; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 500; color: #111; text-align: left; box-sizing: border-box;">
+                    <span>Show All</span>
+                    <span style="font-size: 1.2rem; font-weight: 300; color: #555;">+</span>
+                </button>
+                <button class="drawer-filter-btn" onclick="filterStorefrontViaDrawer('Luxury Handbags', this)" style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 18px 24px; background: transparent; border: none; border-bottom: 1px solid #f0f0f0; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 500; color: #111; text-align: left; box-sizing: border-box;">
+                    <span>Luxury Handbags</span>
+                    <span style="font-size: 1.2rem; font-weight: 300; color: #555;">+</span>
+                </button>
+                <button class="drawer-filter-btn" onclick="filterStorefrontViaDrawer('Clutches', this)" style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 18px 24px; background: transparent; border: none; border-bottom: 1px solid #f0f0f0; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 500; color: #111; text-align: left; box-sizing: border-box;">
+                    <span>Clutches</span>
+                    <span style="font-size: 1.2rem; font-weight: 300; color: #555;">+</span>
+                </button>
+                <button class="drawer-filter-btn" onclick="filterStorefrontViaDrawer('Backpacks', this)" style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 18px 24px; background: transparent; border: none; border-bottom: 1px solid #f0f0f0; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 500; color: #111; text-align: left; box-sizing: border-box;">
+                    <span>Backpacks</span>
+                    <span style="font-size: 1.2rem; font-weight: 300; color: #555;">+</span>
+                </button>
             </div>
+
         </div>
     </div>
 
-    <!-- Main Content Area Wrapper -->
-    <!-- Main Content Area Wrapper -->
-    <main class="storefront-main" style="margin-top: 110px; padding: 0 20px;">
 
-        <!-- DYNAMIC SPLIT HERO BANNER (Matches your Canva mockup) -->
-        <div style="background-color: #f3f0ea; display: flex; align-items: center; justify-content: space-between; padding: 60px 80px; border-radius: 12px; margin-bottom: 30px; min-height: 350px;">
+    <!-- Main Content Area Wrapper -->
+    <!-- Main Content Area Wrapper -->
+    <main class="storefront-main" style="margin-top: 180px; padding: 0 20px;">
+
+        <!-- DYNAMIC SPLIT HERO BANNER -->
+        <div style="background-color: #FCE4EC; display: flex; align-items: center; justify-content: space-between; padding: 60px 80px; border-radius: 12px; margin-bottom: 30px; min-height: 350px;">
             
             <!-- Left Side: Typography -->
             <div style="flex: 1; max-width: 50%;">
@@ -100,17 +141,6 @@
             </div>
         </div>
 
-        <!-- ENTITY & CATEGORY PILLS BAR COMBINED (Sits below banner) -->
-        <div class="filter-container" style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 25px;">
-            <!-- ... Your existing filter buttons stay exactly the same ... -->
-
-        <!-- Category Pills Bar sits BELOW the description text -->
-        <div class="filter-container">
-            <button class="filter-btn active" onclick="filterStorefront('all', this)">Show All</button>
-            <button class="filter-btn" onclick="filterStorefront('Luxury Handbags', this)">Luxury Handbags</button>
-            <button class="filter-btn" onclick="filterStorefront('Clutches', this)">Clutches</button>
-            <button class="filter-btn" onclick="filterStorefront('Backpacks', this)">Backpacks</button>
-        </div>
 
         <!-- Main Products Display Grid -->
         <section id="productsGrid" class="shop-container">

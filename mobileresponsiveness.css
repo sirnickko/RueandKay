@@ -35,10 +35,9 @@ img {
         padding: 0 20px !important;
     }
 
-    /* Storefront */
+    /* Storefront — let JS control the margin-top via alignCategoryBar() */
     .storefront-main {
         padding: 0 20px !important;
-        margin-top: 80px;
     }
 
     /* Products grid — 3 columns */
@@ -47,16 +46,26 @@ img {
         gap: 18px !important;
     }
 
-    /* Hero banner — stack vertically */
+    /* Hero banner — side-by-side, scale down proportionally */
     .storefront-main > div:first-child {
-        flex-direction: column !important;
-        padding: 40px 20px !important;
-        text-align: center;
-        min-height: auto !important;
+        flex-direction: row !important;
+        padding: 30px 30px !important;
+        min-height: 220px !important;
+        overflow: visible !important;
     }
-    .storefront-main > div:first-child > div {
-        max-width: 100% !important;
+    .storefront-main > div:first-child h1 {
+        font-size: 2.2rem !important;
     }
+    .storefront-main > div:first-child p {
+        font-size: 1rem !important;
+    }
+    .storefront-main > div:first-child > div:first-child {
+        max-width: 50% !important;
+    }
+    .storefront-main > div:first-child > div:last-child {
+        height: 220px !important;
+    }
+
 
     /* Quick-view modal */
     .pdm-window {
@@ -108,6 +117,17 @@ img {
 @media (max-width: 600px) {
 
     /* ---- HEADER ---- */
+
+    /* Hide horizontal category bar on mobile — sidebar drawer handles filtering */
+    #categoryNavBar {
+        display: none !important;
+    }
+
+    /* Reset main top margin since the category bar is gone */
+    .storefront-main {
+        margin-top: 80px !important;
+    }
+
     .main-nav-container {
         height: 60px !important;
         padding: 0 22px 0 14px !important; /* extra right padding pulls cart away from edge */
@@ -135,28 +155,33 @@ img {
         margin-top: 68px !important;
     }
 
-    /* ---- HERO BANNER ---- */
+    /* ---- HERO BANNER — scale down, no stacking ---- */
     .storefront-main > div:first-child {
-        padding: 16px 14px !important;
+        padding: 18px 16px !important;
         border-radius: 10px !important;
-        gap: 10px;
-        min-height: auto !important;
+        min-height: 150px !important;
+        overflow: visible !important;
+        flex-direction: row !important;
     }
     .storefront-main > div:first-child h1 {
-        font-size: 1.4rem !important;
-        letter-spacing: -0.3px !important;
+        font-size: 1.2rem !important;
+        letter-spacing: -0.2px !important;
         margin-bottom: 4px !important;
+        line-height: 1.2 !important;
     }
     .storefront-main > div:first-child p {
-        font-size: 0.8rem !important;
+        font-size: 0.7rem !important;
         line-height: 1.4 !important;
     }
-    /* Hero image — tightly clamped so grid is visible sooner */
+    .storefront-main > div:first-child > div:first-child {
+        max-width: 50% !important;
+    }
+    /* Hero image — compact but visible */
     .storefront-main > div:first-child > div:last-child {
-        height: 130px !important;
+        height: 150px !important;
     }
     .storefront-main > div:first-child > div:last-child img {
-        max-height: 130px !important;
+        max-height: 150px !important;
         object-fit: contain !important;
     }
 
