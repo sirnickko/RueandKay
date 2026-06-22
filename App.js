@@ -8,11 +8,15 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ==========================================
 // 2. STATE AND UI TARGET VARIABLES
-// ==========================================
+// =================a=========================
 let liveProducts = []; 
 let currentCategoryFilter = 'all'; 
 let globalCart = JSON.parse(localStorage.getItem('swiftShopCart')) || [];
 let runningCartTotal = 0; 
+
+// Auth & Wishlist State (declared here so renderInventory can safely reference them)
+let currentUser     = null;
+let userWishlistIds = new Set();
 
 // DOM Layout Element Targets
 const productsGrid = document.getElementById('productsGrid');
@@ -103,6 +107,21 @@ function renderInventory() {
         
         if (priceNode) priceNode.innerText = `KES ${Number(item.price).toLocaleString()}`;
         if (cartButtonNode) cartButtonNode.setAttribute('onclick', `event.stopPropagation(); handleAddToCart(${item.id});`);
+
+        // ── Wishlist button: stamp the product ID and attach click handler ──
+        const wishlistBtnNode = cardClone.querySelector('.icon-wishlist-btn');
+        if (wishlistBtnNode) {
+            wishlistBtnNode.dataset.productId = item.id;
+            wishlistBtnNode.onclick = (e) => {
+                e.stopPropagation();
+                handleWishlistToggle(item.id, wishlistBtnNode);
+            };
+            // Paint immediately if wishlist already loaded
+            const isSaved = userWishlistIds.has(item.id);
+            const heartSvg = wishlistBtnNode.querySelector('.heart-icon');
+            if (heartSvg) heartSvg.setAttribute('fill', isSaved ? '#C2185B' : 'none');
+            wishlistBtnNode.title = isSaved ? 'Remove from Wishlist' : 'Save to Wishlist';
+        }
 
         productsGrid.appendChild(cardClone);
     });
@@ -413,6 +432,14 @@ function toggleSearchField() {
         renderInventory(); 
     }
 }
+
+// Auto-close empty search field on scroll
+window.addEventListener('scroll', () => {
+    const searchInput = document.getElementById('storefrontSearchInput');
+    if (searchInput && searchInput.style.display !== 'none' && searchInput.value.trim() === '') {
+        searchInput.style.display = 'none';
+    }
+}, { passive: true });
 
 function handleSearchFilter(queryText) {
     const cleanQuery = queryText.toLowerCase().trim();
@@ -864,6 +891,118 @@ fetchProductsFromDatabase();
 updateCartBadge();
 renderCartContents(); // FIX: Added initialization render call explicitly on cold boot
 
+// ==========================================
+// 11. CUSTOMER AUTH & WISHLIST SYSTEM
+// ==========================================
+// (currentUser and userWishlistIds are declared at the top of the file)
+
+// ── A. Check auth state on boot ──
+async function checkAuthState() {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    currentUser = session ? session.user : null;
+
+    updateHeaderAccountUI();
+
+    if (currentUser) {
+        await loadUserWishlist();
+    }
+}
+
+// ── B. Sync the header account icon to show login vs. user state ──
+function updateHeaderAccountUI() {
+    const accountLink = document.getElementById('headerAccountLink');
+    if (!accountLink) return;
+
+    if (currentUser) {
+        // Show a filled account icon and link to a future "My Account" page
+        accountLink.title = 'My Account';
+        accountLink.style.color = '#C2185B';
+        accountLink.querySelector('svg').innerHTML = `
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" fill="#FCE4EC"/>
+            <circle cx="12" cy="7" r="4" fill="#C2185B" stroke="#C2185B"/>`;
+    }
+}
+
+// ── C. Load the user's existing wishlist from Supabase ──
+async function loadUserWishlist() {
+    if (!currentUser) return;
+
+    const { data, error } = await supabaseClient
+        .from('wishlists')
+        .select('product_id')
+        .eq('user_id', currentUser.id);
+
+    if (error) { console.error('Wishlist load error:', error.message); return; }
+
+    userWishlistIds = new Set(data.map(row => row.product_id));
+    refreshHeartIcons(); // Paint hearts on any already-rendered cards
+}
+
+// ── D. Paint/unpaint all heart icons on the page based on userWishlistIds ──
+function refreshHeartIcons() {
+    document.querySelectorAll('.icon-wishlist-btn').forEach(btn => {
+        const productId = parseInt(btn.dataset.productId, 10);
+        const isSaved   = userWishlistIds.has(productId);
+        const svg       = btn.querySelector('.heart-icon');
+        if (svg) {
+            svg.setAttribute('fill', isSaved ? '#C2185B' : 'none');
+            svg.setAttribute('stroke', '#C2185B');
+        }
+        btn.title = isSaved ? 'Remove from Wishlist' : 'Save to Wishlist';
+    });
+}
+
+// ── E. Toggle wishlist for a product (add or remove) ──
+async function handleWishlistToggle(productId, btn) {
+    // Not logged in → redirect to login page, come back after
+    if (!currentUser) {
+        window.location.href = `AccountAuth.html?returnTo=${encodeURIComponent(window.location.pathname + window.location.search)}`;
+        return;
+    }
+
+    const isSaved = userWishlistIds.has(productId);
+
+    // Optimistic UI update
+    const svg = btn ? btn.querySelector('.heart-icon') : null;
+    if (isSaved) {
+        userWishlistIds.delete(productId);
+        if (svg) { svg.setAttribute('fill', 'none'); btn.title = 'Save to Wishlist'; }
+
+        const { error } = await supabaseClient
+            .from('wishlists')
+            .delete()
+            .eq('user_id', currentUser.id)
+            .eq('product_id', productId);
+
+        if (error) {
+            // Rollback
+            userWishlistIds.add(productId);
+            if (svg) { svg.setAttribute('fill', '#C2185B'); btn.title = 'Remove from Wishlist'; }
+            console.error('Wishlist remove error:', error.message);
+        }
+    } else {
+        userWishlistIds.add(productId);
+        if (svg) { svg.setAttribute('fill', '#C2185B'); btn.title = 'Remove from Wishlist'; }
+
+        const { error } = await supabaseClient
+            .from('wishlists')
+            .insert([{ user_id: currentUser.id, product_id: productId }]);
+
+        if (error) {
+            // Rollback
+            userWishlistIds.delete(productId);
+            if (svg) { svg.setAttribute('fill', 'none'); btn.title = 'Save to Wishlist'; }
+            console.error('Wishlist add error:', error.message);
+        }
+    }
+}
+
+// ── F. Run auth check on page load (wishlist btn wiring is already done inside renderInventory forEach) ──
+document.addEventListener('DOMContentLoaded', () => {
+    checkAuthState();
+});
+
+
 // Auto-position category nav bar flush below the header
 function alignCategoryBar() {
     const header = document.querySelector('header');
@@ -887,4 +1026,4 @@ if (document.fonts) {
         setTimeout(alignCategoryBar, 600);
     });
 }
-
+

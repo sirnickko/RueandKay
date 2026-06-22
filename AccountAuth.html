@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account | Rue and Kay Atelier</title>
+    <meta name="description" content="Sign in or create your Rue and Kay Atelier account to save your favourite luxury bags to your wishlist.">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Stalemate&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --accent:       #C2185B;
+            --accent-hover: #880E4F;
+            --accent-light: #FCE4EC;
+            --bg:           #fdf5f7;
+            --border:       #f0d6df;
+            --text:         #1a0a0f;
+            --muted:        #7a5560;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── TOP HEADER BAR ── */
+        header {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border);
+            padding: 0 40px;
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+        .logo {
+            font-family: 'Stalemate', cursive;
+            font-size: 2rem;
+            color: #3D0814;
+            text-decoration: none;
+        }
+        .header-back-link {
+            font-size: 0.85rem;
+            color: var(--muted);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s;
+        }
+        .header-back-link:hover { color: var(--accent); }
+
+        /* ── MAIN CENTERING WRAPPER ── */
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        /* ── AUTH CARD ── */
+        .auth-card {
+            background: #ffffff;
+            width: 100%;
+            max-width: 460px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            box-shadow: 0 8px 40px rgba(194, 24, 91, 0.08);
+            overflow: hidden;
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── DECORATIVE TOP STRIP ── */
+        .card-strip {
+            height: 5px;
+            background: linear-gradient(90deg, var(--accent), #E91E8C, var(--accent-hover));
+        }
+
+        /* ── TAB SWITCHER ── */
+        .tab-bar {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border-bottom: 1px solid var(--border);
+        }
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 18px 0;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--muted);
+            cursor: pointer;
+            position: relative;
+            transition: color 0.25s;
+            letter-spacing: 0.3px;
+        }
+        .tab-btn::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 15%;
+            right: 15%;
+            height: 2px;
+            background: var(--accent);
+            transform: scaleX(0);
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border-radius: 2px;
+        }
+        .tab-btn.active { color: var(--accent); }
+        .tab-btn.active::after { transform: scaleX(1); }
+
+        /* ── FORM PANELS ── */
+        .form-panel {
+            padding: 36px 40px 40px 40px;
+            display: none;
+        }
+        .form-panel.active { display: block; }
+
+        .panel-heading {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+        .panel-subtext {
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin-bottom: 28px;
+            line-height: 1.5;
+        }
+
+        /* ── FORM FIELDS ── */
+        .field-group { margin-bottom: 18px; }
+        .field-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 7px;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+        .field-group input {
+            width: 100%;
+            padding: 13px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+            color: var(--text);
+            background: #fff;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+        }
+        .field-group input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(194, 24, 91, 0.1);
+        }
+        .field-group input::placeholder { color: #bbb; }
+
+        /* Password wrapper for show/hide toggle */
+        .password-wrapper { position: relative; }
+        .password-wrapper input { padding-right: 44px; }
+        .toggle-pw {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            padding: 0;
+        }
+        .toggle-pw:hover { color: var(--accent); }
+
+        /* ── SUBMIT BUTTON ── */
+        .submit-btn {
+            width: 100%;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            margin-top: 8px;
+            transition: background 0.25s, transform 0.15s;
+            position: relative;
+            overflow: hidden;
+        }
+        .submit-btn:hover { background: var(--accent-hover); }
+        .submit-btn:active { transform: scale(0.98); }
+        .submit-btn:disabled { background: #e0a0b8; cursor: not-allowed; transform: none; }
+
+        /* ── STATUS MESSAGE ── */
+        .status-msg {
+            margin-top: 16px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-align: center;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        .status-msg.error   { background: #fff0f3; color: #c0152c; border: 1px solid #f5c6ce; }
+        .status-msg.success { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+        .status-msg.info    { background: var(--accent-light); color: var(--accent-hover); border: 1px solid #f9a8c9; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* ── DIVIDER ── */
+        .switch-prompt {
+            margin-top: 22px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+        .switch-prompt a {
+            color: var(--accent);
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .switch-prompt a:hover { text-decoration: underline; }
+
+        /* ── SUCCESS SPLASH (post-signup) ── */
+        .success-splash {
+            padding: 36px 40px 40px;
+            text-align: center;
+            display: none;
+        }
+        .success-splash .splash-icon {
+            width: 72px;
+            height: 72px;
+            background: var(--accent-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+        .success-splash h2 { font-size: 1.4rem; font-weight: 700; margin-bottom: 10px; }
+        .success-splash p { font-size: 0.9rem; color: var(--muted); line-height: 1.6; }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 520px) {
+            header { padding: 0 20px; }
+            .form-panel { padding: 28px 24px 32px; }
+            .auth-card { border-radius: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo">Rue and Kay Atelier.</a>
+        <a href="index.html" class="header-back-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+            </svg>
+            Back to Shop
+        </a>
+    </header>
+
+    <main>
+        <div class="auth-card">
+            <div class="card-strip"></div>
+
+            <!-- TAB SWITCHER -->
+            <div class="tab-bar">
+                <button class="tab-btn active" id="tabLoginBtn" onclick="switchTab('login')">Sign In</button>
+                <button class="tab-btn" id="tabSignupBtn" onclick="switchTab('signup')">Create Account</button>
+            </div>
+
+            <!-- ── LOGIN PANEL ── -->
+            <div class="form-panel active" id="loginPanel">
+                <h2 class="panel-heading">Welcome back</h2>
+                <p class="panel-subtext">Sign in to view your saved wishlist and manage your account.</p>
+
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="field-group">
+                        <label for="loginEmail">Email Address</label>
+                        <input type="email" id="loginEmail" placeholder="you@example.com" required autocomplete="email">
+                    </div>
+
+                    <div class="field-group">
+                        <label for="loginPassword">Password</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="loginPassword" placeholder="••••••••" required autocomplete="current-password">
+                            <button type="button" class="toggle-pw" onclick="togglePasswordVisibility('loginPassword', this)" title="Show/hide password">
+                                <svg id="eyeIconLogin" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="loginBtn">Sign In</button>
+                </form>
+
+                <div class="status-msg" id="loginStatus"></div>
+
+                <p class="switch-prompt">
+                    Don't have an account? <a onclick="switchTab('signup')">Create one here</a>
+                </p>
+            </div>
+
+            <!-- ── SIGNUP PANEL ── -->
+            <div class="form-panel" id="signupPanel">
+                <h2 class="panel-heading">Join Rue and Kay</h2>
+                <p class="panel-subtext">Create a free account to save your favourite bags and track your orders.</p>
+
+                <form id="signupForm" onsubmit="handleSignup(event)">
+                    <div class="field-group">
+                        <label for="signupName">Full Name</label>
+                        <input type="text" id="signupName" placeholder="Your full name" required autocomplete="name">
+                    </div>
+
+                    <div class="field-group">
+                        <label for="signupEmail">Email Address</label>
+                        <input type="email" id="signupEmail" placeholder="you@example.com" required autocomplete="email">
+                    </div>
+
+                    <div class="field-group">
+                        <label for="signupPassword">Password</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="signupPassword" placeholder="Min. 6 characters" required minlength="6" autocomplete="new-password">
+                            <button type="button" class="toggle-pw" onclick="togglePasswordVisibility('signupPassword', this)" title="Show/hide password">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="signupBtn">Create Account</button>
+                </form>
+
+                <div class="status-msg" id="signupStatus"></div>
+
+                <p class="switch-prompt">
+                    Already have an account? <a onclick="switchTab('login')">Sign in</a>
+                </p>
+            </div>
+
+            <!-- ── LOGGED IN PANEL ── -->
+            <div class="form-panel" id="loggedInPanel">
+                <div style="text-align: center; padding: 10px 0 20px;">
+                    <div style="width: 64px; height: 64px; background: var(--accent-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C2185B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                    </div>
+                    <h2 class="panel-heading" style="margin-bottom: 8px;">You're signed in</h2>
+                    <p id="loggedInEmail" class="panel-subtext" style="margin-bottom: 28px;"></p>
+                    <a href="index.html" class="submit-btn" style="display: block; text-decoration: none; text-align: center; margin-bottom: 12px;">Back to Shop</a>
+                    <button onclick="handleSignOut()" style="width: 100%; background: transparent; border: 1.5px solid var(--border); color: var(--muted); padding: 13px; border-radius: 10px; font-family: 'Poppins', sans-serif; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s;"
+                        onmouseover="this.style.borderColor='#C2185B'; this.style.color='#C2185B';"
+                        onmouseout="this.style.borderColor='var(--border)'; this.style.color='var(--muted)';">Sign Out</button>
+                </div>
+            </div>
+
+            <!-- ── SIGNUP SUCCESS SPLASH ── -->
+            <div class="success-splash" id="successSplash">
+                <div class="splash-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#C2185B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+                    </svg>
+                </div>
+                <h2 style="color: #1a0a0f;">Check your email!</h2>
+                <p>We've sent a confirmation link to your inbox. Click it to activate your account, then come back to sign in.</p>
+                <button class="submit-btn" style="margin-top: 24px;" onclick="switchTab('login')">Go to Sign In</button>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // ── SUPABASE INIT ──
+        const SUPABASE_URL     = "https://qwcpiltbfbnfikqlhrrg.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF3Y3BpbHRiZmJuZmlrcWxocnJnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNzY4ODIsImV4cCI6MjA5NDk1Mjg4Mn0.yHTBkF-rQaE-BK0RTcrVmmegqH3y-hgstBqr4P6LW1o";
+        const supabaseClient   = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // ── SESSION CHECK: Show logged-in panel if already authenticated ──
+        (async () => {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (session) {
+                const returnTo = new URLSearchParams(window.location.search).get('returnTo');
+                // Only auto-redirect if they came from a wishlist action
+                if (returnTo) {
+                    window.location.href = returnTo;
+                    return;
+                }
+                // Otherwise show the "already signed in" panel
+                document.getElementById('loginPanel').classList.remove('active');
+                document.getElementById('loggedInPanel').classList.add('active');
+                document.getElementById('tabLoginBtn').classList.remove('active');
+                document.getElementById('loggedInEmail').innerText =
+                    `Signed in as ${session.user.email}`;
+            }
+        })();
+
+        // ── SIGN OUT ──
+        async function handleSignOut() {
+            await supabaseClient.auth.signOut();
+            // Reset to the login tab
+            document.getElementById('loggedInPanel').classList.remove('active');
+            document.getElementById('loginPanel').classList.add('active');
+            document.getElementById('tabLoginBtn').classList.add('active');
+        }
+
+        // ── TAB SWITCHER ──
+        function switchTab(tab) {
+            document.getElementById('loginPanel').classList.toggle('active', tab === 'login');
+            document.getElementById('signupPanel').classList.toggle('active', tab === 'signup');
+            document.getElementById('successSplash').style.display = 'none';
+            document.getElementById('tabLoginBtn').classList.toggle('active', tab === 'login');
+            document.getElementById('tabSignupBtn').classList.toggle('active', tab === 'signup');
+            clearMessages();
+        }
+
+        function clearMessages() {
+            ['loginStatus', 'signupStatus'].forEach(id => {
+                const el = document.getElementById(id);
+                el.style.display = 'none';
+                el.className = 'status-msg';
+                el.innerText = '';
+            });
+        }
+
+        function showMessage(elementId, text, type) {
+            const el = document.getElementById(elementId);
+            el.innerText = text;
+            el.className = `status-msg ${type}`;
+            el.style.display = 'block';
+        }
+
+        // ── PASSWORD SHOW/HIDE ──
+        function togglePasswordVisibility(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const isHidden = input.type === 'password';
+            input.type = isHidden ? 'text' : 'password';
+            // Swap icon: eye vs eye-off
+            btn.querySelector('svg').innerHTML = isHidden
+                ? `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                   <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                   <line x1="1" y1="1" x2="23" y2="23"/>`
+                : `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;
+        }
+
+        // ── LOGIN HANDLER ──
+        async function handleLogin(e) {
+            e.preventDefault();
+            const btn = document.getElementById('loginBtn');
+            btn.disabled = true;
+            btn.innerText = 'Signing in...';
+            clearMessages();
+
+            const email    = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+
+            const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+
+            if (error) {
+                showMessage('loginStatus', error.message, 'error');
+                btn.disabled = false;
+                btn.innerText = 'Sign In';
+            } else {
+                showMessage('loginStatus', 'Success! Redirecting...', 'success');
+                const returnTo = new URLSearchParams(window.location.search).get('returnTo');
+                setTimeout(() => { window.location.href = returnTo || 'index.html'; }, 900);
+            }
+        }
+
+        // ── SIGNUP HANDLER ──
+        async function handleSignup(e) {
+            e.preventDefault();
+            const btn = document.getElementById('signupBtn');
+            btn.disabled = true;
+            btn.innerText = 'Creating account...';
+            clearMessages();
+
+            const name     = document.getElementById('signupName').value.trim();
+            const email    = document.getElementById('signupEmail').value.trim();
+            const password = document.getElementById('signupPassword').value;
+
+            const { error } = await supabaseClient.auth.signUp({
+                email,
+                password,
+                options: { data: { full_name: name } }
+            });
+
+            if (error) {
+                showMessage('signupStatus', error.message, 'error');
+                btn.disabled = false;
+                btn.innerText = 'Create Account';
+            } else {
+                // Show the email-confirmation splash screen
+                document.getElementById('signupPanel').classList.remove('active');
+                document.getElementById('successSplash').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

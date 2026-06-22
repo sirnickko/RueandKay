@@ -130,7 +130,15 @@ img {
 
     .main-nav-container {
         height: 60px !important;
-        padding: 0 22px 0 14px !important; /* extra right padding pulls cart away from edge */
+        padding: 0 12px 0 14px !important;
+    }
+    /* Pull search + cart icons closer together */
+    #navRightGroup {
+        gap: 8px !important;
+    }
+    /* Collapse internal cart trigger gap on mobile (label is hidden) */
+    #headerCartTrigger {
+        gap: 0 !important;
     }
     .logo {
         font-size: 1.8rem !important;

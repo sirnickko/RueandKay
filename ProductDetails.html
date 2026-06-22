@@ -29,14 +29,22 @@
 
             <div style="display: flex; align-items: center; gap: 25px;">
                 <div class="search-widget-container" style="display: flex; align-items: center; gap: 10px;">
-                    <input type="text" id="storefrontSearchInput" placeholder="Search products..." oninput="handleSearchFilter(this.value)" style="display: none; border: none; border-bottom: 1px solid #000; outline: none; padding: 4px 8px; font-family: 'Poppins', sans-serif; font-size: 0.9rem;">
-                    <button id="searchToggleBtn" onclick="toggleSearchField()" style="background: transparent; border: none; cursor: pointer; color: #000; display: flex; align-items: center; padding: 4px;">
+                    <input type="text" id="storefrontSearchInput" placeholder="Search products..." oninput="handleSearchFilter(this.value)" style="display: none; border: none; border-bottom: 1px solid #C2185B; outline: none; padding: 4px 8px; font-family: 'Poppins', sans-serif; font-size: 0.9rem;">
+                    <button id="searchToggleBtn" onclick="toggleSearchField()" style="background: transparent; border: none; cursor: pointer; color: #C2185B; display: flex; align-items: center; padding: 4px;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="11" cy="11" r="8"></circle>
                             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                         </svg>
                     </button>
                 </div>
+
+                <!-- Account / Login Icon -->
+                <a id="headerAccountLink" href="AccountAuth.html" title="My Account" style="background: transparent; border: none; cursor: pointer; color: #C2185B; display: flex; align-items: center; padding: 4px; text-decoration: none;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                </a>
 
                 <div id="headerCartTrigger" onclick="toggleCartDrawer(true)" style="display: flex; align-items: center; gap: 12px; cursor: pointer; font-family: 'Poppins', sans-serif; user-select: none;">
                     <div style="position: relative; display: inline-block;">
@@ -45,10 +53,10 @@
                             <circle cx="20" cy="21" r="1"></circle>
                             <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                         </svg>
-                        <span id="cartCount" style="position: absolute; top: -8px; right: -8px; background: #000000; color: #ffffff; font-size: 0.65rem; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; line-height: 1;">0</span>
+                        <span id="cartCount" style="position: absolute; top: -8px; right: -8px; background: #C2185B; color: #ffffff; font-size: 0.65rem; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; line-height: 1;">0</span>
                     </div>
                     <div style="display: flex; flex-direction: column; justify-content: center; line-height: 1.2;">
-                        <span style="font-weight: 700; font-size: 0.85rem; color: #000000;">Cart</span>
+                        <span style="font-weight: 700; font-size: 0.85rem; color: #880E4F;">Cart</span>
                         <span id="cartHeaderPrice" style="font-size: 0.8rem; color: #333333; font-weight: 500;">KES 0.00</span>
                     </div>
                 </div>
@@ -69,18 +77,22 @@
         </section>
 
         <section style="display: flex; flex-direction: column; padding-top: 20px;">
-            <h1 id="detailTitle" style="margin: 0 0 5px 0; font-size: 1.8rem; font-weight: 600; color: #000;">Loading...</h1>
+            <h1 id="detailTitle" style="margin: 0 0 5px 0; font-size: 1.8rem; font-weight: 600; color: #880E4F;">Loading...</h1>
             <p id="detailSubtitle" style="margin: 0 0 20px 0; font-size: 1rem; color: #666;"></p>
             
-            <p id="detailPrice" style="margin: 0 0 30px 0; font-size: 1.4rem; font-weight: 500; color: #000;">...</p>
+            <p id="detailPrice" style="margin: 0 0 30px 0; font-size: 1.4rem; font-weight: 500; color: #880E4F;">...</p>
 
-            <button id="detailAddBtn" style="width: 100%; background: #000; color: #fff; border: none; padding: 18px; font-size: 1rem; font-weight: 600; cursor: pointer; margin-bottom: 20px; transition: background 0.3s;">
+            <button id="detailAddBtn" style="width: 100%; background: #C2185B; color: #fff; border: none; padding: 18px; font-size: 1rem; font-weight: 600; cursor: pointer; margin-bottom: 20px; transition: background 0.3s;">
                 Add to bag
             </button>
             
-            <div style="display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: #000; margin-bottom: 40px; cursor: pointer;">
-                <span style="font-size: 1.2rem;">♡</span> Add to Favourites
-            </div>
+            <!-- Wishlist / Save to Favourites button -->
+            <button id="detailWishlistBtn" onclick="handleDetailWishlistToggle()" style="display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: #C2185B; margin-bottom: 40px; cursor: pointer; background: transparent; border: none; font-family: 'Poppins', sans-serif; font-weight: 500; padding: 0; transition: opacity 0.2s;">
+                <svg id="detailHeartIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C2185B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+                <span id="detailWishlistLabel">Save to Wishlist</span>
+            </button>
 
             <div style="border-top: 1px solid #e5e7eb; padding-top: 20px;">
                 <h3 style="font-size: 0.95rem; font-weight: 600; margin: 0 0 15px 0; display: flex; justify-content: space-between;">
@@ -133,9 +145,9 @@
         <div id="footerContactPanels" style="display: none; max-width: 900px; margin: 0 auto; padding: 20px 0; position: relative; animation: fadeIn 0.4s ease;">
             <button onclick="hideContactCards()" 
                     style="position: absolute; top: -10px; right: 0; background: #ffffff; border: 1px solid #e5e7eb; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.04); z-index: 10;"
-                    onmouseover="this.style.background='#000000'; this.style.borderColor='#000000'; this.querySelector('svg').style.stroke='#ffffff';"
-                    onmouseout="this.style.background='#ffffff'; this.style.borderColor='#e5e7eb'; this.querySelector('svg').style.stroke='#000000';">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    onmouseover="this.style.background='#C2185B'; this.style.borderColor='#C2185B'; this.querySelector('svg').style.stroke='#ffffff';"
+                    onmouseout="this.style.background='#ffffff'; this.style.borderColor='#e5e7eb'; this.querySelector('svg').style.stroke='#C2185B';">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C2185B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="18" y1="6" x2="6" y2="18"></line>
                     <line x1="6" y1="6" x2="18" y2="18"></line>
                 </svg>
@@ -148,7 +160,7 @@
                     </svg>
                     <h4 style="margin: 5px 0; font-size: 0.9rem; text-transform: uppercase; color: #444; letter-spacing: 1px; font-weight: 600;">Call Us</h4>
                     <p style="margin: 0; font-size: 0.8rem; color: #888; max-width: 240px; line-height: 1.4;">Reach our concierge client services desk directly for immediate assistance.</p>
-                    <a href="tel:+254712345678" style="font-size: 0.9rem; color: #000000; font-weight: 600; text-decoration: none; margin-top: 5px;">+254 (0) 712 345 678</a>
+                    <a href="tel:+254712345678" style="font-size: 0.9rem; color: #C2185B; font-weight: 600; text-decoration: none; margin-top: 5px;">+254 (0) 712 345 678</a>
                 </div>
 
                 <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
@@ -158,16 +170,18 @@
                     </svg>
                     <h4 style="margin: 5px 0; font-size: 0.9rem; text-transform: uppercase; color: #444; letter-spacing: 1px; font-weight: 600;">Contact Us</h4>
                     <p style="margin: 0; font-size: 0.8rem; color: #888; max-width: 240px; line-height: 1.4;">Drop our support studio a digital line and we'll reply within 12 business hours.</p>
-                    <a href="mailto:concierge@rueandkay.com" style="font-size: 0.9rem; color: #080808; font-weight: 600; text-decoration: none; margin-top: 5px;">concierge@rueandkay.com</a>
+                    <a href="mailto:concierge@rueandkay.com" style="font-size: 0.9rem; color: #C2185B; font-weight: 600; text-decoration: none; margin-top: 5px;">concierge@rueandkay.com</a>
                 </div>
             </div>
         </div>
     </footer>
     
-
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="App.js"></script>
+    <script src="App.js?v=2"></script>
     <script>
+        // Holds the product ID of the currently viewed item
+        let detailCurrentProductId = null;
+
         document.addEventListener('DOMContentLoaded', async () => {
             const urlParams = new URLSearchParams(window.location.search);
             const productId = urlParams.get('id');
@@ -176,6 +190,8 @@
                 document.getElementById('detailTitle').innerText = "Product Not Found";
                 return;
             }
+
+            detailCurrentProductId = parseInt(productId, 10);
 
             try {
                 const { data: product, error } = await supabaseClient
@@ -194,7 +210,7 @@
 
                 const thumbContainer = document.getElementById('thumbnailContainer');
                 thumbContainer.innerHTML = `
-                    <img src="${product.image_url}" style="width: 80px; height: 100px; object-fit: cover; border: 1px solid #000; cursor: pointer;" onclick="document.getElementById('detailMainImage').src=this.src">
+                    <img src="${product.image_url}" style="width: 80px; height: 100px; object-fit: cover; border: 1px solid #C2185B; cursor: pointer;" onclick="document.getElementById('detailMainImage').src=this.src">
                 `;
                 if (product.image_url_2) {
                     thumbContainer.innerHTML += `
@@ -207,14 +223,35 @@
                     const btn = document.getElementById('detailAddBtn');
                     btn.innerText = "Added to Bag ✓";
                     btn.style.background = "#059669";
-                    setTimeout(() => { btn.innerText = "Add to bag"; btn.style.background = "#000"; }, 2000);
+                    setTimeout(() => { btn.innerText = "Add to bag"; btn.style.background = "#C2185B"; }, 2000);
                 };
+
+                // Update the wishlist button state after auth + wishlist loads
+                updateDetailWishlistUI();
 
             } catch (err) {
                 console.error("Error loading product:", err.message);
                 document.getElementById('detailTitle').innerText = "Error loading product.";
             }
         });
+
+        // Call from global auth listener when wishlist data arrives
+        function updateDetailWishlistUI() {
+            if (!detailCurrentProductId) return;
+            const isSaved = userWishlistIds.has(detailCurrentProductId);
+            const heartSvg = document.getElementById('detailHeartIcon');
+            const label    = document.getElementById('detailWishlistLabel');
+            if (heartSvg) heartSvg.setAttribute('fill', isSaved ? '#C2185B' : 'none');
+            if (label)    label.innerText = isSaved ? 'Remove from Wishlist' : 'Save to Wishlist';
+        }
+
+        // Called by the button onclick
+        async function handleDetailWishlistToggle() {
+            if (!detailCurrentProductId) return;
+            const btn = document.getElementById('detailWishlistBtn');
+            await handleWishlistToggle(detailCurrentProductId, btn);
+            updateDetailWishlistUI();
+        }
     </script>
 </body>
 </html>

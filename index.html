@@ -19,7 +19,7 @@
         <div class="main-nav-container" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; max-width: 1200px; margin: 0 auto; box-sizing: border-box;">
             
             <div style="display: flex; align-items: center; gap: 15px;">
-                <button id="menuToggleBtn" onclick="toggleCategoryMenu(true)" style="background: transparent; border: none; cursor: pointer; color: #3D0814; display: flex; align-items: center; padding: 4px;">
+                <button id="menuToggleBtn" onclick="toggleCategoryMenu(true)" style="background: transparent; border: none; cursor: pointer; color: #C2185B; display: flex; align-items: center; padding: 4px;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="3" y1="12" x2="21" y2="12"></line>
                         <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -32,10 +32,10 @@
                 </div>
             </div>
 
-            <div style="display: flex; align-items: center; gap: 25px;">
+            <div id="navRightGroup" style="display: flex; align-items: center; gap: 25px;">
                 <div class="search-widget-container" style="display: flex; align-items: center; gap: 10px;">
-                    <input type="text" id="storefrontSearchInput" placeholder="Search products..." oninput="handleSearchFilter(this.value)" style="display: none; border: none; border-bottom: 1px solid #000; outline: none; padding: 4px 8px; font-family: 'Poppins', sans-serif; font-size: 0.9rem;">
-                    <button id="searchToggleBtn" onclick="toggleSearchField()" style="background: transparent; border: none; cursor: pointer; color: #000; display: flex; align-items: center; padding: 4px;">
+                    <input type="text" id="storefrontSearchInput" placeholder="Search products..." oninput="handleSearchFilter(this.value)" style="display: none; border: none; border-bottom: 1px solid #C2185B; outline: none; padding: 4px 8px; font-family: 'Poppins', sans-serif; font-size: 0.9rem;">
+                    <button id="searchToggleBtn" onclick="toggleSearchField()" style="background: transparent; border: none; cursor: pointer; color: #C2185B; display: flex; align-items: center; padding: 4px;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="11" cy="11" r="8"></circle>
                             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
@@ -43,18 +43,25 @@
                     </button>
                 </div>
 
-                
+                <!-- Account / Login Icon -->
+                <a id="headerAccountLink" href="AccountAuth.html" title="My Account" style="background: transparent; border: none; cursor: pointer; color: #C2185B; display: flex; align-items: center; padding: 4px; text-decoration: none;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                </a>
+
                 <div id="headerCartTrigger" onclick="toggleCartDrawer(true)" style="display: flex; align-items: center; gap: 12px; cursor: pointer; font-family: 'Poppins', sans-serif; user-select: none;">
                     <div style="position: relative; display: inline-block;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C2185B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="9" cy="21" r="1"></circle>
                             <circle cx="20" cy="21" r="1"></circle>
                             <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                         </svg>
-                        <span id="cartCount" style="position: absolute; top: -8px; right: -8px; background: #000000; color: #ffffff; font-size: 0.65rem; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; line-height: 1;">0</span>
+                        <span id="cartCount" style="position: absolute; top: -8px; right: -8px; background: #C2185B; color: #ffffff; font-size: 0.65rem; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; line-height: 1;">0</span>
                     </div>
                     <div style="display: flex; flex-direction: column; justify-content: center; line-height: 1.2;">
-                        <span style="font-weight: 700; font-size: 0.85rem; color: #000000;">Cart</span>
+                        <span style="font-weight: 700; font-size: 0.85rem; color: #880E4F;">Cart</span>
                         <span id="cartHeaderPrice" style="font-size: 0.8rem; color: #333333; font-weight: 500;">KES 0.00</span>
                     </div>
                 </div>
@@ -213,6 +220,12 @@
                 <button class="icon-cart-btn" title="Add to Bag">
                     <span class="material-symbols-outlined">shopping_cart</span>
                 </button>
+                <!-- Wishlist heart button -->
+                <button class="icon-wishlist-btn" title="Save to Wishlist" style="background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 6px; border-radius: 50%; transition: all 0.2s ease;">
+                    <svg class="heart-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C2185B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
+                </button>
             </div>
             
         </div>
@@ -333,6 +346,6 @@
     <!-- CDN link for supabase js library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>   
     <script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD"></script>
-    <script src="App.js"></script>
+    <script src="App.js?v=2"></script>
 </body>
 </html>
