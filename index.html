@@ -1,240 +1,360 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rue and Kay Atelier</title>
-    <!-- Linking our external styles -->
-    <link rel="stylesheet" href="LandingStyle.css">
+    <title>Rue and Kay Atelier — Luxury Bags & Accessories, Nairobi</title>
+    <meta name="description"
+        content="Rue and Kay Atelier — handcrafted luxury handbags, clutches and backpacks designed in Nairobi, Kenya. Shop the new collection.">
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Stalemate&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet" href="mobileresponsiveness.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Poppins:wght@300;400;500;600;700&family=Stalemate&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="LuxuryLanding.css?v=11">
+    <link rel="stylesheet" href="mobileresponsiveness.css?v=11">
 </head>
+
 <body>
 
-    <!-- Navigation Bar -->
-    <header style="position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; border-bottom: 1px solid #e5e7eb; background: white;">
-        <div class="main-nav-container" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; max-width: 1200px; margin: 0 auto; box-sizing: border-box;">
-            
-            <div style="display: flex; align-items: center; gap: 15px;">
-                <button id="menuToggleBtn" onclick="toggleCategoryMenu(true)" style="background: transparent; border: none; cursor: pointer; color: #C2185B; display: flex; align-items: center; padding: 4px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <!-- ══════════════════════════════════════
+         HEADER / NAV
+    ══════════════════════════════════════ -->
+    <header id="siteHeader">
+        <div class="main-nav-container">
+
+            <!-- LEFT: hamburger (phone-only) -->
+            <div style="flex: 1; display: flex; align-items: center; justify-content: flex-start; gap: 8px;">
+                <button id="menuToggleBtn" onclick="toggleCategoryMenu(true)" class="nav-icon-btn"
+                    title="Browse categories">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="3" y1="12" x2="21" y2="12"></line>
                         <line x1="3" y1="6" x2="21" y2="6"></line>
                         <line x1="3" y1="18" x2="21" y2="18"></line>
                     </svg>
                 </button>
-
-                <div class="logo" style="margin: 0; white-space: nowrap;">
-                    Rue and Kay Atelier.
-                </div>
             </div>
 
-            <div id="navRightGroup" style="display: flex; align-items: center; gap: 25px;">
-                <div class="search-widget-container" style="display: flex; align-items: center; gap: 10px;">
-                    <input type="text" id="storefrontSearchInput" placeholder="Search products..." oninput="handleSearchFilter(this.value)" style="display: none; border: none; border-bottom: 1px solid #C2185B; outline: none; padding: 4px 8px; font-family: 'Poppins', sans-serif; font-size: 0.9rem;">
-                    <button id="searchToggleBtn" onclick="toggleSearchField()" style="background: transparent; border: none; cursor: pointer; color: #C2185B; display: flex; align-items: center; padding: 4px;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <!-- CENTER: logo -->
+            <a href="index.html" class="logo">Rue and Kay Atelier.</a>
+
+            <!-- RIGHT: icons -->
+            <div id="navRightGroup"
+                style="flex: 1; display: flex; align-items: center; justify-content: flex-end; gap: 6px;">
+
+                <!-- Search -->
+                <div class="search-widget-container" style="display: flex; align-items: center; gap: 8px;">
+                    <input type="text" id="storefrontSearchInput" placeholder="Search…"
+                        oninput="handleSearchFilter(this.value)"
+                        style="display: none; border: none; border-bottom: 1px solid var(--accent); outline: none; padding: 4px 8px; font-family: 'Poppins', sans-serif; font-size: 0.85rem; background: transparent; color: var(--text-main); width: 160px;">
+                    <button id="searchToggleBtn" onclick="toggleSearchField()" class="nav-icon-btn" title="Search">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="11" cy="11" r="8"></circle>
                             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                         </svg>
                     </button>
                 </div>
 
-                <!-- Account / Login Icon -->
-                <a id="headerAccountLink" href="AccountAuth.html" title="My Account" style="background: transparent; border: none; cursor: pointer; color: #C2185B; display: flex; align-items: center; padding: 4px; text-decoration: none;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                        <circle cx="12" cy="7" r="4"/>
+                <!-- Theme toggle -->
+                <button id="themeToggleBtn" onclick="toggleTheme()" class="nav-icon-btn" title="Toggle dark mode">
+                    <svg id="themeToggleIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+
+                <!-- Account -->
+                <a id="headerAccountLink" href="AccountAuth.html" class="nav-icon-btn" title="My Account"
+                    style="text-decoration: none;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
                     </svg>
                 </a>
 
-                <div id="headerCartTrigger" onclick="toggleCartDrawer(true)" style="display: flex; align-items: center; gap: 12px; cursor: pointer; font-family: 'Poppins', sans-serif; user-select: none;">
+                <!-- Cart -->
+                <div id="headerCartTrigger" onclick="toggleCartDrawer(true)"
+                    style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-family: 'Poppins', sans-serif; user-select: none; padding: 6px;">
                     <div style="position: relative; display: inline-block;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C2185B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"
+                            style="color: var(--accent);">
                             <circle cx="9" cy="21" r="1"></circle>
                             <circle cx="20" cy="21" r="1"></circle>
                             <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                         </svg>
-                        <span id="cartCount" style="position: absolute; top: -8px; right: -8px; background: #C2185B; color: #ffffff; font-size: 0.65rem; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; line-height: 1;">0</span>
+                        <span id="cartCount"
+                            style="position: absolute; top: -7px; right: -7px; background: var(--accent); color: #fff; font-size: 0.6rem; font-weight: 700; width: 15px; height: 15px; border-radius: 50%; display: flex; align-items: center; justify-content: center; line-height: 1;">0</span>
                     </div>
                     <div style="display: flex; flex-direction: column; justify-content: center; line-height: 1.2;">
-                        <span style="font-weight: 700; font-size: 0.85rem; color: #880E4F;">Cart</span>
-                        <span id="cartHeaderPrice" style="font-size: 0.8rem; color: #333333; font-weight: 500;">KES 0.00</span>
+                        <span
+                            style="font-weight: 600; font-size: 0.78rem; color: var(--accent); letter-spacing: 0.5px;">Bag</span>
+                        <span id="cartHeaderPrice"
+                            style="font-size: 0.72rem; color: var(--text-muted); font-weight: 400;">KES 0.00</span>
                     </div>
                 </div>
-            </div>
 
+            </div>
         </div>
     </header>
 
-    <!-- Horizontal Category Nav Bar -->
-    <nav id="categoryNavBar" style="position: fixed; top: 77px; left: 0; width: 100%; z-index: 999; background: #ffffff; border-bottom: 1px solid #e5e7eb; border-top: 1px solid #e5e7eb;">
-        <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; align-items: center; gap: 0; overflow-x: auto; scrollbar-width: none;">
+    <!-- ══════════════════════════════════════
+         HORIZONTAL CATEGORY NAV BAR
+    ══════════════════════════════════════ -->
+    <nav id="categoryNavBar">
+        <div
+            style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; overflow-x: auto; scrollbar-width: none;">
             <button class="cat-nav-btn active" onclick="filterStorefront('all', this)">
-                Show All <span class="cat-chevron">&#8964;</span>
+                All <span class="cat-chevron">⌄</span>
             </button>
             <button class="cat-nav-btn" onclick="filterStorefront('Luxury Handbags', this)">
-                Luxury Handbags <span class="cat-chevron">&#8964;</span>
+                Luxury Handbags <span class="cat-chevron">⌄</span>
             </button>
             <button class="cat-nav-btn" onclick="filterStorefront('Clutches', this)">
-                Clutches <span class="cat-chevron">&#8964;</span>
+                Clutches <span class="cat-chevron">⌄</span>
             </button>
             <button class="cat-nav-btn" onclick="filterStorefront('Backpacks', this)">
-                Backpacks <span class="cat-chevron">&#8964;</span>
+                Backpacks <span class="cat-chevron">⌄</span>
             </button>
         </div>
     </nav>
 
-    <!-- Side Navigation Sidebar Filters Drawer Overlay -->
-    <div id="categoryMenuOverlay" class="cmo-backdrop" onclick="toggleCategoryMenu(false)" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 4000;">
-        <div class="cmo-drawer" onclick="event.stopPropagation()" style="position: absolute; top: 0; left: 0; width: 340px; height: 100%; background: #ffffff; box-shadow: 5px 0 30px rgba(0,0,0,0.18); display: flex; flex-direction: column; overflow: hidden;">
+    <!-- ══════════════════════════════════════
+         SIDE DRAWER — CATEGORY MENU
+    ══════════════════════════════════════ -->
+    <div id="categoryMenuOverlay" class="cmo-backdrop" onclick="toggleCategoryMenu(false)"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(26,10,14,0.6); z-index: 4000;">
+        <div class="luxury-mobile-drawer" onclick="event.stopPropagation()"
+            style="position: absolute; top: 0; right: 0; width: 85vw; max-width: 360px; height: 100%; background: #EBE5E0; box-shadow: -8px 0 40px rgba(26,10,14,0.25); display: flex; flex-direction: column; overflow: hidden; padding: 24px 20px;">
 
-            <!-- Black header bar -->
-            <div style="background: #C2185B; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; height: 64px; flex-shrink: 0;">
-                <div style="display: flex; align-items: center; gap: 12px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <!-- Drawer header (Inset dark box) -->
+            <div style="background: #180D11; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; height: 72px; flex-shrink: 0; border-radius: 16px;">
+                <div style="display: flex; align-items: center; gap: 14px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                        stroke="#C9A96E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="3" y1="12" x2="21" y2="12"></line>
                         <line x1="3" y1="6" x2="21" y2="6"></line>
                         <line x1="3" y1="18" x2="21" y2="18"></line>
                     </svg>
-                    <span style="color: #ffffff; font-family: 'Stalemate', cursive; font-size: 1.8rem; font-weight: 400; letter-spacing: 1px;">Rue and Kay Online Menu</span>
+                    <span style="color: #FAF5EF; font-family: 'Stalemate', cursive; font-size: 1.9rem; font-weight: 400; letter-spacing: 1px; line-height: 1; transform: translateY(2px);">Rue and Kay</span>
                 </div>
-                <button onclick="toggleCategoryMenu(false)" style="background: #880E4F; border: none; cursor: pointer; color: #ffffff; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; line-height: 1; flex-shrink: 0;">&#x2715;</button>
+                <button onclick="toggleCategoryMenu(false)"
+                    style="background: #25161B; border: 1px solid rgba(255,255,255,0.05); cursor: pointer; color: #FAF5EF; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; border-radius: 50%; transition: background 0.2s ease;">&#x2715;</button>
+            </div>
+
+            <!-- Eyebrow label -->
+            <div style="padding: 32px 0 12px 4px;">
+                <p style="font-family: 'Poppins', sans-serif; font-size: 0.65rem; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #9B4E63; margin: 0;">
+                    Browse Categories</p>
             </div>
 
             <!-- Category list -->
-            <div style="flex: 1; overflow-y: auto; padding: 8px 0;">
-                <button class="drawer-filter-btn active" onclick="filterStorefrontViaDrawer('all', this)" style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 18px 24px; background: transparent; border: none; border-bottom: 1px solid #f0f0f0; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 500; color: #111; text-align: left; box-sizing: border-box;">
+            <div style="flex: 1; overflow-y: auto; padding: 0; display: flex; flex-direction: column; gap: 4px;">
+                <button class="drawer-filter-btn active" onclick="filterStorefrontViaDrawer('all', this)"
+                    style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 16px 20px; background: #F4EBEF; border: none; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 600; color: #180D11; text-align: left; box-sizing: border-box; border-radius: 2px;">
                     <span>Show All</span>
-                    <span style="font-size: 1.2rem; font-weight: 300; color: #555;">+</span>
+                    <span style="font-size: 1.2rem; font-weight: 300; color: #9B4E63;">+</span>
                 </button>
-                <button class="drawer-filter-btn" onclick="filterStorefrontViaDrawer('Luxury Handbags', this)" style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 18px 24px; background: transparent; border: none; border-bottom: 1px solid #f0f0f0; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 500; color: #111; text-align: left; box-sizing: border-box;">
+                <button class="drawer-filter-btn" onclick="filterStorefrontViaDrawer('Luxury Handbags', this)"
+                    style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 16px 20px; background: transparent; border: none; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 400; color: #180D11; text-align: left; box-sizing: border-box; border-radius: 2px;">
                     <span>Luxury Handbags</span>
-                    <span style="font-size: 1.2rem; font-weight: 300; color: #555;">+</span>
+                    <span style="font-size: 1.2rem; font-weight: 300; color: #888;">+</span>
                 </button>
-                <button class="drawer-filter-btn" onclick="filterStorefrontViaDrawer('Clutches', this)" style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 18px 24px; background: transparent; border: none; border-bottom: 1px solid #f0f0f0; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 500; color: #111; text-align: left; box-sizing: border-box;">
+                <button class="drawer-filter-btn" onclick="filterStorefrontViaDrawer('Clutches', this)"
+                    style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 16px 20px; background: transparent; border: none; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 400; color: #180D11; text-align: left; box-sizing: border-box; border-radius: 2px;">
                     <span>Clutches</span>
-                    <span style="font-size: 1.2rem; font-weight: 300; color: #555;">+</span>
+                    <span style="font-size: 1.2rem; font-weight: 300; color: #888;">+</span>
                 </button>
-                <button class="drawer-filter-btn" onclick="filterStorefrontViaDrawer('Backpacks', this)" style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 18px 24px; background: transparent; border: none; border-bottom: 1px solid #f0f0f0; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 500; color: #111; text-align: left; box-sizing: border-box;">
+                <button class="drawer-filter-btn" onclick="filterStorefrontViaDrawer('Backpacks', this)"
+                    style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 16px 20px; background: transparent; border: none; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 400; color: #180D11; text-align: left; box-sizing: border-box; border-radius: 2px;">
                     <span>Backpacks</span>
-                    <span style="font-size: 1.2rem; font-weight: 300; color: #555;">+</span>
+                    <span style="font-size: 1.2rem; font-weight: 300; color: #888;">+</span>
                 </button>
             </div>
 
         </div>
     </div>
 
+    <!-- ══════════════════════════════════════
+         HERO — CINEMATIC CENTER (OPTION A)
+    ══════════════════════════════════════ -->
+    <section class="hero-section" style="margin-top: 72px;">
+        <!-- Full-bleed background image (JS will swap this dynamically) -->
+        <div class="hero-image-panel">
+            <img id="heroDynamicImage" src="" alt="Rue and Kay Atelier — Featured Collection"
+                style="opacity: 1; transition: opacity 0.8s ease-in-out;">
+            <div class="hero-vignette"></div>
+        </div>
 
-    <!-- Main Content Area Wrapper -->
-    <!-- Main Content Area Wrapper -->
-    <main class="storefront-main" style="margin-top: 180px; padding: 0 20px;">
-
-        <!-- DYNAMIC SPLIT HERO BANNER -->
-        <div style="background-color: #FCE4EC; display: flex; align-items: center; justify-content: space-between; padding: 60px 80px; border-radius: 12px; margin-bottom: 30px; min-height: 350px;">
-            
-            <!-- Left Side: Typography -->
-            <div style="flex: 1; max-width: 50%;">
-                <h1 style="font-size: 4rem; font-weight: 800; color: #221f24; margin: 0 0 15px 0; font-family: 'Poppins', sans-serif; letter-spacing: -1px; line-height: 1.1;">Our Products</h1>
-                <p style="font-size: 1.3rem; color: #221f24; margin: 0; font-family: 'Poppins', sans-serif; line-height: 1.6;">Some of our products as Rue<br>and Kay Atelier</p>
-            </div>
-            
-            <!-- Right Side: Dynamic Image Canvas -->
-            <div style="flex: 1; display: flex; align-items: center; justify-content: center; height: 350px;">
-                <img id="heroDynamicImage" src="" alt="Featured Atelier Bag" style="max-width: 100%; max-height: 100%; object-fit: contain; opacity: 1; transition: opacity 0.6s ease-in-out;">
+        <!-- Centered glassmorphic text container -->
+        <div class="hero-content-center">
+            <div class="hero-glass-panel">
+                <span class="hero-eyebrow">Nairobi · New Collection</span>
+                <h1 class="hero-headline">Crafted<br>for the <em>Bold.</em></h1>
+                <p class="hero-subtext">Handmade luxury bags, clutches and backpacks — designed in Nairobi, worn
+                    worldwide.</p>
+                <button class="hero-cta"
+                    onclick="document.getElementById('productsSection').scrollIntoView({behavior:'smooth'})">
+                    Shop the Collection
+                    <span class="hero-cta-arrow">→</span>
+                </button>
             </div>
         </div>
 
+        <div class="hero-gold-line"></div>
+    </section>
 
-        <!-- Main Products Display Grid -->
-        <section id="productsGrid" class="shop-container">
-            <!-- Bags injected dynamically by App.js -->
-        </section>
-    </main>
-    
-    <!-- SHOPPING DRAWER MODAL OVERLAY -->
-    <div id="cartModalOverlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 5000; display: none; justify-content: flex-end;">
-        <div style="width: 100%; max-width: 400px; height: 100%; background: white; box-shadow: -4px 0 15px rgba(0,0,0,0.1); padding: 30px; display: flex; flex-direction: column; justify-content: space-between; overflow-y: auto; box-sizing: border-box;">
+
+
+    <!-- ══════════════════════════════════════
+         MAIN PRODUCTS SECTION
+    ══════════════════════════════════════ -->
+    <main id="productsSection" class="storefront-main">
+
+        <!-- Section header -->
+        <div class="section-header">
             <div>
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid #e5e7eb; padding-bottom: 15px;">
-                    <h2 id="drawerTitle" style="font-size: 1.4rem; margin: 0;">Your Shopping Bag</h2>
-                    <button onclick="toggleCartDrawer(false)" style="background: transparent; border: none; font-size: 1.5rem; cursor: pointer; color: #666;">&times;</button>
+                <p class="section-eyebrow">The Collection</p>
+                <h2 class="section-title">Our <em>Products</em></h2>
+            </div>
+            <a href="javascript:void(0)" onclick="filterStorefront('all', null)" class="section-see-all">
+                View All &nbsp;→
+            </a>
+        </div>
+
+        <!-- Products Grid -->
+        <section id="productsGrid" class="shop-container" style="margin-top: 10px !important;">
+            <!-- Injected dynamically by App.js -->
+        </section>
+
+    </main>
+
+    <!-- ══════════════════════════════════════
+         CART DRAWER MODAL
+    ══════════════════════════════════════ -->
+    <div id="cartModalOverlay"
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(26,10,14,0.45); backdrop-filter: blur(4px); z-index: 5000; display: none; justify-content: flex-end;">
+        <div
+            style="width: 100%; max-width: 400px; height: 100%; background: var(--card-bg); box-shadow: -6px 0 30px rgba(26,10,14,0.15); padding: 32px 28px; display: flex; flex-direction: column; justify-content: space-between; overflow-y: auto; box-sizing: border-box;">
+            <div>
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; border-bottom: 1px solid var(--border); padding-bottom: 18px;">
+                    <h2 id="drawerTitle"
+                        style="font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 400; color: var(--text-main); margin: 0; letter-spacing: 0.3px;">
+                        Your Shopping Bag</h2>
+                    <button onclick="toggleCartDrawer(false)"
+                        style="background: transparent; border: none; font-size: 1.4rem; cursor: pointer; color: var(--text-muted);">&#x2715;</button>
                 </div>
-                
                 <div id="cartItemsView">
-                    <div id="cartItemsList" style="max-height: 60vh; overflow-y: auto; display: flex; flex-direction: column; gap: 15px;">
-                        <!-- Injected Rows -->
+                    <div id="cartItemsList"
+                        style="max-height: 58vh; overflow-y: auto; display: flex; flex-direction: column; gap: 14px;">
                     </div>
                 </div>
             </div>
 
-            <div id="cartCheckoutSection" style="border-top: 1px solid #e5e7eb; padding-top: 20px; margin-top: 20px;">
-                <div style="display: flex; justify-content: space-between; font-size: 1.1rem; font-weight: 700; margin-bottom: 20px;">
-                    <span>Total Cost:</span>
+            <div id="cartCheckoutSection"
+                style="border-top: 1px solid var(--border); padding-top: 20px; margin-top: 20px;">
+                <div
+                    style="display: flex; justify-content: space-between; font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 600; margin-bottom: 20px; color: var(--text-main);">
+                    <span>Total</span>
                     <span id="cartTotalPrice">KES 0</span>
                 </div>
-                
                 <div id="cartActionButtons">
-                    <button class="add-btn" style="width: 100%; margin-bottom: 10px; padding: 12px; background: #000; color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;" onclick="window.location.href='Checkout.html'">Proceed to Checkout</button>
-                    <button onclick="handleClearCart()" style="width: 100%; background: transparent; border: 1px solid #e5e7eb; color: red; padding: 10px; border-radius: 8px; font-weight: 500; cursor: pointer;">Clear Bag</button>
+                    <button class="add-btn" style="margin-bottom: 10px;"
+                        onclick="window.location.href='Checkout.html'">Proceed to Checkout</button>
+                    <button onclick="handleClearCart()"
+                        style="width: 100%; background: transparent; border: 1px solid var(--border); color: var(--accent); padding: 10px; border-radius: 2px; font-weight: 500; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 0.8rem; letter-spacing: 0.5px; transition: background 0.2s ease;">Clear
+                        Bag</button>
                 </div>
-                <div id="orderStatusMessage" style="text-align:center; font-weight:600; margin-top:10px;"></div>
+                <div id="orderStatusMessage"
+                    style="text-align: center; font-weight: 600; margin-top: 12px; font-size: 0.85rem;"></div>
             </div>
         </div>
     </div>
 
-    <!-- REUSABLE TEMPLATE LAYOUT SHAPES -->
+    <!-- ══════════════════════════════════════
+         TEMPLATES
+    ══════════════════════════════════════ -->
     <template id="cartItemTemplate">
-        <div class="cart-item-row" style="display: flex; gap: 15px; align-items: center; border-bottom: 1px solid #f3f4f6; padding-bottom: 12px;">
-          <div class="cart-item-image-box" style="width: 50px; height: 50px; background: #f3f4f6; border-radius: 6px; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: #666;">
-            <span class="cart-item-icon-fallback">👜</span>
-          </div>
-          <div style="flex: 1;">
-            <h4 class="cart-item-name" style="font-size: 0.95rem; margin: 0 0 3px 0;">Product Name</h4>
-            <p class="cart-item-price" style="font-weight: 700; font-size: 0.9rem; margin: 0;">KES 0</p>
-          </div>
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <button class="qty-minus-btn" style="background: #f3f4f6; border: none; width: 28px; height: 28px; border-radius: 6px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;">-</button>
-            <span class="cart-item-quantity" style="font-size: 0.95rem; font-weight: 700; min-width: 15px; text-align: center;">1</span>
-            <button class="qty-plus-btn" style="background: #f3f4f6; border: none; width: 28px; height: 28px; border-radius: 6px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;">+</button>
-          </div>
+        <div class="cart-item-row"
+            style="display: flex; gap: 14px; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 14px;">
+            <div class="cart-item-image-box"
+                style="width: 52px; height: 62px; background: var(--accent-light); border-radius: 2px; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: #666; flex-shrink: 0;">
+                <span class="cart-item-icon-fallback">👜</span>
+            </div>
+            <div style="flex: 1;">
+                <h4 class="cart-item-name"
+                    style="font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 500; margin: 0 0 3px 0; color: var(--text-main);">
+                    Product Name</h4>
+                <p class="cart-item-price"
+                    style="font-weight: 600; font-size: 0.82rem; margin: 0; color: var(--text-muted); font-family: 'Poppins', sans-serif;">
+                    KES 0</p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <button class="qty-minus-btn"
+                    style="background: var(--border); border: none; width: 26px; height: 26px; border-radius: 2px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text-main);">−</button>
+                <span class="cart-item-quantity"
+                    style="font-size: 0.88rem; font-weight: 700; min-width: 14px; text-align: center; color: var(--text-main);">1</span>
+                <button class="qty-plus-btn"
+                    style="background: var(--border); border: none; width: 26px; height: 26px; border-radius: 2px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text-main);">+</button>
+            </div>
         </div>
     </template>
 
     <template id="productCardTemplate">
         <div class="product-card">
-            
             <div class="image-placeholder">
-                </div>
-            
+                <!-- Image injected by JS -->
+                <button class="icon-wishlist-btn" title="Save to Wishlist"
+                    style="position: absolute; top: 10px; right: 10px; background: rgba(250,245,239,0.9); border: none; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0; transition: opacity 0.2s ease; z-index: 2; padding: 0;">
+                    <svg class="heart-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                        viewBox="0 0 24 24" fill="none" stroke="#9B4E63" stroke-width="1.8" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path
+                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                    </svg>
+                </button>
+            </div>
             <div class="product-info">
                 <h3 class="product-card-title"></h3>
                 <h4 class="product-card-desc"></h4>
                 <p class="product-card-price"></p>
             </div>
-            
             <div class="product-card-footer">
                 <button class="icon-cart-btn" title="Add to Bag">
-                    <span class="material-symbols-outlined">shopping_cart</span>
-                </button>
-                <!-- Wishlist heart button -->
-                <button class="icon-wishlist-btn" title="Save to Wishlist" style="background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 6px; border-radius: 50%; transition: all 0.2s ease;">
-                    <svg class="heart-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C2185B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                    </svg>
+                    <span class="material-symbols-outlined">shopping_bag</span>
+                    Add to Bag
                 </button>
             </div>
-            
         </div>
     </template>
 
-    <!-- QUICK VIEW PRODUCT OVERLAY MODAL -->
+    <!-- ══════════════════════════════════════
+         QUICK-VIEW MODAL
+    ══════════════════════════════════════ -->
     <div id="productDetailModal" class="pdm-overlay" onclick="closeProductModal(event)">
         <div class="pdm-window" onclick="event.stopPropagation()">
-            <button class="pdm-close-btn" onclick="document.getElementById('productDetailModal').style.display='none'">&times;</button>
+            <button class="pdm-close-btn"
+                onclick="document.getElementById('productDetailModal').style.display='none'">&#x2715;</button>
             <div class="pdm-content-layout">
                 <div class="pdm-gallery-side">
                     <div class="pdm-main-frame">
@@ -243,24 +363,25 @@
                     <div class="pdm-carousel-ribbon">
                         <button class="pdm-arrow">&lt;</button>
                         <div class="pdm-thumbnails">
-                           <img class="pdm-thumb" src="" alt="View 1" onclick="swapPdmView(this.src)">
-                           <img class="pdm-thumb" src="" alt="View 2" onclick="swapPdmView(this.src)">
-                           <img class="pdm-thumb" src="" alt="View 3" onclick="swapPdmView(this.src)">
+                            <img class="pdm-thumb" src="" alt="View 1" onclick="swapPdmView(this.src)">
+                            <img class="pdm-thumb" src="" alt="View 2" onclick="swapPdmView(this.src)">
+                            <img class="pdm-thumb" src="" alt="View 3" onclick="swapPdmView(this.src)">
                         </div>
                         <button class="pdm-arrow">&gt;</button>
                     </div>
                 </div>
                 <div class="pdm-details-side">
-                    <h2 id="pdmBrand" class="pdm-brand-title">Designer Brand</h2>
-                    <p id="pdmName" class="pdm-product-tagline">Product Tagline Details</p>
-                    <div id="pdmPrice" class="pdm-price-label">0000 ksh</div>
-                    <button id="pdmAddBtn" class="pdm-primary-add">ADD TO BAG</button>
+                    <p id="pdmBrand" class="pdm-brand-title">Category</p>
+                    <h2 id="pdmName" class="pdm-product-tagline">Product Name</h2>
+                    <div id="pdmPrice" class="pdm-price-label">KES 0</div>
+                    <button id="pdmAddBtn" class="pdm-primary-add">Add to Bag</button>
                     <button class="pdm-fav-btn">
-                        Add to Favourites <span class="material-symbols-outlined" style="font-size: 1rem; vertical-align: middle;">favorite</span>
+                        Save to Wishlist &nbsp;<span class="material-symbols-outlined"
+                            style="font-size: 0.9rem; vertical-align: middle;">favorite</span>
                     </button>
                     <hr class="pdm-divider">
                     <div class="pdm-info-block">
-                        <h3>Product Description</h3>
+                        <h3>About this piece</h3>
                         <p id="pdmDesc">Your paragraph text placeholder detailing the item craftsmanship.</p>
                     </div>
                 </div>
@@ -268,84 +389,162 @@
         </div>
     </div>
 
-    <!-- GLOBAL STOREFRONT FOOTER COMPONENT -->
+    <!-- ══════════════════════════════════════
+         FOOTER
+    ══════════════════════════════════════ -->
     <footer class="site-footer">
-        <!-- CONTAINER 1: STANDARD CORPORATE FOOTER -->
+
+        <!-- CONTAINER 1: DEFAULT FOOTER -->
         <div id="footerDefaultLinks" style="display: block;">
             <div class="footer-main-columns">
+
+                <!-- Brand column -->
+                <div class="footer-brand-col footer-column">
+                    <h2>Rue and Kay Atelier.</h2>
+                    <p>Your premier luxury atelier in Nairobi, Kenya. Handcrafted handbags, accessories and more — made
+                        with love, worn with pride.</p>
+                    <form class="footer-newsletter" onsubmit="event.preventDefault();">
+                        <input type="email" placeholder="Your email address">
+                        <button type="submit">Subscribe</button>
+                    </form>
+                </div>
+
+                <!-- Shop column -->
                 <div class="footer-column">
-                    <h3>Customer Service</h3>
+                    <h3>Shop</h3>
                     <ul>
-                        <li><a href="javascript:void(0)" onclick="revealContactCards()">Contact Us</a></li>
-                        <li><a href="#">Payment </a></li>
-                        <li><a href="#">Delivery Policy</a></li>
+                        <li><a href="javascript:void(0)" onclick="filterStorefront('all', null)">All Products</a></li>
+                        <li><a href="javascript:void(0)" onclick="filterStorefront('Luxury Handbags', null)">Luxury
+                                Handbags</a></li>
+                        <li><a href="javascript:void(0)" onclick="filterStorefront('Clutches', null)">Clutches</a></li>
+                        <li><a href="javascript:void(0)" onclick="filterStorefront('Backpacks', null)">Backpacks</a>
+                        </li>
+                        <li><a href="Cart.html">Your Bag</a></li>
+                        <li>
+                            <button
+                                style="background: transparent; border: 1px solid rgba(255,255,255,0.2); color: rgba(250,245,239,0.6); padding: 5px 14px; margin-top: 6px; border-radius: 2px; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 0.75rem; transition: all 0.2s ease;"
+                                onmouseover="this.style.color='#FAF5EF'; this.style.borderColor='rgba(255,255,255,0.5)';"
+                                onmouseout="this.style.color='rgba(250,245,239,0.6)'; this.style.borderColor='rgba(255,255,255,0.2)';"
+                                onclick="window.location.href='AccountAuth.html'">Track Order</button>
+                        </li>
                     </ul>
                 </div>
-                <div class="footer-column text-center-col">
-                    <h3>About us</h3>
-                    <ul>
-                        <li><a href="#">The Rue and Kay Atelier</a></li>
+
+                <!-- Contact column -->
+                <div class="footer-column">
+                    <h3>Contact</h3>
+                    <ul style="color: rgba(250,245,239,0.55); font-size: 0.82rem; line-height: 2.2; font-weight: 300;">
+                        <li>Nairobi, Kenya</li>
+                        <li>+254 (0) 712 345 678</li>
+                        <li><a href="mailto:concierge@rueandkay.com">concierge@rueandkay.com</a></li>
+                        <li><a href="javascript:void(0)" onclick="revealContactCards()">Contact Us →</a></li>
                     </ul>
                 </div>
-                <div class="footer-column right-align-col">
-                    <div class="social-wrapper">
-                        <h3>Follow us on</h3>
-                        <div class="social-icons-row">
-                            <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.85z"/></svg></a>
-                            <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2A10 10 0 0 0 2 12c0 4.9 3.53 8.93 8.2 9.82-.1-.9-.19-2.27.04-3.25l1.32-5.63s-.33-.66-.33-1.64c0-1.54.89-2.68 2-2.68.94 0 1.39.71 1.39 1.56 0 .95-.6 2.37-.92 3.69-.26 1.1.55 2 1.64 2 1.97 0 3.48-2.07 3.48-5.07 0-2.65-1.9-4.5-4.62-4.5-3.15 0-5 2.36-5 4.8 0 .95.36 1.97.82 2.52.1.1.1.2.07.33l-.3 1.25c-.05.2-.17.25-.39.15-1.43-.66-2.33-2.75-2.33-4.43 0-3.6 2.62-6.92 7.55-6.92 3.97 0 7.05 2.83 7.05 6.6 0 3.94-2.48 7.12-5.93 7.12-1.16 0-2.25-.6-2.62-1.32l-.72 2.74c-.26 1-1 2.26-1.5 3.06A10 10 0 1 0 12 2z"/></svg></a>
-                            <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8A3.6 3.6 0 0 0 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6A3.6 3.6 0 0 0 16.4 4H7.6m4.4 3.5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9m0 2a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5m4.75-.75a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg></a>
-                        </div>
-                    </div>
-                </div>
+
             </div>
+
             <div class="footer-legal-base">
-                <div class="legal-links"><a href="#">Terms of Use</a><a href="#">Privacy Policy</a><a href="#">Imprint</a></div>
-                <div class="copyright-notice">copyright ©2026 rueandkay.com</div>
+                <div class="copyright-notice">© 2026 Rue and Kay Atelier. All rights reserved.</div>
+                <div class="legal-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Returns</a>
+                </div>
             </div>
         </div>
 
-        <!-- CONTAINER 2: REPLACEMENT CONTACT TILES CARD PANEL -->
-        <div id="footerContactPanels" style="display: none; max-width: 900px; margin: 0 auto; padding: 20px 0; position: relative; animation: fadeIn 0.4s ease;">
-            <!-- SLEEK MODERN MINIMALIST CLOSE TRIGGER ICON -->
-            <button onclick="hideContactCards()" 
-                    style="position: absolute; top: -10px; right: 0; background: #ffffff; border: 1px solid #e5e7eb; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.04); z-index: 10;"
-                    onmouseover="this.style.background='#000000'; this.style.borderColor='#000000'; this.querySelector('svg').style.stroke='#ffffff';"
-                    onmouseout="this.style.background='#ffffff'; this.style.borderColor='#e5e7eb'; this.querySelector('svg').style.stroke='#000000';">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <!-- CONTAINER 2: CONTACT TILES -->
+        <div id="footerContactPanels"
+            style="display: none; max-width: 900px; margin: 0 auto; padding: 20px 0; position: relative; animation: pdmFadeIn 0.4s ease;">
+            <button onclick="hideContactCards()"
+                style="position: absolute; top: -10px; right: 0; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; transition: background 0.2s ease;"
+                onmouseover="this.style.background='rgba(255,255,255,0.16)'"
+                onmouseout="this.style.background='rgba(255,255,255,0.08)'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                    stroke="#FAF5EF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="18" y1="6" x2="6" y2="18"></line>
                     <line x1="6" y1="6" x2="18" y2="18"></line>
                 </svg>
             </button>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; text-align: center; font-family: 'Poppins', sans-serif; margin-top: 20px;">
-                <!-- Call Card Slot -->
-                <div style="display: flex; flex-direction: column; align-items: center; gap: 12px; border-right: 1px solid #e5e7eb; padding-right: 20px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#e0532b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+            <div
+                style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; text-align: center; font-family: 'Poppins', sans-serif; margin-top: 20px;">
+                <!-- Call -->
+                <div
+                    style="display: flex; flex-direction: column; align-items: center; gap: 12px; border-right: 1px solid rgba(201,169,110,0.2); padding-right: 20px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                        stroke="#C9A96E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                        <path
+                            d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                        </path>
                     </svg>
-                    <h4 style="margin: 5px 0; font-size: 0.9rem; text-transform: uppercase; color: #444; letter-spacing: 1px; font-weight: 600;">Call Us</h4>
-                    <p style="margin: 0; font-size: 0.8rem; color: #888; max-width: 240px; line-height: 1.4;">Reach our concierge client services desk directly for immediate assistance.</p>
-                    <a href="tel:+254712345678" style="font-size: 0.9rem; color: #000000; font-weight: 600; text-decoration: none; margin-top: 5px;">+254 (0) 712 345 678</a>
+                    <h4
+                        style="margin: 4px 0; font-size: 0.7rem; text-transform: uppercase; color: #FAF5EF; letter-spacing: 2px; font-weight: 600;">
+                        Call Us</h4>
+                    <p
+                        style="margin: 0; font-size: 0.78rem; color: rgba(250,245,239,0.5); max-width: 220px; line-height: 1.5;">
+                        Reach our concierge client services desk directly for immediate assistance.</p>
+                    <a href="tel:+254712345678"
+                        style="font-size: 0.88rem; color: #FAF5EF; font-weight: 600; text-decoration: none; transition: color 0.2s ease;"
+                        onmouseover="this.style.color='#C9A96E'" onmouseout="this.style.color='#FAF5EF'">+254 (0) 712
+                        345 678</a>
                 </div>
-
-                <!-- Contact Card Slot -->
+                <!-- Email -->
                 <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#e0532b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                        stroke="#C9A96E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
                         <polyline points="22,6 12,13 2,6"></polyline>
                     </svg>
-                    <h4 style="margin: 5px 0; font-size: 0.9rem; text-transform: uppercase; color: #444; letter-spacing: 1px; font-weight: 600;">Contact Us</h4>
-                    <p style="margin: 0; font-size: 0.8rem; color: #888; max-width: 240px; line-height: 1.4;">Drop our support studio a digital line and we'll reply within 12 business hours.</p>
-                    <a href="mailto:concierge@rueandkay.com" style="font-size: 0.9rem; color: #080808; font-weight: 600; text-decoration: none; margin-top: 5px;">concierge@rueandkay.com</a>
+                    <h4
+                        style="margin: 4px 0; font-size: 0.7rem; text-transform: uppercase; color: #FAF5EF; letter-spacing: 2px; font-weight: 600;">
+                        Email Us</h4>
+                    <p
+                        style="margin: 0; font-size: 0.78rem; color: rgba(250,245,239,0.5); max-width: 220px; line-height: 1.5;">
+                        Drop our support studio a line and we'll reply within 12 business hours.</p>
+                    <a href="mailto:concierge@rueandkay.com"
+                        style="font-size: 0.88rem; color: #FAF5EF; font-weight: 600; text-decoration: none; transition: color 0.2s ease;"
+                        onmouseover="this.style.color='#C9A96E'"
+                        onmouseout="this.style.color='#FAF5EF'">concierge@rueandkay.com</a>
                 </div>
             </div>
         </div>
     </footer>
 
-
-    <!-- CDN link for supabase js library -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>   
+    <!-- ══════════════════════════════════════
+         SCRIPTS
+    ══════════════════════════════════════ -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD"></script>
-    <script src="App.js?v=2"></script>
+    <script src="App.js?v=3"></script>
+
+    <!-- Scroll animations & header behaviour -->
+    <script>
+        // Header darkens on scroll
+        const siteHeader = document.getElementById('siteHeader');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) siteHeader.classList.add('scrolled');
+            else siteHeader.classList.remove('scrolled');
+        }, { passive: true });
+
+        // Scroll-reveal for product cards
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, i) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => entry.target.classList.add('visible'), i * 60);
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        // Observe cards after they're injected
+        const gridEl = document.getElementById('productsGrid');
+        if (gridEl) {
+            new MutationObserver(() => {
+                gridEl.querySelectorAll('.product-card:not(.visible)').forEach(card => revealObserver.observe(card));
+            }).observe(gridEl, { childList: true });
+        }
+    </script>
 </body>
+
 </html>

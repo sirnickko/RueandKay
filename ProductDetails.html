@@ -4,110 +4,359 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Details | Rue and Kay Atelier</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Stalemate&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="LandingStyle.css">
+    <!-- Use the fonts from LuxuryLanding.css -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Poppins:wght@300;400;500;600;700&family=Stalemate&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="LuxuryLanding.css">
     <link rel="stylesheet" href="mobileresponsiveness.css">
-</head>
-<body style="background-color: #ffffff; margin: 0; font-family: 'Poppins', sans-serif;">
+    <style>
+        /* Premium Product Details Specific Styles */
+        .product-detail-main {
+            max-width: 1200px;
+            margin: 100px auto 80px auto;
+            padding: 0 40px;
+            display: grid;
+            grid-template-columns: 0.85fr 1.15fr;
+            gap: 80px;
+            align-items: start;
+        }
 
-    <header style="position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; border-bottom: 1px solid #e5e7eb; background: white;">
-        <div class="main-nav-container" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; max-width: 1200px; margin: 0 auto; box-sizing: border-box;">
-            
+        .product-gallery {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            position: sticky;
+            top: 100px;
+        }
+
+        .main-image-frame {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            max-height: 65vh;
+            background: var(--card-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-radius: 2px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+        }
+
+        .main-image-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 20px;
+            transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .main-image-frame:hover img {
+            transform: scale(1.05);
+        }
+
+        #thumbnailContainer {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        #thumbnailContainer img {
+            width: 80px;
+            height: 100px;
+            object-fit: cover;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0.5;
+            border-radius: 2px;
+        }
+
+        #thumbnailContainer img:hover,
+        #thumbnailContainer img.active {
+            opacity: 1;
+            border-color: var(--accent-gold);
+        }
+
+        .product-info-panel {
+            display: flex;
+            flex-direction: column;
+            padding-top: 10px;
+        }
+
+        .product-category {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--accent-gold);
+            margin-bottom: 16px;
+        }
+
+        .product-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.2rem;
+            font-weight: 300;
+            line-height: 1.1;
+            color: var(--text-main);
+            margin-bottom: 24px;
+        }
+
+        .product-price {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 400;
+            color: var(--text-main);
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid var(--border);
+            letter-spacing: 1px;
+        }
+
+        .product-description {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+            line-height: 1.9;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+        }
+
+        .product-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 50px;
+        }
+
+        .btn-add-bag {
+            width: 100%;
+            background: var(--bg-dark);
+            color: #FAF5EF;
+            border: 1px solid var(--bg-dark);
+            padding: 16px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn-add-bag:hover {
+            background: var(--accent-gold);
+            border-color: var(--accent-gold);
+            color: var(--bg-dark);
+        }
+
+        .btn-wishlist {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: transparent;
+            border: 1px solid var(--border);
+            padding: 16px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .btn-wishlist:hover {
+            border-color: var(--text-main);
+            background: var(--card-bg);
+        }
+
+        .details-accordion {
+            border-top: 1px solid var(--border);
+        }
+
+        .accordion-item {
+            border-bottom: 1px solid var(--border);
+            padding: 24px 0;
+        }
+
+        .accordion-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-main);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 0;
+        }
+
+        .accordion-content {
+            padding-top: 20px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            line-height: 1.8;
+            color: var(--text-muted);
+        }
+        
+        .accordion-content ul {
+            padding-left: 20px;
+            margin: 0;
+        }
+
+        .accordion-content li {
+            margin-bottom: 10px;
+        }
+
+        /* Scrollbar styling for thumbnails */
+        #thumbnailContainer::-webkit-scrollbar {
+            height: 4px;
+        }
+        #thumbnailContainer::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        #thumbnailContainer::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+        #thumbnailContainer::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-gold);
+        }
+
+        @media (max-width: 900px) {
+            .product-detail-main {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                margin-top: 100px;
+                padding: 0 20px;
+            }
+            .product-gallery {
+                position: relative;
+                top: 0;
+            }
+            .product-title {
+                font-size: 2.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header id="mainHeader">
+        <div class="main-nav-container">
             <div style="display: flex; align-items: center; gap: 15px;">
-                <button id="menuToggleBtn" onclick="toggleCategoryMenu(true)" style="background: transparent; border: none; cursor: pointer; color: #3D0814; display: flex; align-items: center; padding: 4px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <button id="menuToggleBtn" onclick="toggleCategoryMenu(true)" class="nav-icon-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="3" y1="12" x2="21" y2="12"></line>
                         <line x1="3" y1="6" x2="21" y2="6"></line>
                         <line x1="3" y1="18" x2="21" y2="18"></line>
                     </svg>
                 </button>
-
-                <a href="index.html" class="logo" style="margin: 0; white-space: nowrap; text-decoration: none; color: inherit;">
-                    Rue and Kay Atelier.
-                </a>
             </div>
 
-            <div style="display: flex; align-items: center; gap: 25px;">
+            <a href="index.html" class="logo">
+                Rue and Kay Atelier.
+            </a>
+
+            <div style="display: flex; align-items: center; gap: 15px;">
                 <div class="search-widget-container" style="display: flex; align-items: center; gap: 10px;">
-                    <input type="text" id="storefrontSearchInput" placeholder="Search products..." oninput="handleSearchFilter(this.value)" style="display: none; border: none; border-bottom: 1px solid #C2185B; outline: none; padding: 4px 8px; font-family: 'Poppins', sans-serif; font-size: 0.9rem;">
-                    <button id="searchToggleBtn" onclick="toggleSearchField()" style="background: transparent; border: none; cursor: pointer; color: #C2185B; display: flex; align-items: center; padding: 4px;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <input type="text" id="storefrontSearchInput" placeholder="Search..." oninput="handleSearchFilter(this.value)" style="display: none; border: none; border-bottom: 1px solid var(--accent-gold); outline: none; padding: 4px 8px; font-family: 'Poppins', sans-serif; font-size: 0.8rem; background: transparent; color: var(--text-main);">
+                    <button id="searchToggleBtn" onclick="toggleSearchField()" class="nav-icon-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="11" cy="11" r="8"></circle>
                             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                         </svg>
                     </button>
                 </div>
 
-                <!-- Account / Login Icon -->
-                <a id="headerAccountLink" href="AccountAuth.html" title="My Account" style="background: transparent; border: none; cursor: pointer; color: #C2185B; display: flex; align-items: center; padding: 4px; text-decoration: none;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <button id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Dark Mode" class="nav-icon-btn">
+                    <svg id="themeToggleIcon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+
+                <a id="headerAccountLink" href="AccountAuth.html" title="My Account" class="nav-icon-btn" style="text-decoration: none;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
                         <circle cx="12" cy="7" r="4"/>
                     </svg>
                 </a>
 
-                <div id="headerCartTrigger" onclick="toggleCartDrawer(true)" style="display: flex; align-items: center; gap: 12px; cursor: pointer; font-family: 'Poppins', sans-serif; user-select: none;">
-                    <div style="position: relative; display: inline-block;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <div id="headerCartTrigger" onclick="toggleCartDrawer(true)" style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-family: 'Poppins', sans-serif; user-select: none; margin-left: 10px;">
+                    <div id="cartWidget">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="9" cy="21" r="1"></circle>
                             <circle cx="20" cy="21" r="1"></circle>
                             <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                         </svg>
-                        <span id="cartCount" style="position: absolute; top: -8px; right: -8px; background: #C2185B; color: #ffffff; font-size: 0.65rem; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; line-height: 1;">0</span>
+                        <span id="cartCount">0</span>
                     </div>
                     <div style="display: flex; flex-direction: column; justify-content: center; line-height: 1.2;">
-                        <span style="font-weight: 700; font-size: 0.85rem; color: #880E4F;">Cart</span>
-                        <span id="cartHeaderPrice" style="font-size: 0.8rem; color: #333333; font-weight: 500;">KES 0.00</span>
+                        <span style="font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px;">Cart</span>
+                        <span id="cartHeaderPrice" style="font-size: 0.75rem; color: var(--text-muted); font-weight: 400;">KES 0.00</span>
                     </div>
                 </div>
             </div>
-
         </div>
     </header>
 
-    <main style="max-width: 1200px; margin: 100px auto 60px auto; padding: 0 20px; display: grid; grid-template-columns: 55% 40%; gap: 5%;">
+    <main class="product-detail-main">
         
-        <section style="display: flex; flex-direction: column; gap: 15px;">
-            <div style="background: #f9fafb; display: flex; justify-content: center; align-items: center; height: 600px; border-radius: 8px; overflow: hidden;">
-                <img id="detailMainImage" src="" alt="Loading..." style="max-width: 100%; max-height: 100%; object-fit: cover;">
+        <section class="product-gallery">
+            <div class="main-image-frame">
+                <img id="detailMainImage" src="" alt="Loading...">
             </div>
             
-            <div id="thumbnailContainer" style="display: flex; gap: 10px; overflow-x: auto;">
-                </div>
+            <div id="thumbnailContainer">
+                <!-- Thumbnails injected here -->
+            </div>
         </section>
 
-        <section style="display: flex; flex-direction: column; padding-top: 20px;">
-            <h1 id="detailTitle" style="margin: 0 0 5px 0; font-size: 1.8rem; font-weight: 600; color: #880E4F;">Loading...</h1>
-            <p id="detailSubtitle" style="margin: 0 0 20px 0; font-size: 1rem; color: #666;"></p>
+        <section class="product-info-panel">
+            <p id="detailSubtitle" class="product-category">Atelier Exclusive</p>
+            <h1 id="detailTitle" class="product-title">Loading...</h1>
             
-            <p id="detailPrice" style="margin: 0 0 30px 0; font-size: 1.4rem; font-weight: 500; color: #880E4F;">...</p>
+            <p id="detailPrice" class="product-price">...</p>
 
-            <button id="detailAddBtn" style="width: 100%; background: #C2185B; color: #fff; border: none; padding: 18px; font-size: 1rem; font-weight: 600; cursor: pointer; margin-bottom: 20px; transition: background 0.3s;">
-                Add to bag
-            </button>
-            
-            <!-- Wishlist / Save to Favourites button -->
-            <button id="detailWishlistBtn" onclick="handleDetailWishlistToggle()" style="display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: #C2185B; margin-bottom: 40px; cursor: pointer; background: transparent; border: none; font-family: 'Poppins', sans-serif; font-weight: 500; padding: 0; transition: opacity 0.2s;">
-                <svg id="detailHeartIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C2185B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                </svg>
-                <span id="detailWishlistLabel">Save to Wishlist</span>
-            </button>
+            <p id="detailDescription" class="product-description">
+                <!-- Description injected here -->
+            </p>
 
-            <div style="border-top: 1px solid #e5e7eb; padding-top: 20px;">
-                <h3 style="font-size: 0.95rem; font-weight: 600; margin: 0 0 15px 0; display: flex; justify-content: space-between;">
-                    Product Details
-                </h3>
-                <p id="detailDescription" style="font-size: 0.9rem; color: #444; line-height: 1.6; margin-bottom: 15px;">
-                    </p>
-                <ul id="detailFeaturesList" style="font-size: 0.9rem; color: #444; line-height: 1.8; padding-left: 20px; margin: 0;">
-                    <li>Material: Premium Handpicked Leather/Fabric</li>
-                    <li>Made in Italy / Kenya</li>
-                    <li>Includes: Dust bag, Rue and Kay authenticity card</li>
-                </ul>
+            <div class="product-actions">
+                <button id="detailAddBtn" class="btn-add-bag">
+                    Add to bag
+                </button>
+                
+                <button id="detailWishlistBtn" onclick="handleDetailWishlistToggle()" class="btn-wishlist">
+                    <svg id="detailHeartIcon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
+                    <span id="detailWishlistLabel">Save to Wishlist</span>
+                </button>
+            </div>
+
+            <div class="details-accordion">
+                <div class="accordion-item">
+                    <h3 class="accordion-title">
+                        Product Details
+                    </h3>
+                    <div class="accordion-content">
+                        <div id="detailFeaturesList">
+                            <!-- Injected dynamically from Supabase description field -->
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
+
     <footer class="site-footer">
         <div id="footerDefaultLinks" style="display: block;">
             <div class="footer-main-columns">
@@ -115,63 +364,32 @@
                     <h3>Customer Service</h3>
                     <ul>
                         <li><a href="javascript:void(0)" onclick="revealContactCards()">Contact Us</a></li>
-                        <li><a href="#">Payment </a></li>
-                        <li><a href="#">Delivery Policy</a></li>
+                        <li><a href="#">Payment & Shipping</a></li>
+                        <li><a href="#">Returns & Exchanges</a></li>
                     </ul>
                 </div>
                 <div class="footer-column text-center-col">
-                    <h3>About us</h3>
+                    <h3>About Us</h3>
                     <ul>
                         <li><a href="#">The Rue and Kay Atelier</a></li>
+                        <li><a href="#">Our Heritage</a></li>
+                        <li><a href="#">Sustainability</a></li>
                     </ul>
                 </div>
                 <div class="footer-column right-align-col">
                     <div class="social-wrapper">
-                        <h3>Follow us on</h3>
+                        <h3>Follow Us</h3>
                         <div class="social-icons-row">
-                            <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.85z"/></svg></a>
-                            <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2A10 10 0 0 0 2 12c0 4.9 3.53 8.93 8.2 9.82-.1-.9-.19-2.27.04-3.25l1.32-5.63s-.33-.66-.33-1.64c0-1.54.89-2.68 2-2.68.94 0 1.39.71 1.39 1.56 0 .95-.6 2.37-.92 3.69-.26 1.1.55 2 1.64 2 1.97 0 3.48-2.07 3.48-5.07 0-2.65-1.9-4.5-4.62-4.5-3.15 0-5 2.36-5 4.8 0 .95.36 1.97.82 2.52.1.1.1.2.07.33l-.3 1.25c-.05.2-.17.25-.39.15-1.43-.66-2.33-2.75-2.33-4.43 0-3.6 2.62-6.92 7.55-6.92 3.97 0 7.05 2.83 7.05 6.6 0 3.94-2.48 7.12-5.93 7.12-1.16 0-2.25-.6-2.62-1.32l-.72 2.74c-.26 1-1 2.26-1.5 3.06A10 10 0 1 0 12 2z"/></svg></a>
-                            <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8A3.6 3.6 0 0 0 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6A3.6 3.6 0 0 0 16.4 4H7.6m4.4 3.5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9m0 2a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5m4.75-.75a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg></a>
+                            <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.85z"/></svg></a>
+                            <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2A10 10 0 0 0 2 12c0 4.9 3.53 8.93 8.2 9.82-.1-.9-.19-2.27.04-3.25l1.32-5.63s-.33-.66-.33-1.64c0-1.54.89-2.68 2-2.68.94 0 1.39.71 1.39 1.56 0 .95-.6 2.37-.92 3.69-.26 1.1.55 2 1.64 2 1.97 0 3.48-2.07 3.48-5.07 0-2.65-1.9-4.5-4.62-4.5-3.15 0-5 2.36-5 4.8 0 .95.36 1.97.82 2.52.1.1.1.2.07.33l-.3 1.25c-.05.2-.17.25-.39.15-1.43-.66-2.33-2.75-2.33-4.43 0-3.6 2.62-6.92 7.55-6.92 3.97 0 7.05 2.83 7.05 6.6 0 3.94-2.48 7.12-5.93 7.12-1.16 0-2.25-.6-2.62-1.32l-.72 2.74c-.26 1-1 2.26-1.5 3.06A10 10 0 1 0 12 2z"/></svg></a>
+                            <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8A3.6 3.6 0 0 0 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6A3.6 3.6 0 0 0 16.4 4H7.6m4.4 3.5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9m0 2a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5m4.75-.75a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg></a>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="footer-legal-base">
                 <div class="legal-links"><a href="#">Terms of Use</a><a href="#">Privacy Policy</a><a href="#">Imprint</a></div>
-                <div class="copyright-notice">copyright © 2006-2026 rueandkay.com</div>
-            </div>
-        </div>
-
-        <div id="footerContactPanels" style="display: none; max-width: 900px; margin: 0 auto; padding: 20px 0; position: relative; animation: fadeIn 0.4s ease;">
-            <button onclick="hideContactCards()" 
-                    style="position: absolute; top: -10px; right: 0; background: #ffffff; border: 1px solid #e5e7eb; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.04); z-index: 10;"
-                    onmouseover="this.style.background='#C2185B'; this.style.borderColor='#C2185B'; this.querySelector('svg').style.stroke='#ffffff';"
-                    onmouseout="this.style.background='#ffffff'; this.style.borderColor='#e5e7eb'; this.querySelector('svg').style.stroke='#C2185B';">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C2185B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-            </button>
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; text-align: center; font-family: 'Poppins', sans-serif; margin-top: 20px;">
-                <div style="display: flex; flex-direction: column; align-items: center; gap: 12px; border-right: 1px solid #e5e7eb; padding-right: 20px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#e0532b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                    </svg>
-                    <h4 style="margin: 5px 0; font-size: 0.9rem; text-transform: uppercase; color: #444; letter-spacing: 1px; font-weight: 600;">Call Us</h4>
-                    <p style="margin: 0; font-size: 0.8rem; color: #888; max-width: 240px; line-height: 1.4;">Reach our concierge client services desk directly for immediate assistance.</p>
-                    <a href="tel:+254712345678" style="font-size: 0.9rem; color: #C2185B; font-weight: 600; text-decoration: none; margin-top: 5px;">+254 (0) 712 345 678</a>
-                </div>
-
-                <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#e0532b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                        <polyline points="22,6 12,13 2,6"></polyline>
-                    </svg>
-                    <h4 style="margin: 5px 0; font-size: 0.9rem; text-transform: uppercase; color: #444; letter-spacing: 1px; font-weight: 600;">Contact Us</h4>
-                    <p style="margin: 0; font-size: 0.8rem; color: #888; max-width: 240px; line-height: 1.4;">Drop our support studio a digital line and we'll reply within 12 business hours.</p>
-                    <a href="mailto:concierge@rueandkay.com" style="font-size: 0.9rem; color: #C2185B; font-weight: 600; text-decoration: none; margin-top: 5px;">concierge@rueandkay.com</a>
-                </div>
+                <div class="copyright-notice">© 2006-2026 Rue and Kay Atelier. All rights reserved.</div>
             </div>
         </div>
     </footer>
@@ -208,22 +426,56 @@
                 document.getElementById('detailPrice').innerText = `${Number(product.price).toLocaleString()} ksh`;
                 document.getElementById('detailDescription').innerText = product.description || 'Classy all time item with elegant structures. Handpicked styling configurations crafted from premium selections.';
 
+                // ── Product Details bullets ──────────────────────────────
+                const featuresList = document.getElementById('detailFeaturesList');
+                const defaultBullets = [
+                    'Material: Premium Handpicked Leather/Fabric',
+                    'Crafted by Artisans in Italy / Kenya',
+                    'Includes: Signature Dust Bag & Rue and Kay Authenticity Card',
+                    'Dimensions: Engineered for elegant everyday carry'
+                ];
+                if (product.description) {
+                    // Split description on newlines or semicolons into bullet points
+                    const bullets = product.description
+                        .split(/\n|;/)
+                        .map(s => s.replace(/^[-•*]\s*/, '').trim())
+                        .filter(s => s.length > 0);
+                    if (bullets.length > 1) {
+                        featuresList.innerHTML = '<ul>' + bullets.map(b => `<li>${b}</li>`).join('') + '</ul>';
+                    } else {
+                        // Single sentence — show as plain paragraph + default craft bullets
+                        featuresList.innerHTML = `<p style="margin-bottom:12px;">${product.description}</p>` +
+                            '<ul>' + defaultBullets.map(b => `<li>${b}</li>`).join('') + '</ul>';
+                    }
+                } else {
+                    // No description — show brand default bullets
+                    featuresList.innerHTML = '<ul>' + defaultBullets.map(b => `<li>${b}</li>`).join('') + '</ul>';
+                }
+
                 const thumbContainer = document.getElementById('thumbnailContainer');
                 thumbContainer.innerHTML = `
-                    <img src="${product.image_url}" style="width: 80px; height: 100px; object-fit: cover; border: 1px solid #C2185B; cursor: pointer;" onclick="document.getElementById('detailMainImage').src=this.src">
+                    <img src="${product.image_url}" class="active" onclick="changeMainImage(this.src, this)">
                 `;
                 if (product.image_url_2) {
                     thumbContainer.innerHTML += `
-                        <img src="${product.image_url_2}" style="width: 80px; height: 100px; object-fit: cover; border: 1px solid #e5e7eb; cursor: pointer;" onclick="document.getElementById('detailMainImage').src=this.src">
+                        <img src="${product.image_url_2}" onclick="changeMainImage(this.src, this)">
                     `;
                 }
 
                 document.getElementById('detailAddBtn').onclick = () => {
                     handleAddToCart(product.id);
                     const btn = document.getElementById('detailAddBtn');
+                    const originalText = btn.innerText;
                     btn.innerText = "Added to Bag ✓";
                     btn.style.background = "#059669";
-                    setTimeout(() => { btn.innerText = "Add to bag"; btn.style.background = "#C2185B"; }, 2000);
+                    btn.style.borderColor = "#059669";
+                    btn.style.color = "#ffffff";
+                    setTimeout(() => { 
+                        btn.innerText = originalText; 
+                        btn.style.background = "var(--bg-dark)"; 
+                        btn.style.borderColor = "var(--bg-dark)"; 
+                        btn.style.color = "#FAF5EF"; 
+                    }, 2000);
                 };
 
                 // Update the wishlist button state after auth + wishlist loads
@@ -233,15 +485,33 @@
                 console.error("Error loading product:", err.message);
                 document.getElementById('detailTitle').innerText = "Error loading product.";
             }
+
+            // Scroll effect for header
+            window.addEventListener('scroll', () => {
+                const header = document.getElementById('mainHeader');
+                if (window.scrollY > 20) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
         });
+
+        // Function to change main image and active state on thumbnails
+        function changeMainImage(src, element) {
+            document.getElementById('detailMainImage').src = src;
+            const thumbs = document.querySelectorAll('#thumbnailContainer img');
+            thumbs.forEach(thumb => thumb.classList.remove('active'));
+            element.classList.add('active');
+        }
 
         // Call from global auth listener when wishlist data arrives
         function updateDetailWishlistUI() {
             if (!detailCurrentProductId) return;
-            const isSaved = userWishlistIds.has(detailCurrentProductId);
+            const isSaved = typeof userWishlistIds !== 'undefined' && userWishlistIds.has(detailCurrentProductId);
             const heartSvg = document.getElementById('detailHeartIcon');
             const label    = document.getElementById('detailWishlistLabel');
-            if (heartSvg) heartSvg.setAttribute('fill', isSaved ? '#C2185B' : 'none');
+            if (heartSvg) heartSvg.setAttribute('fill', isSaved ? 'currentColor' : 'none');
             if (label)    label.innerText = isSaved ? 'Remove from Wishlist' : 'Save to Wishlist';
         }
 
@@ -249,9 +519,13 @@
         async function handleDetailWishlistToggle() {
             if (!detailCurrentProductId) return;
             const btn = document.getElementById('detailWishlistBtn');
-            await handleWishlistToggle(detailCurrentProductId, btn);
-            updateDetailWishlistUI();
+            if(typeof handleWishlistToggle === 'function') {
+                await handleWishlistToggle(detailCurrentProductId, btn);
+                updateDetailWishlistUI();
+            } else {
+                console.warn('Wishlist functionality not loaded yet.');
+            }
         }
     </script>
 </body>
-</html>
+</html>ml>

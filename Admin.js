@@ -30,67 +30,87 @@ const statusMessage = document.getElementById('statusMessage');
 if (addProductForm) {
     addProductForm.addEventListener('submit', async (event) => {
         event.preventDefault();
-        showStatus("Processing product submission...", "var(--text-muted)");
+        showStatus("Processing product submission...", "loading");
 
-        const nameValue = document.getElementById('prodName').value;
-        const priceValue = document.getElementById('prodPrice').value;
-        const urlInputValue = document.getElementById('prodImage').value;
-        const fileInput = document.getElementById('prodFile');
-        
-        let finalImageUrl = urlInputValue || null;
+        const nameValue        = document.getElementById('prodName').value;
+        const priceValue       = document.getElementById('prodPrice').value;
+        const categoryValue    = document.getElementById('prodCategory')?.value || null;
+        const descriptionValue = document.getElementById('prodDescription')?.value || null;
+
+        // Image inputs
+        const fileInput1 = document.getElementById('prodFile');
+        const fileInput2 = document.getElementById('prodFile2');
+        const fileInput3 = document.getElementById('prodFile3');
+        const urlInput1  = document.getElementById('prodImage').value;
+        const urlInput2  = document.getElementById('prodImage2')?.value || null;
+        const urlInput3  = document.getElementById('prodImage3')?.value || null;
 
         try {
-            // Check if the admin selected a local file
-            if (fileInput && fileInput.files.length > 0) {
-                showStatus("Uploading file to cloud storage...","var(--accent)");
-                
-                const chosenFile = fileInput.files[0];
-                
-                // Create a unique filename using the current timestamp to avoid duplicate name overwrites
-                const uniqueFileName = `${Date.now()}-${chosenFile.name}`;
+            // Upload all three images (file takes priority over URL for each slot)
+            showStatus("Uploading images...", "loading");
+            const finalUrl1 = await uploadFileOrUrl(fileInput1, urlInput1);
+            const finalUrl2 = await uploadFileOrUrl(fileInput2, urlInput2);
+            const finalUrl3 = await uploadFileOrUrl(fileInput3, urlInput3);
 
-                // Upload the file to your public 'product-images' bucket
-                const { data: uploadData, error: uploadError } = await supabaseClient
-                    .storage
-                    .from('product-images')
-                    .upload(uniqueFileName, chosenFile);
-
-                if (uploadError) throw uploadError;
-
-                // Grab the public web URL of the uploaded image file
-                const { data: publicUrlData } = supabaseClient
-                    .storage
-                    .from('product-images')
-                    .getPublicUrl(uniqueFileName);
-
-                finalImageUrl = publicUrlData.publicUrl;
-            }
-
-            // Save everything into your products table
-            showStatus("Saving product entry to database...", "var(--accent)");
+            // Save everything into the products table
+            showStatus("Saving product entry to database...", "loading");
             const { error: dbError } = await supabaseClient
                 .from('products')
                 .insert([
-                    { name: nameValue, price: Number(priceValue), image_url: finalImageUrl }
+                    {
+                        name:        nameValue,
+                        price:       Number(priceValue),
+                        image_url:   finalUrl1,
+                        image_url_2: finalUrl2,
+                        image_url_3: finalUrl3,
+                        category:    categoryValue,
+                        description: descriptionValue
+                    }
                 ]);
 
             if (dbError) throw dbError;
 
-            showStatus("Product successfully added to the shop", "green");
+            showStatus("✓ Product successfully added to the shop", "success");
             addProductForm.reset();
 
         } catch (err) {
             console.error("Operation failed:", err.message);
-            showStatus(" Error: " + err.message, "red");
+            showStatus("✕ Error: " + err.message, "error");
         }
     });
 }
 
+// ── Reusable upload helper ──────────────────────────────────────
+// Uploads a file to Supabase Storage if selected; otherwise uses the pasted URL.
+// Returns the final public URL string, or null if neither is provided.
+async function uploadFileOrUrl(fileInput, fallbackUrl) {
+    if (fileInput && fileInput.files && fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        const uniqueFileName = `${Date.now()}-${file.name}`;
+
+        const { error: uploadError } = await supabaseClient
+            .storage
+            .from('product-images')
+            .upload(uniqueFileName, file);
+
+        if (uploadError) throw uploadError;
+
+        const { data: publicUrlData } = supabaseClient
+            .storage
+            .from('product-images')
+            .getPublicUrl(uniqueFileName);
+
+        return publicUrlData.publicUrl;
+    }
+    return fallbackUrl || null;
+}
+
 // Helper function to update our status text box
-function showStatus(text, color) {
+// 'type' is one of: 'loading' | 'success' | 'error'
+function showStatus(text, type) {
     if (statusMessage) {
-        statusMessage.innerText = text;
-        statusMessage.style.color = color;
+        statusMessage.textContent = text;
+        statusMessage.className = 'status-msg visible ' + (type || 'loading');
     }
 }
 // Logout Handler

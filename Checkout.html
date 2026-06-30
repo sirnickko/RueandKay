@@ -4,16 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Secure Checkout | Rue and Kay Atelier</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Stalemate&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="LandingStyle.css">
+    <meta name="description" content="Complete your secure checkout at Rue and Kay Atelier — Kenya's premier luxury fashion boutique.">
+    <link rel="stylesheet" href="LuxuryLanding.css">
     <link rel="stylesheet" href="mobileresponsiveness.css">
+    <style>
+        /* ── Checkout-scoped overrides: neutralise the warm blush palette ── */
+        body {
+            /* replace cream/blush page bg with clean neutral */
+            background-color: #f4f4f6 !important;
+        }
+        [data-theme="dark"] body,
+        [data-theme="dark"] {
+            background-color: var(--bg) !important; /* keep dark mode as-is */
+        }
+        /* Inputs: pure white instead of cream --bg */
+        #checkoutDeliveryForm input,
+        #cardDetailsSubForm input {
+            background: #ffffff !important;
+        }
+        [data-theme="dark"] #checkoutDeliveryForm input,
+        [data-theme="dark"] #cardDetailsSubForm input {
+            background: var(--card-bg) !important;
+        }
+        /* Info sub-forms: champagne-gold tint instead of pink accent-light */
+        #mpesaDetailsSubForm,
+        #globalGatewaySubForm {
+            background: rgba(201, 169, 110, 0.12) !important;
+            border: 1px solid rgba(201, 169, 110, 0.3);
+        }
+        [data-theme="dark"] #mpesaDetailsSubForm,
+        [data-theme="dark"] #globalGatewaySubForm {
+            background: rgba(201, 169, 110, 0.08) !important;
+            border: 1px solid rgba(201, 169, 110, 0.2);
+        }
+    </style>
 </head>
-<body style="background-color: #f9fafb; margin: 0; font-family: 'Poppins', sans-serif;">
+<body>
 
-    <header style="position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; border-bottom: 1px solid #e5e7eb; background: white;">
-        <div class="main-nav-container" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; max-width: 1200px; margin: 0 auto; box-sizing: border-box;">
+    <header id="siteHeader">
+        <div class="main-nav-container" style="display: flex; justify-content: space-between; align-items: center;">
             <div style="display: flex; align-items: center; gap: 15px;">
-                <button onclick="history.back()" style="background: transparent; border: none; cursor: pointer; color: #3D0814; display: flex; align-items: center; padding: 4px;">
+                <button onclick="history.back()" style="background: transparent; border: none; cursor: pointer; color: var(--text-main); display: flex; align-items: center; padding: 4px; transition: color 0.2s ease;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="3" y1="12" x2="21" y2="12"></line>
                         <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -24,97 +55,106 @@
                     Rue and Kay Atelier.
                 </div>
             </div>
-            
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <!-- Theme Toggle Icon -->
+                <button id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Dark Mode" style="background: transparent; border: none; cursor: pointer; color: var(--accent); display: flex; align-items: center; padding: 4px; transition: color 0.2s ease;">
+                    <svg id="themeToggleIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
         </div>
     </header>
 
 
-    <main style="max-width: 1200px; margin: 110px auto 40px auto; padding: 0 20px; display: grid; grid-template-columns: 58% 38%; gap: 4%; align-items: start;">
+    <main style="max-width: 1200px; margin: 110px auto 60px auto; padding: 0 20px; display: grid; grid-template-columns: 58% 38%; gap: 4%; align-items: start;">
         
         <section style="display: flex; flex-direction: column; gap: 25px;">
             
-            <div style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 30px;">
-                <h3 style="margin: 0 0 20px 0; font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 600;">Delivery Information</h3>
+            <!-- Delivery Information -->
+            <div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 30px;">
+                <h3 style="margin: 0 0 20px 0; font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 600; color: var(--text-main);">Delivery Information</h3>
                 <form id="checkoutDeliveryForm" style="display: flex; flex-direction: column; gap: 15px;">
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                         <div>
-                            <label style="display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 6px; color: #333;">First Name</label>
-                            <input type="text" id="chkFirstName" required style="width: 100%; padding: 10px 14px; border: 1px solid #d1d5db; border-radius: 8px; box-sizing: border-box; outline: none; font-size: 0.9rem;">
+                            <label style="display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 6px; color: var(--text-muted);">First Name</label>
+                            <input type="text" id="chkFirstName" required style="width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; box-sizing: border-box; outline: none; font-size: 0.9rem; background: var(--bg); color: var(--text-main); transition: border-color 0.2s ease;">
                         </div>
                         <div>
-                            <label style="display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 6px; color: #333;">Last Name</label>
-                            <input type="text" id="chkLastName" required style="width: 100%; padding: 10px 14px; border: 1px solid #d1d5db; border-radius: 8px; box-sizing: border-box; outline: none; font-size: 0.9rem;">
+                            <label style="display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 6px; color: var(--text-muted);">Last Name</label>
+                            <input type="text" id="chkLastName" required style="width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; box-sizing: border-box; outline: none; font-size: 0.9rem; background: var(--bg); color: var(--text-main); transition: border-color 0.2s ease;">
                         </div>
                     </div>
                     <div>
-                        <label style="display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 6px; color: #333;">Delivery Address / Building Name</label>
-                        <input type="text" id="chkLocation" required style="width: 100%; padding: 10px 14px; border: 1px solid #d1d5db; border-radius: 8px; box-sizing: border-box; outline: none; font-size: 0.9rem;">
+                        <label style="display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 6px; color: var(--text-muted);">Delivery Address / Building Name</label>
+                        <input type="text" id="chkLocation" required style="width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; box-sizing: border-box; outline: none; font-size: 0.9rem; background: var(--bg); color: var(--text-main); transition: border-color 0.2s ease;">
                     </div>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                         <div>
-                            <label style="display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 6px; color: #333;">City</label>
-                            <input type="text" id="chkCity" value="Nairobi" style="width: 100%; padding: 10px 14px; border: 1px solid #d1d5db; border-radius: 8px; box-sizing: border-box; outline: none; font-size: 0.9rem;">
+                            <label style="display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 6px; color: var(--text-muted);">City</label>
+                            <input type="text" id="chkCity" value="Nairobi" style="width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; box-sizing: border-box; outline: none; font-size: 0.9rem; background: var(--bg); color: var(--text-main); transition: border-color 0.2s ease;">
                         </div>
                         <div>
-                            <label style="display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 6px; color: #333;">Phone Number</label>
-                            <input type="tel" id="chkPhone" placeholder="e.g. 0712345678" required style="width: 100%; padding: 10px 14px; border: 1px solid #d1d5db; border-radius: 8px; box-sizing: border-box; outline: none; font-size: 0.9rem;">
+                            <label style="display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 6px; color: var(--text-muted);">Phone Number</label>
+                            <input type="tel" id="chkPhone" placeholder="e.g. 0712345678" required style="width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; box-sizing: border-box; outline: none; font-size: 0.9rem; background: var(--bg); color: var(--text-main); transition: border-color 0.2s ease;">
                         </div>
                     </div>
                 </form>
             </div>
 
-            <div style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 30px; margin-top: 25px;">
-                <h3 style="margin: 0 0 20px 0; font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 600;">Payment Method</h3>
+            <!-- Payment Method -->
+            <div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 30px;">
+                <h3 style="margin: 0 0 20px 0; font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 600; color: var(--text-main);">Payment Method</h3>
                 
                 <div style="display: flex; flex-direction: column; gap: 12px;">
-                    <label style="display: flex; align-items: center; justify-content: space-between; padding: 16px; border: 1px solid #d1d5db; border-radius: 10px; cursor: pointer; font-weight: 500;" onclick="togglePaymentFields('mpesa')">
+                    <label style="display: flex; align-items: center; justify-content: space-between; padding: 16px; border: 1px solid var(--border); border-radius: 10px; cursor: pointer; font-weight: 500; color: var(--text-main); background: var(--card-bg); transition: border-color 0.2s ease, background 0.2s ease;" onclick="togglePaymentFields('mpesa')">
                         <div style="display: flex; align-items: center; gap: 12px;">
-                            <input type="radio" name="paymentType" id="payMpesa" checked style="accent-color: #C2185B;">
+                            <input type="radio" name="paymentType" id="payMpesa" checked style="accent-color: var(--accent);">
                             <span>M-Pesa (STK Push)</span>
                         </div>
                         <span style="font-size: 0.8rem; color: #059669; font-weight: 600;">Lipa Na M-Pesa</span>
                     </label>
 
-                    <label style="display: flex; align-items: center; justify-content: space-between; padding: 16px; border: 1px solid #d1d5db; border-radius: 10px; cursor: pointer; font-weight: 500;" onclick="togglePaymentFields('card')">
+                    <label style="display: flex; align-items: center; justify-content: space-between; padding: 16px; border: 1px solid var(--border); border-radius: 10px; cursor: pointer; font-weight: 500; color: var(--text-main); background: var(--card-bg); transition: border-color 0.2s ease, background 0.2s ease;" onclick="togglePaymentFields('card')">
                         <div style="display: flex; align-items: center; gap: 12px;">
-                            <input type="radio" name="paymentType" id="payCard" style="accent-color: #C2185B;">
+                            <input type="radio" name="paymentType" id="payCard" style="accent-color: var(--accent);">
                             <span>Credit / Debit Card</span>
                         </div>
                         <span style="font-size: 1.2rem;">💳</span>
                     </label>
 
-                    <label style="display: flex; align-items: center; justify-content: space-between; padding: 16px; border: 1px solid #d1d5db; border-radius: 10px; cursor: pointer; font-weight: 500;" onclick="togglePaymentFields('paypal')">
+                    <label style="display: flex; align-items: center; justify-content: space-between; padding: 16px; border: 1px solid var(--border); border-radius: 10px; cursor: pointer; font-weight: 500; color: var(--text-main); background: var(--card-bg); transition: border-color 0.2s ease, background 0.2s ease;" onclick="togglePaymentFields('paypal')">
                         <div style="display: flex; align-items: center; gap: 12px;">
-                            <input type="radio" name="paymentType" id="payPaypal" style="accent-color: #C2185B;">
+                            <input type="radio" name="paymentType" id="payPaypal" style="accent-color: var(--accent);">
                             <span>PayPal</span>
                         </div>
                         <span style="font-size: 0.85rem; color: #003087; font-weight: 700; font-style: italic;">PayPal</span>
                     </label>
                 </div>
 
-                <div id="mpesaDetailsSubForm" style="display: block; margin-top: 15px; padding: 15px; background: #f9fafb; border-radius: 8px; font-size: 0.85rem; color: #666; animation: fadeIn 0.3s ease;">
+                <div id="mpesaDetailsSubForm" style="display: block; margin-top: 15px; padding: 15px; background: var(--accent-light); border-radius: 8px; font-size: 0.85rem; color: var(--text-muted); animation: fadeIn 0.3s ease;">
                     <span style="color: #059669; font-weight: 600; margin-right: 4px;">STK Push Live:</span> 
                     An automated STK PIN prompt will be sent instantly to the phone number specified above upon clicking Place Order.
                 </div>
 
-                <div id="cardDetailsSubForm" style="display: none; flex-direction: column; gap: 15px; margin-top: 20px; padding-top: 20px; border-top: 1px solid #f3f4f6; animation: fadeIn 0.3s ease;">
+                <div id="cardDetailsSubForm" style="display: none; flex-direction: column; gap: 15px; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); animation: fadeIn 0.3s ease;">
                     <div>
-                        <label style="display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 6px; color: #333;">Card Number</label>
-                        <input type="text" id="chkCardNumber" placeholder="1234 5678 9012 3456" style="width: 100%; padding: 10px 14px; border: 1px solid #d1d5db; border-radius: 8px; box-sizing: border-box; outline: none; font-size: 0.9rem;">
+                        <label style="display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 6px; color: var(--text-muted);">Card Number</label>
+                        <input type="text" id="chkCardNumber" placeholder="1234 5678 9012 3456" style="width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; box-sizing: border-box; outline: none; font-size: 0.9rem; background: var(--bg); color: var(--text-main);">
                     </div>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                         <div>
-                            <label style="display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 6px; color: #333;">Expiry Date</label>
-                            <input type="text" id="chkCardExpiry" placeholder="MM/YY" style="width: 100%; padding: 10px 14px; border: 1px solid #d1d5db; border-radius: 8px; box-sizing: border-box; outline: none; font-size: 0.9rem;">
+                            <label style="display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 6px; color: var(--text-muted);">Expiry Date</label>
+                            <input type="text" id="chkCardExpiry" placeholder="MM/YY" style="width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; box-sizing: border-box; outline: none; font-size: 0.9rem; background: var(--bg); color: var(--text-main);">
                         </div>
                         <div>
-                            <label style="display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 6px; color: #333;">CVC</label>
-                            <input type="text" id="chkCardCvc" placeholder="123" style="width: 100%; padding: 10px 14px; border: 1px solid #d1d5db; border-radius: 8px; box-sizing: border-box; outline: none; font-size: 0.9rem;">
+                            <label style="display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 6px; color: var(--text-muted);">CVC</label>
+                            <input type="text" id="chkCardCvc" placeholder="123" style="width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; box-sizing: border-box; outline: none; font-size: 0.9rem; background: var(--bg); color: var(--text-main);">
                         </div>
                     </div>
                 </div>
 
-                <div id="globalGatewaySubForm" style="display: none; margin-top: 15px; padding: 15px; background: #f9fafb; border-radius: 8px; animation: fadeIn 0.3s ease;">
+                <div id="globalGatewaySubForm" style="display: none; margin-top: 15px; padding: 15px; background: var(--accent-light); border-radius: 8px; animation: fadeIn 0.3s ease;">
                     <div id="paypal-button-container" style="width: 100%; min-height: 150px;"></div>
                 </div>
 
@@ -122,26 +162,27 @@
         
         </section>
 
-        <section style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 30px; position: sticky; top: 100px;">
-            <h3 style="margin: 0 0 20px 0; font-size: 1.1rem; font-weight: 600;">Order Summary</h3>
+        <!-- Order Summary -->
+        <section style="background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 30px; position: sticky; top: 100px;">
+            <h3 style="margin: 0 0 20px 0; font-size: 1.1rem; font-weight: 600; color: var(--text-main);">Order Summary</h3>
             
-            <div id="checkoutSummaryList" style="max-height: 240px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; border-bottom: 1px solid #f3f4f6; padding-bottom: 20px;">
-                </div>
-
-            <div style="display: flex; flex-direction: column; gap: 10px; border-bottom: 1px solid #f3f4f6; padding-bottom: 20px; margin-bottom: 20px; font-size: 0.9rem; color: #444;">
-                <div style="display: flex; justify-content: space-between;"><span>Subtotal</span><span id="chkSubtotal">KES 0</span></div>
-                <div style="display: flex; justify-content: space-between;"><span>Shipping Delivery</span><span style="color: #059669; font-weight: 500;">FREE</span></div>
+            <div id="checkoutSummaryList" style="max-height: 240px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 20px;">
             </div>
 
-            <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 1.2rem; color: #880E4F; margin-bottom: 25px;">
-                <span>Total Due</span>
+            <div style="display: flex; flex-direction: column; gap: 10px; border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 20px; font-size: 0.9rem; color: var(--text-muted);">
+                <div style="display: flex; justify-content: space-between;"><span>Subtotal</span><span id="chkSubtotal" style="color: var(--text-main); font-weight: 500;">KES 0</span></div>
+                <div style="display: flex; justify-content: space-between;"><span>Shipping Delivery</span><span style="color: #059669; font-weight: 600;">FREE</span></div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 1.2rem; color: var(--accent); margin-bottom: 25px;">
+                <span style="color: var(--text-main);">Total Due</span>
                 <span id="chkTotal">KES 0</span>
             </div>
             
-            <button id="chkPlaceOrderBtn" onclick="processCheckoutOrder()" style="width: 100%; background: #C2185B; color: #ffffff; border: none; padding: 15px; border-radius: 30px; font-weight: 600; font-size: 0.95rem; cursor: pointer; letter-spacing: 0.5px; transition: opacity 0.2s; margin-bottom: 12px;">
+            <button id="chkPlaceOrderBtn" onclick="processCheckoutOrder()" style="width: 100%; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%); color: #ffffff; border: none; padding: 15px; border-radius: 30px; font-weight: 600; font-size: 0.95rem; cursor: pointer; letter-spacing: 0.5px; transition: opacity 0.2s ease, transform 0.2s ease; margin-bottom: 12px;">
                 Place Order →
             </button>
-            <a href="index.html" style="display: block; text-align: center; color: #666666; font-size: 0.85rem; text-decoration: none; font-weight: 500;">
+            <a href="index.html" style="display: block; text-align: center; color: var(--text-muted); font-size: 0.85rem; text-decoration: none; font-weight: 500; transition: color 0.2s ease;">
                 ← Continue Shopping
             </a>
             
@@ -158,6 +199,43 @@
         // Trigger initialization routine directly on screen initialization bootup
         if (typeof renderCheckoutSummaryPage === 'function') {
             renderCheckoutSummaryPage();
+        }
+
+        // Input focus styles using new accent colour
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', () => {
+                input.style.borderColor = 'var(--accent)';
+                input.style.boxShadow = '0 0 0 3px var(--accent-light)';
+            });
+            input.addEventListener('blur', () => {
+                input.style.borderColor = 'var(--border)';
+                input.style.boxShadow = 'none';
+            });
+        });
+
+        // Payment label hover highlight
+        document.querySelectorAll('label[onclick]').forEach(label => {
+            label.addEventListener('mouseenter', () => {
+                label.style.borderColor = 'var(--accent)';
+                label.style.background = 'var(--accent-light)';
+            });
+            label.addEventListener('mouseleave', () => {
+                label.style.borderColor = 'var(--border)';
+                label.style.background = 'var(--card-bg)';
+            });
+        });
+
+        // Place Order button hover
+        const placeOrderBtn = document.getElementById('chkPlaceOrderBtn');
+        if (placeOrderBtn) {
+            placeOrderBtn.addEventListener('mouseenter', () => {
+                placeOrderBtn.style.opacity = '0.88';
+                placeOrderBtn.style.transform = 'translateY(-1px)';
+            });
+            placeOrderBtn.addEventListener('mouseleave', () => {
+                placeOrderBtn.style.opacity = '1';
+                placeOrderBtn.style.transform = 'translateY(0)';
+            });
         }
     </script>
 </body>

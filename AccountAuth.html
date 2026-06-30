@@ -17,6 +17,20 @@
             --border:       #f0d6df;
             --text:         #1a0a0f;
             --muted:        #7a5560;
+            --card-bg:      #ffffff;
+            --header-bg:    #ffffff;
+        }
+
+        [data-theme="dark"] {
+            --accent:       #C2185B;
+            --accent-hover: #FCE4EC;
+            --accent-light: rgba(194, 24, 91, 0.15);
+            --bg:           #121212;
+            --border:       #333333;
+            --text:         #f5f5f5;
+            --muted:        #a0a0a0;
+            --card-bg:      #1e1e1e;
+            --header-bg:    #1a1a1a;
         }
 
         body {
@@ -29,7 +43,8 @@
 
         /* ── TOP HEADER BAR ── */
         header {
-            background: #ffffff;
+            background: var(--header-bg);
+            transition: background 0.3s ease;
             border-bottom: 1px solid var(--border);
             padding: 0 40px;
             height: 72px;
@@ -41,7 +56,7 @@
         .logo {
             font-family: 'Stalemate', cursive;
             font-size: 2rem;
-            color: #3D0814;
+            color: var(--text, #3D0814);
             text-decoration: none;
         }
         .header-back-link {
@@ -66,7 +81,7 @@
 
         /* ── AUTH CARD ── */
         .auth-card {
-            background: #ffffff;
+            background: var(--card-bg);
             width: 100%;
             max-width: 460px;
             border-radius: 20px;
@@ -159,7 +174,7 @@
             font-family: 'Poppins', sans-serif;
             font-size: 0.95rem;
             color: var(--text);
-            background: #fff;
+            background: var(--card-bg);
             transition: border-color 0.2s, box-shadow 0.2s;
             outline: none;
         }
@@ -271,12 +286,21 @@
 
     <header>
         <a href="index.html" class="logo">Rue and Kay Atelier.</a>
-        <a href="index.html" class="header-back-link">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
-            </svg>
-            Back to Shop
-        </a>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <!-- Theme Toggle Icon -->
+            <button id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Dark Mode" style="background: transparent; border: none; cursor: pointer; color: #C2185B; display: flex; align-items: center; padding: 4px;">
+                <svg id="themeToggleIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+            </button>
+
+            <a href="index.html" class="header-back-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+                </svg>
+                Back to Shop
+            </a>
+        </div>
     </header>
 
     <main>
@@ -385,7 +409,7 @@
                         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
                     </svg>
                 </div>
-                <h2 style="color: #1a0a0f;">Check your email!</h2>
+                <h2 style="color: var(--text);">Check your email!</h2>
                 <p>We've sent a confirmation link to your inbox. Click it to activate your account, then come back to sign in.</p>
                 <button class="submit-btn" style="margin-top: 24px;" onclick="switchTab('login')">Go to Sign In</button>
             </div>
@@ -394,6 +418,33 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
+        // ── THEME MANAGER ──
+        let currentTheme = localStorage.getItem('theme') || 'light';
+        function initializeTheme() {
+            if (currentTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+            }
+            updateThemeIcon();
+        }
+        function toggleTheme() {
+            currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            localStorage.setItem('theme', currentTheme);
+            initializeTheme();
+        }
+        function updateThemeIcon() {
+            const icon = document.getElementById('themeToggleIcon');
+            if (icon) {
+                if (currentTheme === 'dark') {
+                    icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+                } else {
+                    icon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
+                }
+            }
+        }
+        initializeTheme();
+
         // ── SUPABASE INIT ──
         const SUPABASE_URL     = "https://qwcpiltbfbnfikqlhrrg.supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF3Y3BpbHRiZmJuZmlrcWxocnJnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNzY4ODIsImV4cCI6MjA5NDk1Mjg4Mn0.yHTBkF-rQaE-BK0RTcrVmmegqH3y-hgstBqr4P6LW1o";
