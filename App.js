@@ -979,7 +979,8 @@ function initializeHeroCarousel() {
 // ==========================================
 // 10. COLD-BOOT APPLICATION INITIALIZATION
 // ==========================================
-fetchProductsFromDatabase();
+// Only fetch all products on pages that actually render the product grid
+if (productsGrid) fetchProductsFromDatabase();
 updateCartBadge();
 renderCartContents(); // FIX: Added initialization render call explicitly on cold boot
 

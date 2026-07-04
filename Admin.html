@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard | Rue and Kay Atelier</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://qwcpiltbfbnfikqlhrrg.supabase.co">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Poppins:wght@300;400;500;600;700&family=Stalemate&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="LuxuryLanding.css">
     <style>
@@ -780,14 +784,26 @@
             loadProductTable();
         }
 
-        // ── Toggle Sold Out ───────────────────────────────────────
+        // ── Toggle Sold Out ───────────────────────────────────
         async function toggleSoldOut(id, currentStatus) {
+            console.log('[toggleSoldOut] called — id:', id, 'currentStatus:', currentStatus);
             const newStatus = !currentStatus;
-            const { error } = await supabaseClient
+            const btn = document.getElementById('sold-btn-' + id);
+            if (btn) { btn.disabled = true; btn.textContent = 'Updating...'; }
+
+            const { data, error } = await supabaseClient
                 .from('products')
                 .update({ sold_out: newStatus })
-                .eq('id', id);
-            if (error) { alert('Update failed: ' + error.message); return; }
+                .eq('id', id)
+                .select();
+
+            console.log('[toggleSoldOut] response — data:', data, 'error:', error);
+
+            if (error) {
+                alert('Update failed: ' + error.message);
+                if (btn) { btn.disabled = false; btn.textContent = currentStatus ? 'Mark In Stock' : 'Mark Sold Out'; }
+                return;
+            }
             loadProductTable();
         }
 
